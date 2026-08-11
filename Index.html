@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" content="#0071e3">
+    <title>Keto Meal Planner - Diversificación Avanzada</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥑</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f8f8fa;
+            --bg-card: #ffffff;
+            --bg-card-alt: #fafafc;
+            --text-primary: #1a1a1e;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #aeaeb2;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --accent-light: #e8f2ff;
+            --green: #34c759;
+            --green-bg: #e8f9ed;
+            --orange: #ff9500;
+            --orange-bg: #fff8e8;
+            --red: #ff3b30;
+            --red-bg: #fde8e8;
+            --border: #e8e8ed;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.08);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: clamp(1rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2rem);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: center;
+            max-width: 90%;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--text-primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            pointer-events: auto;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success { background: var(--green); }
+        .toast.error { background: var(--red); }
+        .toast.info { background: var(--accent); }
+        .toast.warning { background: var(--orange); }
+
+        .landing-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 85vh;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            animation: fadeIn 1s ease;
+        }
+
+        .landing-page.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-16px); }
+        }
+
+        .landing-icon {
+            font-size: clamp(4rem, 10vw, 6.5rem);
+            margin-bottom: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .landing-badge {
+            display: inline-block;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1.5rem;
+        }
+
+        .landing-title {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text-primary);
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .landing-title .highlight {
+            background: linear-gradient(135deg, #0071e3 0%, #0055b3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .landing-desc {
+            font-size: clamp(1rem, 1.4vw, 1.2rem);
+            color: var(--text-secondary);
+            max-width: 560px;
+            line-height: 1.7;
+            margin-bottom: 0.8rem;
+        }
+
+        .landing-features {
+            display: flex;
+            gap: clamp(1.5rem, 3vw, 3rem);
+            margin: 2rem 0 2.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .landing-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-secondary);
+        }
+
+        .landing-feature .icon {
+            font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+        }
+
+        .landing-feature .label {
+            font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+            font-weight: 500;
+            color: var(--text-tertiary);
+        }
+
+        .landing-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: clamp(0.9rem, 1.5vw, 1.1rem) clamp(2.5rem, 5vw, 4rem);
+            font-size: clamp(1.1rem, 1.5vw, 1.2rem);
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            box-shadow: 0 4px 24px rgba(0, 113, 227, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            touch-action: manipulation;
+        }
+
+        .landing-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 40px rgba(0, 113, 227, 0.45);
+        }
+
+        .landing-btn:active {
+            transform: scale(0.97);
+        }
+
+        .landing-footer {
+            margin-top: 3rem;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        .app-content {
+            display: none;
+        }
+
+        .app-content.visible {
+            display: block;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: clamp(1.5rem, 4vw, 3rem);
+            padding-bottom: clamp(1rem, 2vw, 2rem);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .app-title-group {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.6rem, 1.5vw, 1rem);
+        }
+
+        .app-icon {
+            width: clamp(40px, 5vw, 52px);
+            height: clamp(40px, 5vw, 52px);
+            background: linear-gradient(135deg, #0071e3 0%, #0055b3 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.2rem, 2vw, 1.6rem);
+            color: white;
+            box-shadow: 0 4px 16px rgba(0, 113, 227, 0.3);
+            flex-shrink: 0;
+        }
+
+        .app-title {
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+        }
+
+        .app-subtitle {
+            font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-top: 0.05rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: clamp(0.6rem, 1.2vw, 0.8rem) clamp(1rem, 2vw, 2rem);
+            font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 12px rgba(0, 113, 227, 0.2);
+            font-family: inherit;
+            letter-spacing: -0.01em;
+            touch-action: manipulation;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(0, 113, 227, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary .counter {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.1rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            padding: clamp(0.5rem, 0.8vw, 0.6rem) clamp(1rem, 1.5vw, 1.5rem);
+            font-size: clamp(0.75rem, 0.9vw, 0.85rem);
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            touch-action: manipulation;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg);
+            border-color: var(--text-secondary);
+        }
+
+        .btn-danger {
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: clamp(0.6rem, 1.2vw, 0.8rem) clamp(1rem, 2vw, 2rem);
+            font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            touch-action: manipulation;
+        }
+
+        .btn-danger:hover {
+            background: #d63031;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(255, 59, 48, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: clamp(0.6rem, 1.2vw, 1rem);
+            margin-bottom: clamp(1.5rem, 3vw, 3rem);
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            padding: clamp(0.8rem, 1.2vw, 1.2rem) clamp(1rem, 1.5vw, 1.5rem);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            cursor: default;
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        .stat-label {
+            font-size: clamp(0.55rem, 0.8vw, 0.7rem);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: clamp(1.2rem, 2.5vw, 2rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-top: 0.15rem;
+            color: var(--text-primary);
+        }
+
+        .stat-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s ease;
+            background: var(--accent);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+            background: var(--bg-card);
+            padding: 0.3rem;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab-btn {
+            padding: clamp(0.4rem, 0.8vw, 0.6rem) clamp(0.8rem, 1.5vw, 1.8rem);
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+            touch-action: manipulation;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 2px 12px rgba(0, 113, 227, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeSlide 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: clamp(0.6rem, 1.2vw, 1.25rem);
+        }
+
+        .day-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .day-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        .day-card-header {
+            padding: clamp(0.6rem, 0.8vw, 1rem) clamp(0.8rem, 1vw, 1.2rem);
+            background: var(--bg-card-alt);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .day-name {
+            font-weight: 600;
+            font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+
+        .day-emoji {
+            font-size: clamp(1rem, 1.2vw, 1.2rem);
+            opacity: 0.8;
+        }
+
+        .day-body {
+            padding: clamp(0.6rem, 0.8vw, 1rem) clamp(0.8rem, 1vw, 1.2rem) clamp(0.8rem, 1vw, 1.2rem);
+        }
+
+        .meal-group {
+            margin-bottom: clamp(0.3rem, 0.5vw, 0.6rem);
+            padding: 0.2rem 0.3rem;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .meal-group:hover {
+            background: var(--bg-card-alt);
+        }
+
+        .meal-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .meal-label {
+            font-size: clamp(0.45rem, 0.6vw, 0.55rem);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-tertiary);
+            font-weight: 700;
+            margin-bottom: 0.05rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .meal-label .dot {
+            width: clamp(4px, 0.5vw, 5px);
+            height: clamp(4px, 0.5vw, 5px);
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .dot-bfast { background: var(--orange); }
+        .dot-lunch1 { background: var(--green); }
+        .dot-lunch2 { background: var(--accent); }
+        .dot-dinner1 { background: var(--green); opacity: 0.6; }
+        .dot-dinner2 { background: #5856d6; }
+
+        .meal-name {
+            font-size: clamp(0.65rem, 0.8vw, 0.75rem);
+            color: var(--text-primary);
+            line-height: 1.3;
+            font-weight: 450;
+        }
+
+        .meal-macros {
+            font-size: clamp(0.5rem, 0.65vw, 0.6rem);
+            color: var(--text-tertiary);
+            margin-top: 0.05rem;
+            letter-spacing: 0.01em;
+        }
+
+        .diversity-badge {
+            display: inline-block;
+            font-size: 0.5rem;
+            padding: 0.05rem 0.4rem;
+            border-radius: 10px;
+            margin-left: 0.3rem;
+            font-weight: 600;
+        }
+
+        .diversity-badge.good {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .diversity-badge.warning {
+            background: var(--orange-bg);
+            color: var(--orange);
+        }
+
+        .diversity-badge.bad {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .day-summary {
+            margin-top: clamp(0.4rem, 0.6vw, 0.8rem);
+            padding-top: clamp(0.3rem, 0.5vw, 0.6rem);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: clamp(0.3rem, 0.6vw, 0.8rem);
+            flex-wrap: wrap;
+            font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+            color: var(--text-secondary);
+        }
+
+        .day-summary strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: clamp(0.6rem, 1vw, 1rem);
+        }
+
+        .calendar-week-label {
+            grid-column: 1 / -1;
+            font-size: clamp(0.9rem, 1.2vw, 1rem);
+            font-weight: 600;
+            color: var(--text-secondary);
+            padding: 0.4rem 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 0.3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .calendar-week-label .delete-week {
+            background: var(--red-bg);
+            color: var(--red);
+            border: none;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .calendar-week-label .delete-week:hover {
+            background: var(--red);
+            color: white;
+        }
+
+        .calendar-day {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: clamp(0.6rem, 0.8vw, 1rem);
+            min-height: clamp(120px, 15vw, 180px);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .calendar-day:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .calendar-day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.3rem;
+            padding-bottom: 0.2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .calendar-day-number {
+            font-size: clamp(0.75rem, 0.9vw, 0.85rem);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .calendar-day-name {
+            font-size: clamp(0.6rem, 0.7vw, 0.7rem);
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        .calendar-meal {
+            font-size: clamp(0.55rem, 0.65vw, 0.65rem);
+            padding: 0.15rem 0.25rem;
+            margin-bottom: 0.15rem;
+            border-radius: 3px;
+            background: var(--bg);
+            border-left: 2px solid var(--accent);
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .calendar-meal .type {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: clamp(0.45rem, 0.5vw, 0.55rem);
+            text-transform: uppercase;
+        }
+
+        .calendar-meal .name {
+            color: var(--text-primary);
+            font-size: clamp(0.5rem, 0.6vw, 0.6rem);
+        }
+
+        .recipes-container {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(1.5rem, 3vw, 2.5rem);
+        }
+
+        .recipes-day-section {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .recipes-day-section:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .recipes-day-header {
+            padding: clamp(0.8rem, 1.2vw, 1.2rem) clamp(1rem, 1.5vw, 1.8rem);
+            background: var(--bg-card-alt);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            justify-content: space-between;
+        }
+
+        .recipes-day-header .day-emoji {
+            font-size: clamp(1.2rem, 1.5vw, 1.5rem);
+        }
+
+        .recipes-day-header .day-name {
+            font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+            font-weight: 700;
+        }
+
+        .recipes-day-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: clamp(0.6rem, 1vw, 1rem);
+            padding: clamp(0.8rem, 1.2vw, 1.2rem) clamp(1rem, 1.5vw, 1.8rem);
+        }
+
+        .recipe-mini {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: clamp(0.6rem, 0.8vw, 1rem);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .recipe-mini:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .recipe-mini-type {
+            font-size: clamp(0.45rem, 0.55vw, 0.55rem);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-tertiary);
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .recipe-mini-title {
+            font-size: clamp(0.7rem, 0.85vw, 0.8rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.3;
+            margin-bottom: 0.2rem;
+        }
+
+        .recipe-mini-macros {
+            font-size: clamp(0.5rem, 0.6vw, 0.6rem);
+            color: var(--text-tertiary);
+        }
+
+        .recipe-mini-expand {
+            margin-top: 0.4rem;
+            padding-top: 0.4rem;
+            border-top: 1px solid var(--border);
+            font-size: clamp(0.65rem, 0.75vw, 0.75rem);
+            color: var(--text-secondary);
+            display: none;
+        }
+
+        .recipe-mini-expand.visible {
+            display: block;
+            animation: fadeSlide 0.3s ease;
+        }
+
+        .recipe-mini-expand .ingredients {
+            margin-top: 0.2rem;
+            font-size: clamp(0.6rem, 0.7vw, 0.7rem);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .recipe-mini-expand .ingredients strong {
+            color: var(--text-primary);
+        }
+
+        .recipe-toggle {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: clamp(0.6rem, 0.7vw, 0.7rem);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.15rem 0;
+            font-family: inherit;
+            transition: var(--transition);
+            touch-action: manipulation;
+        }
+
+        .recipe-toggle:hover {
+            color: var(--accent-hover);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: clamp(2rem, 5vw, 5rem) clamp(1rem, 2vw, 2rem);
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+        }
+
+        .empty-state-icon {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            margin-bottom: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .empty-state-title {
+            font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .empty-state-text {
+            font-size: clamp(0.85rem, 1vw, 0.95rem);
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 1024px) {
+            .week-grid { grid-template-columns: repeat(4, 1fr); }
+            .calendar-grid { grid-template-columns: repeat(4, 1fr); }
+            .recipes-day-grid { grid-template-columns: repeat(3, 1fr); }
+            .stats-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .app-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.8rem;
+            }
+            .app-title-group { justify-content: center; }
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .btn-primary, .btn-danger {
+                flex: 1;
+                justify-content: center;
+                padding: 0.7rem 1rem;
+                min-width: 120px;
+            }
+            .btn-secondary {
+                padding: 0.6rem 1rem;
+                font-size: 0.75rem;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+            .tabs {
+                width: 100%;
+                border-radius: var(--radius-sm);
+                padding: 0.3rem;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 0.2rem;
+            }
+            .tab-btn {
+                flex: 0 0 auto;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.7rem;
+            }
+            .week-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+            .recipes-day-grid {
+                grid-template-columns: 1fr 1fr;
+                padding: 0.8rem;
+            }
+            .calendar-day {
+                min-height: 100px;
+                padding: 0.6rem;
+            }
+            .calendar-meal {
+                white-space: normal;
+                overflow: visible;
+            }
+            .recipes-day-header {
+                padding: 0.8rem 1rem;
+            }
+            .day-card-header {
+                padding: 0.6rem 0.8rem;
+            }
+            .day-body {
+                padding: 0.6rem 0.8rem 0.8rem;
+            }
+            .landing-title {
+                font-size: 1.8rem;
+            }
+            .landing-desc {
+                font-size: 0.95rem;
+            }
+            .landing-features {
+                gap: 1rem;
+            }
+            .landing-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 0.9rem 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .week-grid { grid-template-columns: 1fr; }
+            .calendar-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+            .stat-card { padding: 0.6rem 0.8rem; }
+            .stat-value { font-size: 1.1rem; }
+            .app-icon { width: 36px; height: 36px; font-size: 1rem; }
+            .app-title { font-size: 1.2rem; }
+            .recipes-day-grid { grid-template-columns: 1fr; }
+            .landing-icon { font-size: 3.5rem; }
+            .landing-title { font-size: 1.5rem; }
+            .landing-feature .icon { font-size: 1.5rem; }
+        }
+
+        @media print {
+            .btn-primary, .btn-secondary, .btn-danger, .landing-btn, .recipe-toggle, .tabs, .header-actions, .delete-week {
+                display: none !important;
+            }
+            .app-header { margin-bottom: 1rem; }
+            .day-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+            .week-grid { display: block; }
+            .day-card { margin-bottom: 0.5rem; }
+            .stats-grid { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div class="container">
+
+        <div id="landingPage" class="landing-page">
+            <div class="landing-icon">🥑</div>
+            <span class="landing-badge">Algoritmo Avanzado</span>
+            <h1 class="landing-title">
+                Planificador Keto<br>
+                <span class="highlight">Sin Repeticiones</span>
+            </h1>
+            <p class="landing-desc">
+                Algoritmo avanzado que analiza la combinación completa del día<br>
+                para evitar repeticiones de ingredientes.
+            </p>
+            <div class="landing-features">
+                <div class="landing-feature">
+                    <span class="icon">🧠</span>
+                    <span class="label">Análisis completo</span>
+                </div>
+                <div class="landing-feature">
+                    <span class="icon">🔄</span>
+                    <span class="label">Sin repeticiones</span>
+                </div>
+                <div class="landing-feature">
+                    <span class="icon">📊</span>
+                    <span class="label">Diversidad garantizada</span>
+                </div>
+            </div>
+            <button class="landing-btn" id="entrarBtn">
+                Entrar al planificador →
+            </button>
+            <div class="landing-footer">
+                <span id="semanasGuardadas"></span>
+            </div>
+        </div>
+
+        <div id="appContent" class="app-content">
+
+            <header class="app-header">
+                <div class="app-title-group">
+                    <div class="app-icon">🥑</div>
+                    <div>
+                        <div class="app-title">Keto Planner</div>
+                        <div class="app-subtitle">Diversificación avanzada · 7 días</div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-secondary" id="salirBtn">Inicio</button>
+                    <button class="btn-danger" id="clearAllBtn">Limpiar</button>
+                    <button class="btn-primary" id="btnGenerar">
+                        Generar
+                        <span class="counter" id="weekCounter">0</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-label">Calorías (media)</div>
+                    <div class="stat-value" id="statKcal">—</div>
+                    <div class="stat-bar"><div class="stat-bar-fill" id="kcalBar" style="width:0%"></div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Proteína (media)</div>
+                    <div class="stat-value" id="statProtein">—</div>
+                    <div class="stat-bar"><div class="stat-bar-fill" id="proteinBar" style="width:0%"></div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Carbohidratos (media)</div>
+                    <div class="stat-value" id="statCarbs">—</div>
+                    <div class="stat-bar"><div class="stat-bar-fill" id="carbsBar" style="width:0%"></div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Grasa (media)</div>
+                    <div class="stat-value" id="statFat">—</div>
+                    <div class="stat-bar"><div class="stat-bar-fill" id="fatBar" style="width:0%"></div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Diversidad</div>
+                    <div class="stat-value" id="statDiversity">—</div>
+                    <div class="stat-bar"><div class="stat-bar-fill" id="diversityBar" style="width:0%"></div></div>
+                </div>
+            </div>
+
+            <div class="tabs" id="tabs" role="tablist">
+                <button class="tab-btn active" data-tab="menu" role="tab" aria-selected="true">Menú</button>
+                <button class="tab-btn" data-tab="recetas" role="tab" aria-selected="false">Recetas</button>
+                <button class="tab-btn" data-tab="calendario" role="tab" aria-selected="false">Calendario</button>
+                <button class="tab-btn" data-tab="analisis" role="tab" aria-selected="false">Análisis</button>
+            </div>
+
+            <div id="tab-menu" class="tab-content active" role="tabpanel">
+                <div class="week-grid" id="weekGrid">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🍽️</div>
+                        <div class="empty-state-title">Genera tu menú</div>
+                        <div class="empty-state-text">Pulsa "Generar" para comenzar</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-recetas" class="tab-content" role="tabpanel">
+                <div class="recipes-container" id="recipesContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📖</div>
+                        <div class="empty-state-title">Sin recetas</div>
+                        <div class="empty-state-text">Genera un menú para ver las recetas</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-calendario" class="tab-content" role="tabpanel">
+                <div class="calendar-grid" id="calendarGrid">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <div class="empty-state-title">Calendario vacío</div>
+                        <div class="empty-state-text">Genera menús para verlos en el calendario</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-analisis" class="tab-content" role="tabpanel">
+                <div id="analisisContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <div class="empty-state-title">Sin datos para analizar</div>
+                        <div class="empty-state-text">Genera un menú para ver el análisis</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const CONFIG = {
+                STORAGE_KEY: 'keto_calendario_advanced',
+                MAX_WEEKS: 52,
+                TARGET_CALORIES: 1800,
+                TARGET_PROTEIN: 120,
+                TARGET_CARBS: 30,
+                TARGET_FAT: 140,
+                KEY_INGREDIENTS: {
+                    'huevo': ['huevo', 'huevos', 'claras', 'yema'],
+                    'aguacate': ['aguacate'],
+                    'pollo': ['pollo', 'pechuga'],
+                    'salmón': ['salmón', 'salmon'],
+                    'atún': ['atún', 'atun'],
+                    'ternera': ['ternera'],
+                    'cerdo': ['cerdo', 'chuletón'],
+                    'lubina': ['lubina'],
+                    'merluza': ['merluza'],
+                    'bacalao': ['bacalao'],
+                    'chorizo': ['chorizo'],
+                    'jamón': ['jamón', 'jamon'],
+                    'queso': ['queso', 'cheddar', 'mozzarella', 'parmesano', 'feta', 'halloumi', 'cabra'],
+                    'espinacas': ['espinacas'],
+                    'coliflor': ['coliflor'],
+                    'calabacín': ['calabacín', 'calabacin'],
+                    'tomate': ['tomate', 'tomates'],
+                    'lechuga': ['lechuga'],
+                    'rúcula': ['rúcula', 'rucula'],
+                    'setas': ['setas', 'champiñones'],
+                    'gambas': ['gambas'],
+                    'nueces': ['nueces'],
+                    'almendras': ['almendras']
+                }
+            };
+
+            // ============================================================
+            //  DATOS (con categorías de ingredientes)
+            // ============================================================
+
+            function extractIngredientCategories(plato) {
+                if (!plato || !plato.ingredientes) return [];
+                const text = (plato.nombre + ' ' + plato.ingredientes.join(' ')).toLowerCase();
+                const found = [];
+                for (const [category, keywords] of Object.entries(CONFIG.KEY_INGREDIENTS)) {
+                    for (const keyword of keywords) {
+                        if (text.includes(keyword)) {
+                            found.push(category);
+                            break;
+                        }
+                    }
+                }
+                return found;
+            }
+
+            const DESAYUNOS = [
+                { nombre: "Huevos revueltos con aguacate y bacon", kcal: 450, g: 35, c: 3, p: 22,
+                    ingredientes: ["3 huevos", "½ aguacate", "3 tiras bacon", "Sal y pimienta"],
+                    descripcion: "Cocina el bacon crujiente. Bate los huevos, salpimienta y cocina en la misma sartén. Sirve con aguacate en rodajas.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Tortilla de queso cheddar con espinacas", kcal: 420, g: 33, c: 2, p: 20,
+                    ingredientes: ["3 huevos", "50g queso cheddar", "2 puñados espinacas", "Aceite de oliva"],
+                    descripcion: "Saltea las espinacas en aceite. Bate huevos con queso, añade espinacas y cocina como tortilla.",
+                    tiempo: 20, dificultad: 'fácil' },
+                { nombre: "Yogur griego con nueces y chía", kcal: 380, g: 28, c: 5, p: 18,
+                    ingredientes: ["200g yogur griego", "30g nueces", "1 cda semillas chía", "Canela"],
+                    descripcion: "Mezcla todos los ingredientes y reposa 5 minutos.", tiempo: 5, dificultad: 'fácil' },
+                { nombre: "Salmón ahumado con queso crema y pepino", kcal: 350, g: 26, c: 3, p: 20,
+                    ingredientes: ["100g salmón ahumado", "50g queso crema", "½ pepino", "Eneldo"],
+                    descripcion: "Corta el pepino en rodajas. Unta queso crema sobre el salmón y enrolla.",
+                    tiempo: 10, dificultad: 'fácil' },
+                { nombre: "Chaffles con mantequilla y huevo", kcal: 410, g: 34, c: 2, p: 16,
+                    ingredientes: ["1 huevo", "50g mozzarella", "1 cda harina almendra", "Mantequilla"],
+                    descripcion: "Mezcla huevo, queso y harina. Cocina en wafflera. Sirve con mantequilla.",
+                    tiempo: 15, dificultad: 'media' },
+                { nombre: "Omelette de claras con espinacas", kcal: 290, g: 18, c: 4, p: 22,
+                    ingredientes: ["4 claras", "2 puñados espinacas", "Aceite", "Sal y pimienta"],
+                    descripcion: "Saltea espinacas. Bate claras y cocina omelette. Rellena con espinacas.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Batido keto con proteína y cacahuete", kcal: 320, g: 24, c: 5, p: 20,
+                    ingredientes: ["1 scoop proteína", "1 cda mantequilla cacahuete", "200ml leche almendras", "Hielo"],
+                    descripcion: "Mezcla todos los ingredientes en batidora.", tiempo: 5, dificultad: 'fácil' },
+                { nombre: "Huevos Benedict keto (sin pan)", kcal: 480, g: 36, c: 4, p: 24,
+                    ingredientes: ["2 huevos", "2 lonchas jamón", "Salsa holandesa", "Espinacas"],
+                    descripcion: "Cocina huevos escalfados. Coloca sobre jamón y espinacas. Cubre con salsa holandesa.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Tortilla de champiñones y queso", kcal: 390, g: 31, c: 3, p: 21,
+                    ingredientes: ["3 huevos", "100g champiñones", "50g queso", "Aceite"],
+                    descripcion: "Saltea champiñones. Bate huevos con queso y cocina la tortilla.",
+                    tiempo: 20, dificultad: 'fácil' },
+                { nombre: "Pudding de chía con leche de coco", kcal: 350, g: 27, c: 6, p: 12,
+                    ingredientes: ["50g semillas chía", "200ml leche coco", "Vainilla", "Coco rallado"],
+                    descripcion: "Mezcla todos los ingredientes y reposa en nevera 4 horas.", tiempo: 240,
+                    dificultad: 'fácil' }
+            ];
+
+            const PRIMEROS_COMIDA = [
+                { nombre: "Ensalada de aguacate, tomate y huevo duro", kcal: 320, g: 27, c: 4, p: 12,
+                    ingredientes: ["1 aguacate", "2 tomates", "2 huevos duros", "Cebolla roja", "Vinagreta"],
+                    descripcion: "Corta el aguacate, tomates y huevos en dados. Mezcla con cebolla picada y aliña con vinagreta.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Aguacate relleno de atún con huevo duro", kcal: 380, g: 30, c: 3, p: 18,
+                    ingredientes: ["1 aguacate", "1 lata atún", "1 huevo duro", "Mayonesa", "Perejil"],
+                    descripcion: "Abre el aguacate por la mitad. Mezcla el atún con huevo picado y mayonesa. Rellena las mitades de aguacate.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Crema de aguacate y pepino con huevo poché", kcal: 290, g: 24, c: 4, p: 14,
+                    ingredientes: ["1 aguacate", "½ pepino", "2 huevos", "Caldo de verduras", "Aceite de oliva"],
+                    descripcion: "Tritura el aguacate con pepino y caldo. Sirve caliente con un huevo poché encima.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Crema de coliflor y parmesano", kcal: 180, g: 14, c: 5, p: 6,
+                    ingredientes: ["½ coliflor", "50g parmesano", "200ml nata", "Caldo", "Nuez moscada"],
+                    descripcion: "Cocina coliflor en caldo. Tritura con nata, queso y nuez moscada.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Ensalada de rúcula, nueces y queso de cabra", kcal: 260, g: 22, c: 3, p: 8,
+                    ingredientes: ["100g rúcula", "50g nueces", "100g queso cabra", "Vinagreta limón"],
+                    descripcion: "Lava rúcula, añade nueces y queso desmenuzado. Aliña.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Ensalada de espinacas con vinagreta y huevo", kcal: 220, g: 18, c: 3, p: 12,
+                    ingredientes: ["100g espinacas", "2 huevos duros", "Tomates cherry", "Vinagre balsámico", "Aceite"],
+                    descripcion: "Lava espinacas y tomates. Añade huevo duro picado. Aliña con vinagreta.",
+                    tiempo: 10, dificultad: 'fácil' },
+                { nombre: "Caldo de verduras con huevo escalfado", kcal: 190, g: 14, c: 4, p: 10,
+                    ingredientes: ["Calabacín", "Puerro", "Apio", "2 huevos", "Hierbas"],
+                    descripcion: "Cuece verduras en agua con hierbas. Sirve con un huevo escalfado en el centro.",
+                    tiempo: 30, dificultad: 'media' },
+                { nombre: "Gazpacho keto de aguacate y pepino", kcal: 190, g: 16, c: 5, p: 4,
+                    ingredientes: ["1 aguacate", "½ pepino", "1 diente ajo", "Vinagre", "Aceite"],
+                    descripcion: "Tritura todo con agua fría. Sirve bien frío.", tiempo: 10, dificultad: 'fácil' },
+                { nombre: "Ensalada César keto", kcal: 280, g: 22, c: 3, p: 15,
+                    ingredientes: ["Lechuga romana", "Pechuga pollo", "Queso parmesano", "Anchoas", "Vinagreta"],
+                    descripcion: "Lava lechuga, añade pollo desmenuzado, queso y anchoas. Aliña.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Ensalada de espárragos y huevo", kcal: 210, g: 17, c: 3, p: 11,
+                    ingredientes: ["Espárragos verdes", "2 huevos duros", "Vinagreta", "Almendras"],
+                    descripcion: "Cocina espárragos, añade huevos picados y almendras. Aliña.", tiempo: 15,
+                    dificultad: 'fácil' }
+            ];
+
+            const SEGUNDOS_COMIDA = [
+                { nombre: "Chuletón de cerdo con espárragos", kcal: 480, g: 35, c: 3, p: 38,
+                    ingredientes: ["1 chuletón", "Espárragos", "Aceite", "Sal y pimienta"],
+                    descripcion: "Sazona y cocina a la plancha 5-7 min por lado. Acompaña con espárragos.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Salmón al horno con costra de mostaza", kcal: 450, g: 28, c: 5, p: 40,
+                    ingredientes: ["2 filetes salmón", "2 cdas mostaza", "Pan rallado keto", "Eneldo"],
+                    descripcion: "Unta con mostaza, espolvorea pan rallado. Hornea 15 min a 180°C.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Muslos de pollo al curry de coco", kcal: 430, g: 30, c: 4, p: 36,
+                    ingredientes: ["4 muslos pollo", "200ml leche coco", "Curry", "Jengibre", "Ajo"],
+                    descripcion: "Dora pollo, añade ajo y jengibre. Añade leche de coco y curry. Cocina 25 min.",
+                    tiempo: 35, dificultad: 'media' },
+                { nombre: "Albóndigas en salsa de tomate keto", kcal: 460, g: 33, c: 5, p: 34,
+                    ingredientes: ["500g carne picada", "1 huevo", "Salsa tomate sin azúcar", "Orégano"],
+                    descripcion: "Forma albóndigas con carne y huevo. Cocina en salsa 20 min.", tiempo: 30,
+                    dificultad: 'media' },
+                { nombre: "Filete de lubina a la mantequilla", kcal: 380, g: 24, c: 3, p: 35,
+                    ingredientes: ["2 filetes lubina", "Mantequilla", "Limón", "Alcaparras"],
+                    descripcion: "Cocina pescado en mantequilla 4 min por lado. Añade limón y alcaparras.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Costillas de ternera estofadas", kcal: 520, g: 38, c: 4, p: 40,
+                    ingredientes: ["1kg costillas", "Cebolla", "Zanahoria", "Caldo", "Tomillo"],
+                    descripcion: "Sella costillas. Añade verdura y caldo. Cocina 2 horas.", tiempo: 120,
+                    dificultad: 'difícil' },
+                { nombre: "Hamburguesa keto con queso azul y bacon", kcal: 500, g: 38, c: 2, p: 35,
+                    ingredientes: ["200g carne picada", "50g queso azul", "3 tiras bacon", "Lechuga"],
+                    descripcion: "Forma hamburguesa y cocina. Añade bacon y queso. Sirve en lechuga.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Merluza al papillote con calabacín", kcal: 320, g: 18, c: 5, p: 33,
+                    ingredientes: ["2 lomos merluza", "1 calabacín", "Aceitunas", "Tomates cherry"],
+                    descripcion: "Coloca pescado con verduras en papel. Hornea 15 min a 200°C.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Pechuga de pollo a la plancha con verduras", kcal: 350, g: 22, c: 5, p: 38,
+                    ingredientes: ["Pechuga pollo", "Calabacín", "Pimiento", "Cebolla", "Aceite"],
+                    descripcion: "Cocina pollo y verduras a la plancha. Sirve con un chorrito de aceite.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Entrecot con champiñones y mantequilla", kcal: 510, g: 37, c: 3, p: 39,
+                    ingredientes: ["Entrecot", "Champiñones", "Mantequilla", "Tomillo", "Ajo"],
+                    descripcion: "Sella el entrecot. Saltea champiñones con mantequilla, ajo y tomillo.",
+                    tiempo: 25, dificultad: 'media' }
+            ];
+
+            const PRIMEROS_CENA = [
+                { nombre: "Crema de aguacate y cilantro", kcal: 200, g: 18, c: 3, p: 5,
+                    ingredientes: ["1 aguacate", "Cilantro fresco", "Caldo", "Limón", "Aceite"],
+                    descripcion: "Tritura el aguacate con cilantro y caldo. Sirve con un chorrito de limón.",
+                    tiempo: 10, dificultad: 'fácil' },
+                { nombre: "Ensalada de aguacate, naranja y huevo", kcal: 240, g: 19, c: 4, p: 8,
+                    ingredientes: ["1 aguacate", "1 naranja", "2 huevos", "Lechuga", "Vinagreta"],
+                    descripcion: "Corta aguacate, naranja y huevos. Mezcla con lechuga y aliña.", tiempo: 15,
+                    dificultad: 'fácil' },
+                { nombre: "Crema de calabacín con queso de cabra", kcal: 150, g: 12, c: 4, p: 5,
+                    ingredientes: ["2 calabacines", "50g queso cabra", "Caldo", "Mantequilla"],
+                    descripcion: "Cocina calabacines en caldo, tritura con mantequilla. Sirve con queso.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Ensalada de tomate y mozzarella ligera", kcal: 160, g: 13, c: 3, p: 6,
+                    ingredientes: ["2 tomates", "1 bola mozzarella ligera", "Albahaca", "Aceite"],
+                    descripcion: "Corta tomates y mozzarella. Alterna con albahaca y aliña.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Sopa de verduras keto", kcal: 120, g: 8, c: 4, p: 3,
+                    ingredientes: ["Calabacín", "Puerro", "Apio", "Caldo"],
+                    descripcion: "Cuece verduras en caldo 20 min. Sirve caliente.", tiempo: 30, dificultad: 'fácil' },
+                { nombre: "Gazpacho andaluz keto", kcal: 130, g: 10, c: 5, p: 2,
+                    ingredientes: ["Tomates", "Pimiento", "Pepino", "Ajo", "Vinagre"],
+                    descripcion: "Tritura todo con agua y aceite. Sirve muy frío.", tiempo: 10, dificultad: 'fácil' },
+                { nombre: "Crema de espárragos trigueros", kcal: 160, g: 13, c: 3, p: 4,
+                    ingredientes: ["1 manojo espárragos", "Nata", "Mantequilla", "Caldo"],
+                    descripcion: "Cocina espárragos, tritura con nata y mantequilla.", tiempo: 25,
+                dificultad: 'media' },
+                { nombre: "Ensalada de remolacha y queso feta", kcal: 180, g: 15, c: 4, p: 6,
+                    ingredientes: ["Remolacha cocida", "100g queso feta", "Nueces", "Vinagreta"],
+                    descripcion: "Corta remolacha y queso. Añade nueces y aliña.", tiempo: 10, dificultad: 'fácil' },
+                { nombre: "Crema de champiñones", kcal: 140, g: 11, c: 3, p: 3,
+                    ingredientes: ["250g champiñones", "Nata", "Caldo", "Cebolla"],
+                    descripcion: "Sofríe cebolla y champiñones. Añade caldo y nata. Tritura.", tiempo: 25,
+                    dificultad: 'media' }
+            ];
+
+            const SEGUNDOS_CENA = [
+                { nombre: "Tortilla francesa con jamón y aguacate", kcal: 380, g: 30, c: 3, p: 24,
+                    ingredientes: ["3 huevos", "2 lonchas jamón", "½ aguacate", "Queso rallado"],
+                    descripcion: "Bate huevos con jamón y queso. Cocina como tortilla. Sirve con aguacate en rodajas.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Wrap de lechuga con atún y aguacate", kcal: 290, g: 18, c: 4, p: 24,
+                    ingredientes: ["Hojas lechuga", "1 lata atún", "½ aguacate", "Mayonesa"],
+                    descripcion: "Mezcla atún, aguacate y mayonesa. Enrolla en lechuga.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Revuelto de setas con gambas", kcal: 310, g: 20, c: 4, p: 25,
+                    ingredientes: ["200g setas", "150g gambas", "Ajo", "Perejil", "Aceite"],
+                    descripcion: "Saltea ajo, añade setas y gambas. Cocina 5 min.", tiempo: 20,
+                dificultad: 'media' },
+                { nombre: "Ensalada templada de pollo asado", kcal: 380, g: 27, c: 4, p: 28,
+                    ingredientes: ["Pechuga pollo asada", "Lechuga", "Aguacate", "Vinagreta"],
+                    descripcion: "Mezcla lechuga con pollo y aguacate. Aliña.", tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Huevos al plato con chorizo", kcal: 360, g: 28, c: 3, p: 22,
+                    ingredientes: ["2 huevos", "50g chorizo", "Pimiento morrón", "Mantequilla"],
+                    descripcion: "Sofríe chorizo y pimiento. Añade huevos y hornea 5 min.", tiempo: 20,
+                    dificultad: 'media' },
+                { nombre: "Bacalao al horno con pisto", kcal: 340, g: 18, c: 5, p: 30,
+                    ingredientes: ["2 lomos bacalao", "Pisto keto", "Aceite"],
+                    descripcion: "Coloca bacalao sobre pisto y hornea 15 min a 180°C.", tiempo: 30,
+                    dificultad: 'media' },
+                { nombre: "Queso halloumi a la plancha", kcal: 360, g: 28, c: 3, p: 20,
+                    ingredientes: ["250g halloumi", "Tomate", "Orégano", "Aceite"],
+                    descripcion: "Corta halloumi y cocina a la plancha. Acompaña con tomate.", tiempo: 15,
+                    dificultad: 'fácil' },
+                { nombre: "Huevos nube con aguacate", kcal: 330, g: 27, c: 2, p: 18,
+                    ingredientes: ["2 huevos", "½ aguacate", "Sal", "Pimienta"],
+                    descripcion: "Monta claras a punto de nieve. Hornea con yema encima. Sirve con aguacate.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Sardinas con aguacate", kcal: 370, g: 28, c: 3, p: 22,
+                    ingredientes: ["1 lata sardinas", "½ aguacate", "Limón", "Perejil"],
+                    descripcion: "Sirve sardinas con aguacate y aliña con limón.", tiempo: 10,
+                dificultad: 'fácil' },
+                { nombre: "Tortilla de calabacín con feta", kcal: 340, g: 25, c: 4, p: 22,
+                    ingredientes: ["2 calabacines", "3 huevos", "100g queso feta", "Menta"],
+                    descripcion: "Ralla calabacines, mezcla con huevo y queso. Cocina.", tiempo: 25,
+                    dificultad: 'media' },
+                { nombre: "Pechuga de pollo con espinacas", kcal: 320, g: 20, c: 4, p: 32,
+                    ingredientes: ["Pechuga pollo", "Espinacas", "Ajo", "Nata", "Queso parmesano"],
+                    descripcion: "Cocina pollo. Saltea espinacas con ajo y nata. Sirve con queso.",
+                    tiempo: 25, dificultad: 'media' }
+            ];
+
+            const DIAS = [
+                { nombre: "Lunes", emoji: "🌙" },
+                { nombre: "Martes", emoji: "⭐" },
+                { nombre: "Miércoles", emoji: "☀️" },
+                { nombre: "Jueves", emoji: "🌈" },
+                { nombre: "Viernes", emoji: "🎉" },
+                { nombre: "Sábado", emoji: "🍷" },
+                { nombre: "Domingo", emoji: "🌟" }
+            ];
+
+            // ============================================================
+            //  ALGORITMO AVANZADO DE DIVERSIFICACIÓN
+            // ============================================================
+
+            class AdvancedSelector {
+                static extractCategories(plato) {
+                    return extractIngredientCategories(plato);
+                }
+
+                static getIngredientCount(plato) {
+                    return this.extractCategories(plato).length;
+                }
+
+                static calculateDayScore(dayMeals) {
+                    // Contar todas las categorías de ingredientes en el día
+                    const allCategories = new Set();
+                    const categoryCount = {};
+                    let totalCategories = 0;
+
+                    for (const meal of dayMeals) {
+                        const cats = this.extractCategories(meal);
+                        for (const cat of cats) {
+                            allCategories.add(cat);
+                            categoryCount[cat] = (categoryCount[cat] || 0) + 1;
+                            totalCategories++;
+                        }
+                    }
+
+                    const uniqueCount = allCategories.size;
+                    const totalMeals = dayMeals.length;
+
+                    // Penalizar categorías repetidas
+                    let repetitionPenalty = 0;
+                    for (const [cat, count] of Object.entries(categoryCount)) {
+                        if (count > 1) {
+                            repetitionPenalty += (count - 1) * 20;
+                        }
+                    }
+
+                    // Bonificar por variedad
+                    const varietyBonus = uniqueCount * 15;
+
+                    // Penalizar por platos sin ingredientes identificados
+                    const emptyMeals = dayMeals.filter(m => this.extractCategories(m).length === 0).length;
+                    const emptyPenalty = emptyMeals * 5;
+
+                    // Puntuación base
+                    let score = varietyBonus - repetitionPenalty - emptyPenalty;
+
+                    // Normalizar a 0-100
+                    const maxScore = totalMeals * 15;
+                    const minScore = 0;
+                    score = Math.max(minScore, Math.min(100, (score / maxScore) * 100));
+
+                    return {
+                        score: Math.round(score),
+                        uniqueCount,
+                        totalCategories,
+                        repetitionPenalty,
+                        categoryCount
+                    };
+                }
+
+                static selectDiverse(pool, count, existingDayMeals = []) {
+                    if (pool.length === 0) return [];
+
+                    // Crear copia del pool
+                    let available = [...pool];
+                    let selected = [];
+
+                    // Si no hay suficientes, duplicar
+                    while (available.length < count * 2) {
+                        available = available.concat(pool.map(item => ({
+                            ...item,
+                            nombre: item.nombre + ' (v2)'
+                        })));
+                    }
+
+                    // Para cada selección, elegir el plato que maximice la diversidad del día
+                    for (let i = 0; i < count; i++) {
+                        if (available.length === 0) break;
+
+                        // Evaluar cada plato disponible
+                        const scored = available.map((plato, index) => {
+                            // Simular el día con este plato añadido
+                            const simulatedDay = [...existingDayMeals, ...selected, plato];
+                            const analysis = this.calculateDayScore(simulatedDay);
+                            // Puntuación más alta = mejor
+                            return {
+                                plato,
+                                index,
+                                score: analysis.score,
+                                analysis
+                            };
+                        });
+
+                        // Ordenar por puntuación descendente
+                        scored.sort((a, b) => b.score - a.score);
+
+                        // Elegir el mejor, con algo de aleatoriedad entre los mejores
+                        const topScore = scored[0].score;
+                        const topCandidates = scored.filter(s => s.score >= topScore - 5);
+                        const chosen = topCandidates[Math.floor(Math.random() * topCandidates.length)];
+
+                        selected.push(chosen.plato);
+                        available = available.filter((_, idx) => idx !== chosen.index);
+                    }
+
+                    // Rellenar si falta
+                    while (selected.length < count && pool.length > 0) {
+                        const remaining = pool.filter(p => !selected.includes(p));
+                        if (remaining.length === 0) {
+                            const random = pool[Math.floor(Math.random() * pool.length)];
+                            if (!selected.includes(random)) {
+                                selected.push(random);
+                            } else if (selected.length < count) {
+                                selected.push(pool[Math.floor(Math.random() * pool.length)]);
+                            }
+                            break;
+                        } else {
+                            selected.push(remaining[Math.floor(Math.random() * remaining.length)]);
+                        }
+                    }
+
+                    return selected;
+                }
+
+                static analyzeDayDiversity(dayMeals) {
+                    return this.calculateDayScore(dayMeals);
+                }
+            }
+
+            // ============================================================
+            //  CLASE KETO PLANNER
+            // ============================================================
+
+            class KetoPlanner {
+                constructor() {
+                    this.calendario = [];
+                    this.semanaActual = null;
+                    this.loadFromStorage();
+                }
+
+                loadFromStorage() {
+                    try {
+                        const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+                        if (saved) {
+                            const parsed = JSON.parse(saved);
+                            this.calendario = Array.isArray(parsed) ? parsed : [];
+                        }
+                    } catch (error) {
+                        console.error('Error loading calendar:', error);
+                        this.calendario = [];
+                    }
+                }
+
+                saveToStorage() {
+                    try {
+                        localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(this.calendario));
+                    } catch (error) {
+                        console.error('Error saving calendar:', error);
+                    }
+                }
+
+                generateWeek() {
+                    // Generar cada categoría con el algoritmo avanzado
+                    const desayunos = AdvancedSelector.selectDiverse(DESAYUNOS, 7);
+                    const p1c = AdvancedSelector.selectDiverse(PRIMEROS_COMIDA, 7);
+                    const p2c = AdvancedSelector.selectDiverse(SEGUNDOS_COMIDA, 7);
+                    const c1 = AdvancedSelector.selectDiverse(PRIMEROS_CENA, 7);
+                    const c2 = AdvancedSelector.selectDiverse(SEGUNDOS_CENA, 7);
+
+                    let semana = [];
+                    let totalK = 0,
+                        totalP = 0,
+                        totalC = 0,
+                        totalG = 0;
+                    let diversityScores = [];
+
+                    for (let i = 0; i < 7; i++) {
+                        const d = desayunos[i] || DESAYUNOS[Math.floor(Math.random() * DESAYUNOS.length)];
+                        const p1 = p1c[i] || PRIMEROS_COMIDA[Math.floor(Math.random() * PRIMEROS_COMIDA.length)];
+                        const p2 = p2c[i] || SEGUNDOS_COMIDA[Math.floor(Math.random() * SEGUNDOS_COMIDA.length)];
+                        const cena1 = c1[i] || PRIMEROS_CENA[Math.floor(Math.random() * PRIMEROS_CENA.length)];
+                        const cena2 = c2[i] || SEGUNDOS_CENA[Math.floor(Math.random() * SEGUNDOS_CENA.length)];
+
+                        const diaK = d.kcal + p1.kcal + p2.kcal + cena1.kcal + cena2.kcal;
+                        const diaP = d.p + p1.p + p2.p + cena1.p + cena2.p;
+                        const diaC = d.c + p1.c + p2.c + cena1.c + cena2.c;
+                        const diaG = d.g + p1.g + p2.g + cena1.g + cena2.g;
+
+                        totalK += diaK;
+                        totalP += diaP;
+                        totalC += diaC;
+                        totalG += diaG;
+
+                        const dayMeals = [d, p1, p2, cena1, cena2];
+                        const diversity = AdvancedSelector.analyzeDayDiversity(dayMeals);
+                        diversityScores.push(diversity.score);
+
+                        semana.push({
+                            dia: DIAS[i],
+                            desayuno: d,
+                            p1c: p1,
+                            p2c: p2,
+                            c1: cena1,
+                            c2: cena2,
+                            total: { kcal: diaK, p: diaP, c: diaC, g: diaG },
+                            diversity: diversity
+                        });
+                    }
+
+                    this.semanaActual = semana;
+
+                    const avgDiversity = Math.round(diversityScores.reduce((a, b) => a + b, 0) / diversityScores.length);
+
+                    const nextMonday = this._getNextMonday();
+                    const semanaCalendario = {
+                        id: Date.now(),
+                        fechaInicio: nextMonday.toISOString(),
+                        semana: semana,
+                        stats: {
+                            kcal: Math.round(totalK / 7),
+                            p: Math.round(totalP / 7),
+                            c: Math.round(totalC / 7),
+                            g: Math.round(totalG / 7),
+                            diversity: avgDiversity
+                        }
+                    };
+
+                    this.calendario.push(semanaCalendario);
+                    this.saveToStorage();
+
+                    return semanaCalendario;
+                }
+
+                deleteWeek(id) {
+                    this.calendario = this.calendario.filter(w => w.id !== id);
+                    this.saveToStorage();
+                    if (this.calendario.length > 0) {
+                        const last = this.calendario[this.calendario.length - 1];
+                        this.semanaActual = last.semana;
+                    } else {
+                        this.semanaActual = null;
+                    }
+                    return this.calendario;
+                }
+
+                clearAll() {
+                    this.calendario = [];
+                    this.semanaActual = null;
+                    this.saveToStorage();
+                }
+
+                getLastWeek() {
+                    if (this.calendario.length === 0) return null;
+                    const last = this.calendario[this.calendario.length - 1];
+                    return last.semana;
+                }
+
+                getWeekStats() {
+                    if (this.calendario.length === 0) return null;
+                    const last = this.calendario[this.calendario.length - 1];
+                    return last.stats;
+                }
+
+                _getNextMonday() {
+                    const now = new Date();
+                    const day = now.getDay();
+                    const diff = (day === 0 ? 1 : 8 - day);
+                    const monday = new Date(now);
+                    monday.setDate(now.getDate() + diff);
+                    monday.setHours(0, 0, 0, 0);
+                    return monday;
+                }
+
+                formatDate(date) {
+                    const d = new Date(date);
+                    return d.toLocaleDateString('es-ES', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+                }
+
+                getWeekNumber(date) {
+                    const d = new Date(date);
+                    d.setHours(0, 0, 0, 0);
+                    d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+                    const week1 = new Date(d.getFullYear(), 0, 4);
+                    return 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+                }
+
+                analyzeWeek(semana) {
+                    if (!semana) return null;
+
+                    const allMeals = semana.flatMap(d =>
+                        [d.desayuno, d.p1c, d.p2c, d.c1, d.c2]
+                    );
+
+                    const totalK = allMeals.reduce((sum, m) => sum + m.kcal, 0);
+                    const totalP = allMeals.reduce((sum, m) => sum + m.p, 0);
+                    const totalC = allMeals.reduce((sum, m) => sum + m.c, 0);
+                    const totalG = allMeals.reduce((sum, m) => sum + m.g, 0);
+
+                    const avgK = Math.round(totalK / 7);
+                    const avgP = Math.round(totalP / 7);
+                    const avgC = Math.round(totalC / 7);
+                    const avgG = Math.round(totalG / 7);
+
+                    const ratio = (avgG / (avgP + avgC)) * 100;
+
+                    const allCategories = new Set();
+                    for (const meal of allMeals) {
+                        const cats = AdvancedSelector.extractCategories(meal);
+                        for (const cat of cats) allCategories.add(cat);
+                    }
+
+                    return {
+                        avgK,
+                        avgP,
+                        avgC,
+                        avgG,
+                        ratio: Math.round(ratio * 10) / 10,
+                        totalK,
+                        totalP,
+                        totalC,
+                        totalG,
+                        meals: allMeals,
+                        uniqueIngredients: allCategories.size
+                    };
+                }
+
+                getMealClass(plato) {
+                    if (!plato || !plato.nombre) return '';
+                    const cats = AdvancedSelector.extractCategories(plato);
+                    if (cats.includes('aguacate') && cats.includes('huevo')) return 'both';
+                    if (cats.includes('aguacate')) return 'avocado';
+                    if (cats.includes('huevo')) return 'egg';
+                    return '';
+                }
+            }
+
+            // ============================================================
+            //  INSTANCIA
+            // ============================================================
+
+            const planner = new KetoPlanner();
+
+            // ============================================================
+            //  TOAST
+            // ============================================================
+
+            function showToast(message, type = 'info', duration = 3000) {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.textContent = message;
+                container.appendChild(toast);
+                toast.offsetHeight;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => { container.removeChild(toast); }, 400);
+                }, duration);
+            }
+
+            // ============================================================
+            //  NAVEGACIÓN
+            // ============================================================
+
+            function entrarApp() {
+                document.getElementById('landingPage').classList.add('hidden');
+                document.getElementById('appContent').classList.add('visible');
+                cargarUltimoMenu();
+                renderCalendario();
+                actualizarContador();
+                showToast('Algoritmo avanzado de diversificación activado', 'success', 2000);
+            }
+
+            function salirApp() {
+                document.getElementById('landingPage').classList.remove('hidden');
+                document.getElementById('appContent').classList.remove('visible');
+            }
+
+            // ============================================================
+            //  RENDERIZADORES
+            // ============================================================
+
+            function mShort(p) {
+                return `${p.kcal} · ${p.g}g · ${p.c}g · ${p.p}g`;
+            }
+
+            function actualizarContador() {
+                document.querySelector('#weekCounter').textContent = planner.calendario.length;
+                document.querySelector('#semanasGuardadas').textContent =
+                    planner.calendario.length > 0 ?
+                    `${planner.calendario.length} semana${planner.calendario.length > 1 ? 's' : ''} guardada${planner.calendario.length > 1 ? 's' : ''}` :
+                    '';
+            }
+
+            function cargarUltimoMenu() {
+                const semana = planner.getLastWeek();
+                if (semana) {
+                    renderMenu(semana);
+                    renderRecetas(semana);
+                    renderAnalisis(semana);
+                    actualizarStats(semana);
+                }
+            }
+
+            function actualizarStats(semana) {
+                const stats = planner.analyzeWeek(semana);
+                if (!stats) return;
+
+                let avgDiversity = 0;
+                if (semana && semana.length > 0) {
+                    let totalDiv = 0;
+                    for (const day of semana) {
+                        if (day.diversity) {
+                            totalDiv += day.diversity.score;
+                        } else {
+                            const dayMeals = [day.desayuno, day.p1c, day.p2c, day.c1, day.c2];
+                            const div = AdvancedSelector.analyzeDayDiversity(dayMeals);
+                            totalDiv += div.score;
+                        }
+                    }
+                    avgDiversity = Math.round(totalDiv / semana.length);
+                }
+
+                document.getElementById('statKcal').textContent = `~${stats.avgK}`;
+                document.getElementById('statProtein').textContent = `${stats.avgP}g`;
+                document.getElementById('statCarbs').textContent = `${stats.avgC}g`;
+                document.getElementById('statFat').textContent = `${stats.avgG}g`;
+                document.getElementById('statDiversity').textContent = `${avgDiversity}%`;
+
+                const maxK = CONFIG.TARGET_CALORIES * 1.3;
+                document.getElementById('kcalBar').style.width = `${Math.min(100, (stats.avgK / maxK) * 100)}%`;
+                document.getElementById('proteinBar').style.width = `${Math.min(100, (stats.avgP / CONFIG.TARGET_PROTEIN) * 100)}%`;
+                document.getElementById('carbsBar').style.width = `${Math.min(100, (stats.avgC / CONFIG.TARGET_CARBS) * 100)}%`;
+                document.getElementById('fatBar').style.width = `${Math.min(100, (stats.avgG / CONFIG.TARGET_FAT) * 100)}%`;
+                document.getElementById('diversityBar').style.width = `${Math.min(100, avgDiversity)}%`;
+                document.getElementById('diversityBar').style.background = avgDiversity > 70 ? 'var(--green)' : avgDiversity > 40 ?
+                    'var(--orange)' : 'var(--red)';
+            }
+
+            function renderMenu(semana) {
+                const grid = document.getElementById('weekGrid');
+
+                let html = '';
+                for (const d of semana) {
+                    const divScore = d.diversity ? d.diversity.score : 0;
+                    let badgeClass = 'bad';
+                    let badgeText = `Repetido ${divScore}%`;
+                    if (divScore > 70) { badgeClass = 'good';
+                        badgeText = `Diverso ${divScore}%`; } else if (divScore > 40) { badgeClass = 'warning';
+                        badgeText = `Mejorable ${divScore}%`; }
+
+                    html += `
+                        <div class="day-card">
+                            <div class="day-card-header">
+                                <span class="day-name">${d.dia.nombre}</span>
+                                <span class="day-emoji">${d.dia.emoji}</span>
+                            </div>
+                            <div class="day-body">
+                                <div class="meal-group">
+                                    <div class="meal-label"><span class="dot dot-bfast"></span>Desayuno</div>
+                                    <div class="meal-name">${d.desayuno.nombre}</div>
+                                    <div class="meal-macros">${mShort(d.desayuno)}</div>
+                                </div>
+                                <div class="meal-group">
+                                    <div class="meal-label"><span class="dot dot-lunch1"></span>1º Comida</div>
+                                    <div class="meal-name">${d.p1c.nombre}</div>
+                                    <div class="meal-macros">${mShort(d.p1c)}</div>
+                                </div>
+                                <div class="meal-group">
+                                    <div class="meal-label"><span class="dot dot-lunch2"></span>2º Comida</div>
+                                    <div class="meal-name">${d.p2c.nombre}</div>
+                                    <div class="meal-macros">${mShort(d.p2c)}</div>
+                                </div>
+                                <div class="meal-group">
+                                    <div class="meal-label"><span class="dot dot-dinner1"></span>1º Cena</div>
+                                    <div class="meal-name">${d.c1.nombre}</div>
+                                    <div class="meal-macros">${mShort(d.c1)}</div>
+                                </div>
+                                <div class="meal-group">
+                                    <div class="meal-label"><span class="dot dot-dinner2"></span>2º Cena</div>
+                                    <div class="meal-name">${d.c2.nombre}</div>
+                                    <div class="meal-macros">${mShort(d.c2)}</div>
+                                </div>
+                                <div class="day-summary">
+                                    <span>Kcal <strong>${d.total.kcal}</strong></span>
+                                    <span>G <strong>${d.total.g}g</strong></span>
+                                    <span>C <strong>${d.total.c}g</strong></span>
+                                    <span>P <strong>${d.total.p}g</strong></span>
+                                    <span class="diversity-badge ${badgeClass}">${badgeText}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                grid.innerHTML = html;
+            }
+
+            function renderRecetas(semana) {
+                const container = document.getElementById('recipesContainer');
+
+                if (!semana || semana.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📖</div>
+                            <div class="empty-state-title">Sin recetas</div>
+                            <div class="empty-state-text">Genera un menú para ver las recetas</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+
+                for (const d of semana) {
+                    const recetas = [
+                        { tipo: 'Desayuno', plato: d.desayuno },
+                        { tipo: '1º Comida', plato: d.p1c },
+                        { tipo: '2º Comida', plato: d.p2c },
+                        { tipo: '1º Cena', plato: d.c1 },
+                        { tipo: '2º Cena', plato: d.c2 }
+                    ];
+
+                    const divScore = d.diversity ? d.diversity.score : 0;
+                    const diversityLabel = divScore > 70 ? 'Alta diversidad' : divScore > 40 ? 'Media diversidad' :
+                        'Baja diversidad';
+
+                    html += `
+                        <div class="recipes-day-section">
+                            <div class="recipes-day-header">
+                                <div>
+                                    <span class="day-emoji">${d.dia.emoji}</span>
+                                    <span class="day-name">${d.dia.nombre}</span>
+                                    <span style="font-size:0.7rem;color:var(--text-tertiary);margin-left:0.5rem;">
+                                        ${diversityLabel} (${divScore}%)
+                                    </span>
+                                </div>
+                                <span style="font-size:0.7rem;color:var(--text-tertiary);">
+                                    ${d.total.kcal} kcal · ${d.total.g}g grasa
+                                </span>
+                            </div>
+                            <div class="recipes-day-grid">
+                    `;
+
+                    for (const r of recetas) {
+                        if (!r.plato || !r.plato.ingredientes) continue;
+
+                        const cats = AdvancedSelector.extractCategories(r.plato);
+                        const badge = cats.includes('aguacate') ? '🥑' :
+                            cats.includes('huevo') ? '🥚' : '';
+
+                        html += `
+                            <div class="recipe-mini">
+                                <div class="recipe-mini-type">${r.tipo} ${badge}</div>
+                                <div class="recipe-mini-title">${r.plato.nombre}</div>
+                                <div class="recipe-mini-macros">
+                                    ${r.plato.kcal}k · ${r.plato.g}g · ${r.plato.c}g · ${r.plato.p}g
+                                </div>
+                                <button class="recipe-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">
+                                    Ver receta
+                                </button>
+                                <div class="recipe-mini-expand">
+                                    <div><strong>Descripción:</strong> ${r.plato.descripcion}</div>
+                                    <div class="ingredients">
+                                        <strong>Ingredientes:</strong><br>
+                                        ${r.plato.ingredientes.map(i => `• ${i}`).join('<br>')}
+                                    </div>
+                                    <div style="margin-top:0.3rem;font-size:0.6rem;color:var(--text-tertiary);">
+                                        ⏱️ ${r.plato.tiempo || 15} min · Dificultad: ${r.plato.dificultad || 'media'}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = html;
+            }
+
+            function renderCalendario() {
+                const grid = document.getElementById('calendarGrid');
+
+                if (planner.calendario.length === 0) {
+                    grid.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📅</div>
+                            <div class="empty-state-title">Calendario vacío</div>
+                            <div class="empty-state-text">Genera menús para verlos en el calendario</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+
+                const sorted = [...planner.calendario].sort((a, b) =>
+                    new Date(b.fechaInicio) - new Date(a.fechaInicio)
+                );
+
+                for (const entry of sorted) {
+                    const fecha = new Date(entry.fechaInicio);
+                    const weekNum = planner.getWeekNumber(fecha);
+                    const fechaStr = planner.formatDate(fecha);
+
+                    html += `
+                        <div class="calendar-week-label">
+                            <span>Semana ${weekNum} · Inicio: ${fechaStr}</span>
+                            <button class="delete-week" onclick="eliminarSemana(${entry.id})">
+                                Eliminar
+                            </button>
+                        </div>
+                    `;
+
+                    for (const d of entry.semana) {
+                        const diaDate = new Date(fecha);
+                        const dayIndex = DIAS.findIndex(dia => dia.nombre === d.dia.nombre);
+                        diaDate.setDate(diaDate.getDate() + dayIndex);
+
+                        const recetas = [
+                            { type: 'Desayuno', plato: d.desayuno, class: planner.getMealClass(d.desayuno) },
+                            { type: '1º Comida', plato: d.p1c, class: planner.getMealClass(d.p1c) },
+                            { type: '2º Comida', plato: d.p2c, class: planner.getMealClass(d.p2c) },
+                            { type: '1º Cena', plato: d.c1, class: planner.getMealClass(d.c1) },
+                            { type: '2º Cena', plato: d.c2, class: planner.getMealClass(d.c2) }
+                        ];
+
+                        html += `
+                            <div class="calendar-day">
+                                <div class="calendar-day-header">
+                                    <span class="calendar-day-number">${diaDate.getDate()}</span>
+                                    <span class="calendar-day-name">${d.dia.nombre}</span>
+                                </div>
+                                <div>
+                                    ${recetas.map(r => `
+                                        <div class="calendar-meal ${r.class}">
+                                            <span class="type">${r.type}</span><br>
+                                            <span class="name">${r.plato.nombre}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                grid.innerHTML = html;
+            }
+
+            function renderAnalisis(semana) {
+                const container = document.getElementById('analisisContainer');
+                const stats = planner.analyzeWeek(semana);
+
+                if (!stats) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📊</div>
+                            <div class="empty-state-title">Sin datos para analizar</div>
+                            <div class="empty-state-text">Genera un menú para ver el análisis</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let avgDiversity = 0;
+                let diversityDetails = [];
+                if (semana && semana.length > 0) {
+                    let totalDiv = 0;
+                    for (const day of semana) {
+                        let divScore;
+                        if (day.diversity) {
+                            divScore = day.diversity.score;
+                        } else {
+                            const dayMeals = [day.desayuno, day.p1c, day.p2c, day.c1, day.c2];
+                            const div = AdvancedSelector.analyzeDayDiversity(dayMeals);
+                            divScore = div.score;
+                        }
+                        totalDiv += divScore;
+                        diversityDetails.push({
+                            dia: day.dia.nombre,
+                            score: divScore,
+                            unique: day.diversity ? day.diversity.uniqueCount : 0
+                        });
+                    }
+                    avgDiversity = Math.round(totalDiv / semana.length);
+                }
+
+                const meals = stats.meals;
+                const types = [
+                    { name: 'Desayunos', items: meals.filter((_, i) => i % 5 === 0) },
+                    { name: '1º Comida', items: meals.filter((_, i) => i % 5 === 1) },
+                    { name: '2º Comida', items: meals.filter((_, i) => i % 5 === 2) },
+                    { name: '1º Cena', items: meals.filter((_, i) => i % 5 === 3) },
+                    { name: '2º Cena', items: meals.filter((_, i) => i % 5 === 4) }
+                ];
+
+                const avgByType = types.map(t => {
+                    const avgK = Math.round(t.items.reduce((s, m) => s + m.kcal, 0) / t.items.length);
+                    const avgP = Math.round(t.items.reduce((s, m) => s + m.p, 0) / t.items.length);
+                    const avgC = Math.round(t.items.reduce((s, m) => s + m.c, 0) / t.items.length);
+                    const avgG = Math.round(t.items.reduce((s, m) => s + m.g, 0) / t.items.length);
+                    return { ...t, avgK, avgP, avgC, avgG };
+                });
+
+                let html = `
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">
+                        <div style="background:var(--bg-card);border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);">
+                            <h3 style="margin-bottom:0.5rem;">Resumen Semanal</h3>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+                                <div><span style="color:var(--text-tertiary);">Calorías totales</span><br><strong>${stats.totalK}</strong></div>
+                                <div><span style="color:var(--text-tertiary);">Proteína total</span><br><strong>${stats.totalP}g</strong></div>
+                                <div><span style="color:var(--text-tertiary);">Carbohidratos totales</span><br><strong>${stats.totalC}g</strong></div>
+                                <div><span style="color:var(--text-tertiary);">Grasa total</span><br><strong>${stats.totalG}g</strong></div>
+                            </div>
+                            <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+                                <span style="color:var(--text-tertiary);">Ratio Keto</span><br>
+                                <strong style="font-size:1.3rem;color:var(--accent);">${stats.ratio}%</strong>
+                                <span style="font-size:0.8rem;color:var(--text-secondary);margin-left:0.5rem;">
+                                    (Grasa / (Proteína + Carbohidratos))
+                                </span>
+                            </div>
+                        </div>
+                        <div style="background:var(--bg-card);border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);">
+                            <h3 style="margin-bottom:0.5rem;">Diversidad</h3>
+                            <div style="margin-bottom:1rem;">
+                                <span style="color:var(--text-tertiary);">Puntuación global</span><br>
+                                <strong style="font-size:1.8rem;color:${avgDiversity > 70 ? 'var(--green)' : avgDiversity > 40 ? 'var(--orange)' : 'var(--red)'};">${avgDiversity}%</strong>
+                                <span style="font-size:0.8rem;color:var(--text-secondary);margin-left:0.5rem;">
+                                    ${avgDiversity > 70 ? 'Excelente' : avgDiversity > 40 ? 'Mejorable' : 'Pobre'}
+                                </span>
+                            </div>
+                            <div style="margin-bottom:0.3rem;">
+                                <span style="color:var(--text-tertiary);">Categorías únicas</span><br>
+                                <strong>${stats.uniqueIngredients}</strong>
+                                <span style="font-size:0.8rem;color:var(--text-secondary);margin-left:0.5rem;">
+                                    de ${Object.keys(CONFIG.KEY_INGREDIENTS).length} posibles
+                                </span>
+                            </div>
+                            <div style="margin-top:0.5rem;">
+                                <span style="color:var(--text-tertiary);font-size:0.8rem;">Diversidad por día:</span>
+                                <div style="display:flex;gap:0.3rem;margin-top:0.2rem;flex-wrap:wrap;">
+                                    ${diversityDetails.map(d => `
+                                        <span style="background:${d.score > 70 ? 'var(--green-bg)' : d.score > 40 ? 'var(--orange-bg)' : 'var(--red-bg)'};padding:0.1rem 0.4rem;border-radius:10px;font-size:0.65rem;font-weight:600;color:${d.score > 70 ? 'var(--green)' : d.score > 40 ? 'var(--orange)' : 'var(--red)'};">
+                                            ${d.dia}: ${d.score}%
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                html += `
+                    <div style="background:var(--bg-card);border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);">
+                        <h3 style="margin-bottom:0.8rem;">Media Nutricional por Tipo de Comida</h3>
+                        <div style="overflow-x:auto;">
+                            <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                                <thead>
+                                    <tr style="border-bottom:2px solid var(--border);">
+                                        <th style="text-align:left;padding:0.5rem;">Tipo</th>
+                                        <th style="text-align:right;padding:0.5rem;">Kcal</th>
+                                        <th style="text-align:right;padding:0.5rem;">Proteína</th>
+                                        <th style="text-align:right;padding:0.5rem;">Carbos</th>
+                                        <th style="text-align:right;padding:0.5rem;">Grasa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${avgByType.map(t => `
+                                        <tr style="border-bottom:1px solid var(--border);">
+                                            <td style="padding:0.5rem;font-weight:500;">${t.name}</td>
+                                            <td style="text-align:right;padding:0.5rem;">${t.avgK}</td>
+                                            <td style="text-align:right;padding:0.5rem;">${t.avgP}g</td>
+                                            <td style="text-align:right;padding:0.5rem;">${t.avgC}g</td>
+                                            <td style="text-align:right;padding:0.5rem;">${t.avgG}g</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML = html;
+            }
+
+            // ============================================================
+            //  ACCIONES
+            // ============================================================
+
+            function generarMenu() {
+                if (planner.calendario.length >= CONFIG.MAX_WEEKS) {
+                    showToast(`Límite de ${CONFIG.MAX_WEEKS} semanas alcanzado`, 'error');
+                    return;
+                }
+
+                try {
+                    const result = planner.generateWeek();
+                    renderMenu(result.semana);
+                    renderRecetas(result.semana);
+                    renderAnalisis(result.semana);
+                    renderCalendario();
+                    actualizarStats(result.semana);
+                    actualizarContador();
+
+                    let totalDiv = 0;
+                    for (const day of result.semana) {
+                        if (day.diversity) totalDiv += day.diversity.score;
+                    }
+                    const avgDiv = Math.round(totalDiv / result.semana.length);
+
+                    showToast(`Menú generado con diversidad ${avgDiv}%`, 'success');
+                } catch (error) {
+                    console.error('Error generating menu:', error);
+                    showToast('Error al generar el menú', 'error');
+                }
+            }
+
+            function eliminarSemana(id) {
+                if (!confirm('¿Estás seguro de que quieres eliminar esta semana?')) return;
+                planner.deleteWeek(id);
+                renderCalendario();
+                actualizarContador();
+                cargarUltimoMenu();
+                showToast('Semana eliminada', 'info');
+            }
+
+            function limpiarTodo() {
+                if (!confirm('¿Estás seguro de que quieres eliminar TODAS las semanas guardadas?')) return;
+                planner.clearAll();
+                renderCalendario();
+                actualizarContador();
+
+                document.getElementById('weekGrid').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🍽️</div>
+                        <div class="empty-state-title">Genera tu menú</div>
+                        <div class="empty-state-text">Pulsa "Generar" para comenzar</div>
+                    </div>
+                `;
+                document.getElementById('recipesContainer').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📖</div>
+                        <div class="empty-state-title">Sin recetas</div>
+                        <div class="empty-state-text">Genera un menú para ver las recetas</div>
+                    </div>
+                `;
+                document.getElementById('analisisContainer').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <div class="empty-state-title">Sin datos para analizar</div>
+                        <div class="empty-state-text">Genera un menú para ver el análisis</div>
+                    </div>
+                `;
+
+                document.getElementById('statKcal').textContent = '—';
+                document.getElementById('statProtein').textContent = '—';
+                document.getElementById('statCarbs').textContent = '—';
+                document.getElementById('statFat').textContent = '—';
+                document.getElementById('statDiversity').textContent = '—';
+
+                showToast('Todo limpiado correctamente', 'info');
+            }
+
+            // ============================================================
+            //  TABS
+            // ============================================================
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-btn').forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                    });
+                    this.classList.add('active');
+                    this.setAttribute('aria-selected', 'true');
+                    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                    document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+
+                    if (this.dataset.tab === 'calendario') {
+                        renderCalendario();
+                    }
+                    if (this.dataset.tab === 'analisis') {
+                        const semana = planner.getLastWeek();
+                        if (semana) renderAnalisis(semana);
+                    }
+                });
+            });
+
+            // ============================================================
+            //  EVENTOS
+            // ============================================================
+
+            document.getElementById('entrarBtn').addEventListener('click', entrarApp);
+            document.getElementById('salirBtn').addEventListener('click', salirApp);
+            document.getElementById('btnGenerar').addEventListener('click', generarMenu);
+            document.getElementById('clearAllBtn').addEventListener('click', limpiarTodo);
+
+            window.eliminarSemana = eliminarSemana;
+
+            // ============================================================
+            //  INIT
+            // ============================================================
+
+            actualizarContador();
+            console.log('Keto Planner con Diversificación Avanzada cargado');
+            console.log(`📊 ${Object.keys(CONFIG.KEY_INGREDIENTS).length} categorías de ingredientes detectadas`);
+
+        })();
+    </script>
+
+</body>
+</html>
