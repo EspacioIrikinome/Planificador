@@ -39,6 +39,7 @@
             --radius-sm: 10px;
             --transition: all 0.25s ease;
             --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --touch-size: 44px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -65,10 +66,11 @@
             background: var(--bg);
             color: var(--text-primary);
             min-height: 100vh;
-            padding: clamp(1rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2rem);
+            padding: clamp(0.6rem, 2vw, 2.5rem) clamp(0.6rem, 2vw, 2rem);
             -webkit-font-smoothing: antialiased;
             line-height: 1.6;
             transition: background 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
         }
 
         .container {
@@ -77,7 +79,7 @@
         }
 
         /* ============================================================
-           LANDING PAGE - CORPORATIVA MINIMALISTA
+           LANDING PAGE - SIN ICONOS
            ============================================================ */
         .landing-page {
             display: flex;
@@ -86,7 +88,7 @@
             justify-content: center;
             min-height: 85vh;
             text-align: center;
-            padding: 2rem 1.5rem;
+            padding: 1.5rem 1rem;
             animation: fadeIn 0.6s ease;
         }
 
@@ -100,19 +102,11 @@
         }
 
         .landing-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .landing-logo-icon {
-            font-size: 2.8rem;
-            line-height: 1;
+            margin-bottom: 1.5rem;
         }
 
         .landing-logo-text {
-            font-size: 2.0rem;
+            font-size: clamp(1.6rem, 5vw, 2.0rem);
             font-weight: 200;
             color: var(--text-primary);
             letter-spacing: -0.02em;
@@ -125,29 +119,29 @@
 
         .landing-hero {
             max-width: 680px;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .landing-badge {
             display: inline-block;
             background: var(--accent-light);
             color: var(--accent);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 600;
-            padding: 0.25rem 0.9rem;
+            padding: 0.2rem 0.8rem;
             border-radius: 40px;
             text-transform: uppercase;
             letter-spacing: 0.06em;
-            margin-bottom: 1.2rem;
+            margin-bottom: 0.8rem;
         }
 
         .landing-title {
-            font-size: clamp(2.4rem, 5vw, 3.6rem);
+            font-size: clamp(1.8rem, 6vw, 3.6rem);
             font-weight: 700;
             letter-spacing: -0.03em;
             color: var(--text-primary);
             line-height: 1.1;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.6rem;
         }
 
         .landing-title .highlight {
@@ -155,16 +149,12 @@
         }
 
         .landing-desc {
-            font-size: clamp(1rem, 1.2vw, 1.15rem);
+            font-size: clamp(0.9rem, 1.4vw, 1.15rem);
             color: var(--text-secondary);
             max-width: 520px;
-            line-height: 1.7;
+            line-height: 1.6;
             margin: 0 auto 0.5rem;
-        }
-
-        .landing-desc strong {
-            color: var(--text-primary);
-            font-weight: 600;
+            padding: 0 0.5rem;
         }
 
         .landing-actions {
@@ -173,11 +163,51 @@
             flex-wrap: wrap;
             justify-content: center;
             margin-top: 1.5rem;
+            width: 100%;
+            max-width: 320px;
         }
 
-        .landing-btn-primary {
-            background: var(--accent);
-            color: white;
+        .landing-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding-top: 1.2rem;
+            border-top: 1px solid var(--border);
+            width: 100%;
+            max-width: 350px;
+            margin-top: 1rem;
+        }
+
+        .landing-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 60px;
+        }
+
+        .landing-stat .number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .landing-stat .label {
+            font-size: 0.6rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .landing-spacer {
+            height: 1.5rem;
+        }
+
+        /* BOTÓN ENTRAR - ESTILO COHERENTE CON LA APP */
+        .landing-btn-entrar {
+            background: var(--bg);
+            color: var(--green);
             border: none;
             padding: 0.85rem 3rem;
             font-size: 1rem;
@@ -186,53 +216,25 @@
             cursor: pointer;
             transition: var(--transition);
             font-family: inherit;
-            box-shadow: 0 2px 16px rgba(0, 102, 204, 0.25);
+            box-shadow: 0 2px 16px rgba(0, 102, 204, 0.2);
             touch-action: manipulation;
-        }
-
-        .landing-btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 24px rgba(0, 102, 204, 0.35);
-        }
-
-        .landing-btn-primary:active {
-            transform: scale(0.97);
-        }
-
-        .landing-stats {
-            display: flex;
-            gap: 2.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
             width: 100%;
-            max-width: 400px;
-            margin-top: 1.5rem;
+            min-height: var(--touch-size);
+            letter-spacing: 0.01em;
         }
 
-        .landing-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .landing-btn-entrar:hover {
+            background: var(--bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 24px rgba(0, 102, 204, 0.3);
         }
 
-        .landing-stat .number {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .landing-stat .label {
-            font-size: 0.65rem;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
+        .landing-btn-entrar:active {
+            transform: scale(0.98);
         }
 
         /* ============================================================
-           APP CONTENT
+           APP CONTENT - SIN ICONOS
            ============================================================ */
         .app-content {
             display: none;
@@ -248,41 +250,27 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: clamp(1.5rem, 4vw, 3rem);
-            padding-bottom: clamp(1rem, 2vw, 2rem);
+            gap: 0.8rem;
+            margin-bottom: clamp(1rem, 3vw, 3rem);
+            padding-bottom: clamp(0.8rem, 2vw, 2rem);
             border-bottom: 1px solid var(--border);
         }
 
         .app-title-group {
             display: flex;
             align-items: center;
-            gap: clamp(0.6rem, 1.5vw, 1rem);
-        }
-
-        .app-icon {
-            width: clamp(40px, 5vw, 48px);
-            height: clamp(40px, 5vw, 48px);
-            background: var(--accent);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(1.2rem, 2vw, 1.5rem);
-            color: white;
-            box-shadow: 0 2px 12px rgba(0, 102, 204, 0.25);
-            flex-shrink: 0;
+            gap: clamp(0.4rem, 1.5vw, 1rem);
         }
 
         .app-title {
-            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            font-size: clamp(1rem, 2.5vw, 1.6rem);
             font-weight: 600;
             letter-spacing: -0.02em;
             color: var(--text-primary);
         }
 
         .app-subtitle {
-            font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+            font-size: clamp(0.6rem, 1.2vw, 0.85rem);
             color: var(--text-secondary);
             font-weight: 400;
         }
@@ -290,12 +278,12 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
         }
 
         .header-action-link {
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 1.2vw, 0.85rem);
             font-weight: 500;
             color: var(--text-secondary);
             cursor: pointer;
@@ -303,12 +291,15 @@
             font-family: var(--font);
             background: none;
             border: none;
-            padding: 0;
+            padding: 0.4rem 0.2rem;
             text-decoration: underline;
             text-underline-offset: 3px;
             text-decoration-thickness: 1.5px;
             text-decoration-color: transparent;
             touch-action: manipulation;
+            min-height: 36px;
+            display: inline-flex;
+            align-items: center;
         }
 
         .header-action-link:hover {
@@ -335,55 +326,41 @@
             text-decoration-color: var(--red);
         }
 
-        .header-action-link .counter {
-            display: inline-block;
-            background: var(--accent-light);
-            color: var(--accent);
-            font-size: 0.6rem;
-            font-weight: 600;
-            padding: 0.05rem 0.4rem;
-            border-radius: 20px;
-            margin-left: 0.2rem;
-        }
-
         .header-action-divider {
             width: 1px;
-            height: 18px;
+            height: 20px;
             background: var(--border);
+            flex-shrink: 0;
         }
-	/* Clase específica para el botón de landing */
-.landing-link-btn {
-    font-size: 2rem;
-    font-weight: 100;
-    color: var(--red) !important; /* Forzamos el color verde */
-}
 
-/* También puedes cambiar el color al hacer hover */
-.landing-link-btn:hover {
-    color: #fff !important; /* Un verde más oscuro */
-    text-decoration-color: var(--red) !important;
-}
-
+        /* ============================================================
+           TABS
+           ============================================================ */
         .tabs {
             display: flex;
-            gap: 0.25rem;
-            margin-bottom: clamp(1.5rem, 3vw, 2rem);
+            gap: 0.2rem;
+            margin-bottom: clamp(1rem, 2.5vw, 2rem);
             background: var(--bg-card);
-            padding: 0.25rem;
+            padding: 0.2rem;
             border-radius: 40px;
             border: 1px solid var(--border);
             width: 100%;
-            max-width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
         }
 
         .tab-btn {
-            padding: 0.4rem 1.2rem;
+            padding: 0.5rem 0.8rem;
             border: none;
             background: transparent;
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: clamp(0.65rem, 1.2vw, 0.8rem);
             font-weight: 500;
             border-radius: 40px;
             cursor: pointer;
@@ -391,6 +368,10 @@
             font-family: inherit;
             white-space: nowrap;
             touch-action: manipulation;
+            min-height: 36px;
+            flex: 1;
+            text-align: center;
+            min-width: 60px;
         }
 
         .tab-btn:hover {
@@ -417,6 +398,9 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* ============================================================
+           WEEK GRID
+           ============================================================ */
         .week-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -449,7 +433,7 @@
 
         .day-name {
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: clamp(0.7rem, 1vw, 0.8rem);
             color: var(--text-primary);
         }
 
@@ -462,6 +446,12 @@
             padding: 0.15rem 0.2rem;
             border-radius: 4px;
             transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .meal-group:active {
+            transform: scale(0.98);
         }
 
         .meal-group:hover {
@@ -472,8 +462,15 @@
             margin-bottom: 0;
         }
 
+        .meal-group .click-hint {
+            font-size: 0.4rem;
+            color: var(--text-tertiary);
+            opacity: 0.5;
+            margin-left: 0.3rem;
+        }
+
         .meal-label {
-            font-size: 0.45rem;
+            font-size: clamp(0.4rem, 0.6vw, 0.45rem);
             text-transform: uppercase;
             letter-spacing: 0.06em;
             color: var(--text-tertiary);
@@ -498,21 +495,21 @@
         .dot-dinner2 { background: #5856d6; }
 
         .meal-name {
-            font-size: 0.7rem;
+            font-size: clamp(0.6rem, 0.8vw, 0.7rem);
             color: var(--text-primary);
             line-height: 1.3;
             font-weight: 450;
         }
 
         .meal-macros {
-            font-size: 0.5rem;
+            font-size: clamp(0.45rem, 0.6vw, 0.5rem);
             color: var(--text-tertiary);
             margin-top: 0.05rem;
         }
 
         .diversity-badge {
             display: inline-block;
-            font-size: 0.45rem;
+            font-size: clamp(0.4rem, 0.5vw, 0.45rem);
             padding: 0.05rem 0.35rem;
             border-radius: 10px;
             margin-left: 0.2rem;
@@ -541,7 +538,7 @@
             display: flex;
             gap: 0.4rem;
             flex-wrap: wrap;
-            font-size: 0.55rem;
+            font-size: clamp(0.5rem, 0.6vw, 0.55rem);
             color: var(--text-secondary);
         }
 
@@ -550,15 +547,18 @@
             font-weight: 600;
         }
 
+        /* ============================================================
+           CALENDARIO
+           ============================================================ */
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 0.8rem;
+            gap: 0.6rem;
         }
 
         .calendar-week-label {
             grid-column: 1 / -1;
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 1.2vw, 0.9rem);
             font-weight: 600;
             color: var(--text-secondary);
             padding: 0.3rem 0;
@@ -567,18 +567,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
         .calendar-week-label .delete-week {
             background: var(--red-bg);
             color: var(--red);
             border: none;
-            padding: 0.15rem 0.7rem;
+            padding: 0.2rem 0.8rem;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 0.65rem;
+            font-size: clamp(0.6rem, 0.8vw, 0.65rem);
             font-weight: 600;
             transition: var(--transition);
+            min-height: 32px;
         }
 
         .calendar-week-label .delete-week:hover {
@@ -590,8 +593,8 @@
             background: var(--bg-card);
             border-radius: var(--radius);
             border: 1px solid var(--border);
-            padding: 0.6rem;
-            min-height: 110px;
+            padding: 0.5rem;
+            min-height: 100px;
             transition: var(--transition);
             overflow: hidden;
         }
@@ -610,19 +613,19 @@
         }
 
         .calendar-day-number {
-            font-size: 0.75rem;
+            font-size: clamp(0.7rem, 0.9vw, 0.75rem);
             font-weight: 600;
             color: var(--text-primary);
         }
 
         .calendar-day-name {
-            font-size: 0.6rem;
+            font-size: clamp(0.5rem, 0.7vw, 0.6rem);
             color: var(--text-tertiary);
             font-weight: 500;
         }
 
         .calendar-meal {
-            font-size: 0.55rem;
+            font-size: clamp(0.5rem, 0.6vw, 0.55rem);
             padding: 0.1rem 0.2rem;
             margin-bottom: 0.1rem;
             border-radius: 3px;
@@ -632,139 +635,28 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .calendar-meal:hover {
+            background: var(--accent-light);
         }
 
         .calendar-meal .type {
             font-weight: 600;
             color: var(--text-secondary);
-            font-size: 0.45rem;
+            font-size: clamp(0.4rem, 0.5vw, 0.45rem);
             text-transform: uppercase;
         }
 
         .calendar-meal .name {
             color: var(--text-primary);
-            font-size: 0.5rem;
+            font-size: clamp(0.45rem, 0.5vw, 0.5rem);
         }
 
-        .recipes-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .recipes-day-section {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-        }
-
-        .recipes-day-section:hover {
-            box-shadow: var(--shadow-md);
-        }
-
-        .recipes-day-header {
-            padding: 0.8rem 1.2rem;
-            background: var(--bg-card-alt);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            justify-content: space-between;
-        }
-
-        .recipes-day-header .day-name {
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-
-        .recipes-day-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 0.6rem;
-            padding: 0.8rem 1.2rem;
-        }
-
-        .recipe-mini {
-            background: var(--bg);
-            border-radius: var(--radius-sm);
-            padding: 0.6rem 0.8rem;
-            border: 1px solid var(--border);
-            transition: var(--transition);
-        }
-
-        .recipe-mini:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .recipe-mini-type {
-            font-size: 0.45rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-tertiary);
-            font-weight: 600;
-            margin-bottom: 0.15rem;
-        }
-
-        .recipe-mini-title {
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            line-height: 1.3;
-            margin-bottom: 0.15rem;
-        }
-
-        .recipe-mini-macros {
-            font-size: 0.5rem;
-            color: var(--text-tertiary);
-        }
-
-        .recipe-mini-expand {
-            margin-top: 0.3rem;
-            padding-top: 0.3rem;
-            border-top: 1px solid var(--border);
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-            display: none;
-        }
-
-        .recipe-mini-expand.visible {
-            display: block;
-            animation: fadeSlide 0.3s ease;
-        }
-
-        .recipe-mini-expand .ingredients {
-            margin-top: 0.15rem;
-            font-size: 0.6rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .recipe-mini-expand .ingredients strong {
-            color: var(--text-primary);
-        }
-
-        .recipe-toggle {
-            background: none;
-            border: none;
-            color: var(--accent);
-            font-size: 0.55rem;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 0.1rem 0;
-            font-family: inherit;
-            transition: var(--transition);
-            touch-action: manipulation;
-        }
-
-        .recipe-toggle:hover {
-            color: var(--accent-hover);
-        }
-
+        /* ============================================================
+           EMPTY STATE
+           ============================================================ */
         .empty-state {
             text-align: center;
             padding: 2rem 1rem;
@@ -773,31 +665,31 @@
         }
 
         .empty-state-title {
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 1.5vw, 1.1rem);
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: 0.2rem;
         }
 
         .empty-state-text {
-            font-size: 0.85rem;
+            font-size: clamp(0.8rem, 1vw, 0.85rem);
             color: var(--text-secondary);
         }
 
         /* ============================================================
-           STATS CARDS - AHORA EN ANÁLISIS
+           STATS CARDS
            ============================================================ */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 0.8rem;
-            margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+            gap: 0.6rem;
+            margin-bottom: clamp(1rem, 2.5vw, 2.5rem);
         }
 
         .stat-card {
             background: var(--bg-card);
             border-radius: var(--radius-sm);
-            padding: 0.8rem 1rem;
+            padding: 0.6rem 0.6rem;
             border: 1px solid var(--border);
             box-shadow: var(--shadow-sm);
             transition: var(--transition);
@@ -810,7 +702,7 @@
         }
 
         .stat-label {
-            font-size: 0.6rem;
+            font-size: clamp(0.5rem, 0.6vw, 0.6rem);
             text-transform: uppercase;
             letter-spacing: 0.06em;
             color: var(--text-tertiary);
@@ -818,7 +710,7 @@
         }
 
         .stat-value {
-            font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+            font-size: clamp(1rem, 2vw, 1.8rem);
             font-weight: 600;
             letter-spacing: -0.02em;
             margin-top: 0.1rem;
@@ -830,7 +722,7 @@
             height: 3px;
             background: var(--border);
             border-radius: 4px;
-            margin-top: 0.4rem;
+            margin-top: 0.3rem;
             overflow: hidden;
         }
 
@@ -842,85 +734,397 @@
         }
 
         /* ============================================================
+           MODAL DE RECETA - SIN ICONOS
+           ============================================================ */
+        .recipe-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: modalFadeIn 0.25s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .recipe-modal {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
+            animation: modalSlideUp 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes modalSlideUp {
+            from { transform: translateY(30px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .recipe-modal-close {
+            position: absolute;
+            top: 0.8rem;
+            right: 0.8rem;
+            background: var(--bg);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+        }
+
+        .recipe-modal-close:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .recipe-modal-type {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .recipe-modal-title {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            padding-right: 2rem;
+        }
+
+        .recipe-modal-macros {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .recipe-modal-macros span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .recipe-modal-macros strong {
+            color: var(--text-primary);
+        }
+
+        .recipe-modal-section {
+            margin-bottom: 0.8rem;
+        }
+
+        .recipe-modal-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .recipe-modal-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .recipe-modal-ingredients {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .recipe-modal-ingredients li {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 0.2rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recipe-modal-ingredients li:last-child {
+            border-bottom: none;
+        }
+
+        .recipe-modal-ingredients li::before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .recipe-modal-footer {
+            margin-top: 1rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+        }
+
+        .recipe-modal-footer span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* ============================================================
            RESPONSIVE
            ============================================================ */
         @media (max-width: 1024px) {
             .week-grid { grid-template-columns: repeat(4, 1fr); }
             .calendar-grid { grid-template-columns: repeat(4, 1fr); }
-            .recipes-day-grid { grid-template-columns: repeat(3, 1fr); }
             .stats-grid { grid-template-columns: repeat(3, 1fr); }
         }
 
         @media (max-width: 768px) {
-            body { padding: 0.8rem; }
+            body { padding: 0.6rem; }
+            
             .app-header {
                 flex-direction: column;
                 align-items: stretch;
                 gap: 0.6rem;
             }
-            .app-title-group { justify-content: center; }
+            .app-title-group { 
+                justify-content: center;
+                flex-wrap: wrap;
+            }
             .header-actions {
                 width: 100%;
                 justify-content: center;
                 flex-wrap: wrap;
+                gap: 0.4rem;
             }
+            .header-action-divider {
+                display: none;
+            }
+            
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 0.5rem;
+                gap: 0.4rem;
             }
+            .stat-card {
+                padding: 0.5rem 0.5rem;
+            }
+            
             .tabs {
-                width: 100%;
                 border-radius: var(--radius-sm);
                 padding: 0.2rem;
-                flex-wrap: nowrap;
-                overflow-x: auto;
                 gap: 0.15rem;
             }
             .tab-btn {
-                flex: 0 0 auto;
-                padding: 0.3rem 0.7rem;
-                font-size: 0.7rem;
+                padding: 0.3rem 0.5rem;
+                font-size: 0.65rem;
+                min-width: 50px;
+                min-height: 32px;
             }
+            
             .week-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr 1fr;
                 gap: 0.5rem;
             }
             .calendar-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr 1fr;
                 gap: 0.5rem;
             }
-            .recipes-day-grid {
-                grid-template-columns: 1fr 1fr;
-                padding: 0.6rem;
+            
+            .calendar-day { 
+                min-height: 80px; 
+                padding: 0.4rem; 
             }
-            .calendar-day { min-height: 90px; padding: 0.5rem; }
-            .calendar-meal { white-space: normal; overflow: visible; }
-            .recipes-day-header { padding: 0.6rem 0.8rem; }
-            .day-card-header { padding: 0.4rem 0.6rem; }
-            .day-body { padding: 0.4rem 0.6rem 0.6rem; }
-            .landing-title { font-size: 1.8rem; }
-            .landing-desc { font-size: 0.9rem; }
-            .landing-actions { flex-direction: column; width: 100%; }
-            .landing-btn-primary { width: 100%; justify-content: center; }
-            .landing-stats { gap: 1.5rem; }
+            .calendar-meal { 
+                white-space: normal; 
+                overflow: visible; 
+            }
+            
+            .day-card-header { 
+                padding: 0.4rem 0.5rem; 
+            }
+            .day-body { 
+                padding: 0.4rem 0.5rem 0.6rem; 
+            }
+            
+            .landing-title { 
+                font-size: 1.6rem; 
+            }
+            .landing-desc { 
+                font-size: 0.85rem; 
+                padding: 0 0.3rem;
+            }
+            .landing-actions { 
+                max-width: 280px;
+            }
+            .landing-stats { 
+                gap: 1.2rem;
+                max-width: 300px;
+            }
+            
+            .landing-spacer {
+                height: 1rem;
+            }
+
+            .recipe-modal {
+                padding: 1.2rem;
+                margin: 0.5rem;
+                max-height: 85vh;
+            }
         }
 
         @media (max-width: 480px) {
-            .week-grid { grid-template-columns: 1fr; }
-            .calendar-grid { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.3rem; }
-            .stat-card { padding: 0.5rem 0.6rem; }
-            .stat-value { font-size: 1rem; }
-            .app-icon { width: 32px; height: 32px; font-size: 0.9rem; }
-            .app-title { font-size: 1.1rem; }
-            .recipes-day-grid { grid-template-columns: 1fr; }
-            .landing-title { font-size: 1.4rem; }
-            .landing-stats { gap: 1rem; }
+            body { padding: 0.4rem; }
+            
+            .week-grid { 
+                grid-template-columns: 1fr; 
+                gap: 0.4rem;
+            }
+            .calendar-grid { 
+                grid-template-columns: 1fr; 
+                gap: 0.4rem;
+            }
+            .stats-grid { 
+                grid-template-columns: 1fr 1fr; 
+                gap: 0.3rem; 
+            }
+            .stat-card { 
+                padding: 0.4rem 0.4rem; 
+            }
+            .stat-value { 
+                font-size: 0.9rem; 
+            }
+            
+            .app-title { 
+                font-size: 0.95rem; 
+            }
+            .app-subtitle {
+                font-size: 0.55rem;
+            }
+            
+            .landing-title { 
+                font-size: 1.3rem; 
+            }
+            .landing-stats { 
+                gap: 0.8rem; 
+            }
+            .landing-stat .number {
+                font-size: 1rem;
+            }
+            
+            .tabs {
+                border-radius: 8px;
+                padding: 0.15rem;
+            }
+            .tab-btn {
+                padding: 0.25rem 0.4rem;
+                font-size: 0.55rem;
+                min-width: 40px;
+                min-height: 28px;
+            }
+            
+            .header-action-link {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.15rem;
+                min-height: 30px;
+            }
+            
+            .calendar-day {
+                min-height: 70px;
+                padding: 0.3rem;
+            }
+            
+            .day-card-header {
+                padding: 0.3rem 0.4rem;
+            }
+            .day-body {
+                padding: 0.3rem 0.4rem 0.4rem;
+            }
+            .meal-group {
+                margin-bottom: 0.15rem;
+                padding: 0.1rem 0.15rem;
+            }
+            .meal-name {
+                font-size: 0.55rem;
+            }
+            .meal-macros {
+                font-size: 0.4rem;
+            }
+            .day-summary {
+                font-size: 0.45rem;
+                gap: 0.2rem;
+            }
+            
+            .landing-spacer {
+                height: 0.8rem;
+            }
+
+            .recipe-modal {
+                padding: 1rem;
+            }
+            .recipe-modal-title {
+                font-size: 1.1rem;
+            }
+            .recipe-modal-description {
+                font-size: 0.8rem;
+            }
+            .recipe-modal-ingredients li {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .stats-grid { 
+                grid-template-columns: 1fr 1fr; 
+                gap: 0.2rem; 
+            }
+            .stat-card { 
+                padding: 0.3rem 0.3rem; 
+            }
+            .stat-value { 
+                font-size: 0.8rem; 
+            }
+            .stat-label {
+                font-size: 0.45rem;
+            }
+            
+            .tab-btn {
+                font-size: 0.5rem;
+                padding: 0.2rem 0.3rem;
+                min-width: 35px;
+            }
         }
 
         @media print {
-            .btn-primary, .btn-secondary, .btn-danger, .landing-btn-primary,
-            .recipe-toggle, .tabs, .header-actions, .delete-week, .landing-page {
+            .btn-primary, .btn-secondary, .btn-danger, .landing-btn-entrar,
+            .recipe-toggle, .tabs, .header-actions, .delete-week, .landing-page,
+            .recipe-modal-overlay {
                 display: none !important;
             }
             .app-header { margin-bottom: 0.8rem; }
@@ -931,33 +1135,35 @@
             .app-content.visible { display: block !important; }
         }
 
-        /* Añade esto al final del CSS existente */
-.landing-spacer {
-    height: 3.0rem;
-}
-
+        .recipe-modal::-webkit-scrollbar {
+            width: 4px;
+        }
+        .recipe-modal::-webkit-scrollbar-track {
+            background: var(--bg);
+            border-radius: 4px;
+        }
+        .recipe-modal::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+        .recipe-modal::-webkit-scrollbar-thumb:hover {
+            background: var(--text-tertiary);
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
 
-        <!-- ============================================================
-        LANDING PAGE - CORPORATIVA MINIMALISTA
-        ============================================================ -->
+        <!-- LANDING PAGE - SIN ICONOS -->
         <div id="landingPage" class="landing-page">
-
             <div class="landing-logo">
-                
                 <span class="landing-logo-text">Keto<span>Planner</span></span>
             </div>
-
             <div class="landing-hero">
                 <span class="landing-badge">By IanDardonos</span>
             </div>
-
             <div class="landing-stats">
-                
                 <div class="landing-stat">
                     <span class="number">150+</span>
                     <span class="label">Recetas</span>
@@ -967,51 +1173,34 @@
                     <span class="label">Platos / día</span>
                 </div>
             </div>
-
-	    <div class="landing-spacer"></div>
-
-	    <div class="landing-actions">
-                 <button class="header-action-link landing-link-btn" id="entrarBtn">Entra</button>
-                </div>
-
+            <div class="landing-spacer"></div>
+            <div class="landing-actions">
+                <button class="landing-btn-entrar" id="entrarBtn">Entrar</button>
+            </div>
         </div>
 
-        <!-- ============================================================
-        APP CONTENT
-        ============================================================ -->
+        <!-- APP CONTENT -->
         <div id="appContent" class="app-content">
 
             <header class="app-header">
                 <div class="app-title-group">
-                   
                     <div>
                         <div class="app-title">Keto Planner</div>
-                        <div class="app-subtitle">Memoria por día y semana · Sin repeticiones</div>
+                        <div class="app-subtitle">Toca un plato para ver la receta</div>
                     </div>
                 </div>
                 <div class="header-actions">
-                   
+                    <button class="header-action-link header-action-link-primary" id="btnGenerar">Generar</button>
                     <span class="header-action-divider"></span>
-                    
-                    <button class="header-action-link header-action-link-primary" id="btnGenerar">
-                        Generar
-                       
-                    </button>
-                
-                   <span class="header-action-divider"></span>
-                    
                     <button class="header-action-link header-action-link-danger" id="clearAllBtn">Limpiar</button>
-                   
                     <span class="header-action-divider"></span>
-
                     <button class="header-action-link" id="salirBtn">Inicio</button>
-
                 </div>
             </header>
 
+            <!-- TABS -->
             <div class="tabs" id="tabs" role="tablist">
                 <button class="tab-btn active" data-tab="menu" role="tab" aria-selected="true">Menú</button>
-                <button class="tab-btn" data-tab="recetas" role="tab" aria-selected="false">Recetas</button>
                 <button class="tab-btn" data-tab="calendario" role="tab" aria-selected="false">Calendario</button>
                 <button class="tab-btn" data-tab="analisis" role="tab" aria-selected="false">Análisis</button>
             </div>
@@ -1021,15 +1210,6 @@
                     <div class="empty-state">
                         <div class="empty-state-title">Genera tu menú</div>
                         <div class="empty-state-text">Pulsa "Generar" para comenzar</div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tab-recetas" class="tab-content" role="tabpanel">
-                <div class="recipes-container" id="recipesContainer">
-                    <div class="empty-state">
-                        <div class="empty-state-title">Sin recetas</div>
-                        <div class="empty-state-text">Genera un menú para ver las recetas</div>
                     </div>
                 </div>
             </div>
@@ -1056,9 +1236,12 @@
 
     </div>
 
+    <!-- MODAL DE RECETA -->
+    <div id="recipeModalContainer"></div>
+
     <script>
         // ============================================================
-        // SISTEMA DE ALERTAS PERSONALIZADO - SIN ICONOS
+        // SISTEMA DE ALERTAS
         // ============================================================
 
         class AlertSystem {
@@ -1075,14 +1258,16 @@
                     container.id = 'customToastContainer';
                     container.style.cssText = `
                         position: fixed;
-                        bottom: 2rem;
-                        right: 2rem;
+                        bottom: 1rem;
+                        right: 1rem;
+                        left: 1rem;
                         z-index: 10000;
                         display: flex;
                         flex-direction: column;
                         gap: 0.75rem;
                         max-width: 400px;
-                        width: 100%;
+                        width: auto;
+                        margin: 0 auto;
                         pointer-events: none;
                     `;
                     document.body.appendChild(container);
@@ -1097,7 +1282,7 @@
                         pointer-events: auto;
                         background: var(--bg-card, #ffffff);
                         color: var(--text-primary, #1a1a2e);
-                        padding: 1rem 1.25rem;
+                        padding: 0.8rem 1rem;
                         border-radius: 12px;
                         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
                         border-left: 4px solid var(--accent, #0066cc);
@@ -1111,215 +1296,56 @@
                         position: relative;
                         overflow: hidden;
                     }
-
-                    .custom-toast.show {
-                        transform: translateX(0);
-                        opacity: 1;
-                    }
-
-                    .custom-toast.hide {
-                        transform: translateX(100%);
-                        opacity: 0;
-                    }
-
-                    .custom-toast-content {
-                        flex: 1;
-                        min-width: 0;
-                    }
-
-                    .custom-toast-title {
-                        font-weight: 600;
-                        font-size: 0.9rem;
-                        margin-bottom: 0.15rem;
-                        color: var(--text-primary, #1a1a2e);
-                    }
-
-                    .custom-toast-message {
-                        font-size: 0.8rem;
-                        color: var(--text-secondary, #4a4a5a);
-                        line-height: 1.4;
-                    }
-
-                    .custom-toast-close {
-                        background: none;
-                        border: none;
-                        color: var(--text-tertiary, #8a8a9a);
-                        cursor: pointer;
-                        font-size: 1.2rem;
-                        padding: 0.2rem;
-                        flex-shrink: 0;
-                        transition: color 0.2s;
-                        font-family: inherit;
-                        line-height: 1;
-                    }
-
-                    .custom-toast-close:hover {
-                        color: var(--text-primary, #1a1a2e);
-                    }
-
-                    .custom-toast.success {
-                        border-left-color: var(--green, #2d8f4e);
-                        background: var(--green-bg, #e6f2ea);
-                    }
-
-                    .custom-toast.error {
-                        border-left-color: var(--red, #c0392b);
-                        background: var(--red-bg, #f0e4e2);
-                    }
-
-                    .custom-toast.warning {
-                        border-left-color: var(--orange, #c97d2b);
-                        background: var(--orange-bg, #f5ede4);
-                    }
-
-                    .custom-toast.info {
-                        border-left-color: var(--accent, #0066cc);
-                        background: var(--accent-light, #ebf3fa);
-                    }
-
-                    .custom-toast-progress {
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
-                        height: 3px;
-                        background: var(--accent, #0066cc);
-                        transition: width 0.1s linear;
-                    }
-
-                    .custom-toast.success .custom-toast-progress {
-                        background: var(--green, #2d8f4e);
-                    }
-                    .custom-toast.error .custom-toast-progress {
-                        background: var(--red, #c0392b);
-                    }
-                    .custom-toast.warning .custom-toast-progress {
-                        background: var(--orange, #c97d2b);
-                    }
+                    .custom-toast.show { transform: translateX(0); opacity: 1; }
+                    .custom-toast.hide { transform: translateX(100%); opacity: 0; }
+                    .custom-toast-content { flex: 1; min-width: 0; }
+                    .custom-toast-title { font-weight: 600; font-size: 0.85rem; margin-bottom: 0.1rem; color: var(--text-primary, #1a1a2e); }
+                    .custom-toast-message { font-size: 0.75rem; color: var(--text-secondary, #4a4a5a); line-height: 1.4; }
+                    .custom-toast-close { background: none; border: none; color: var(--text-tertiary, #8a8a9a); cursor: pointer; font-size: 1.2rem; padding: 0.2rem; flex-shrink: 0; transition: color 0.2s; font-family: inherit; line-height: 1; min-height: 32px; min-width: 32px; }
+                    .custom-toast-close:hover { color: var(--text-primary, #1a1a2e); }
+                    .custom-toast.success { border-left-color: var(--green, #2d8f4e); background: var(--green-bg, #e6f2ea); }
+                    .custom-toast.error { border-left-color: var(--red, #c0392b); background: var(--red-bg, #f0e4e2); }
+                    .custom-toast.warning { border-left-color: var(--orange, #c97d2b); background: var(--orange-bg, #f5ede4); }
+                    .custom-toast.info { border-left-color: var(--accent, #0066cc); background: var(--accent-light, #ebf3fa); }
+                    .custom-toast-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--accent, #0066cc); transition: width 0.1s linear; }
+                    .custom-toast.success .custom-toast-progress { background: var(--green, #2d8f4e); }
+                    .custom-toast.error .custom-toast-progress { background: var(--red, #c0392b); }
+                    .custom-toast.warning .custom-toast-progress { background: var(--orange, #c97d2b); }
 
                     .custom-modal-overlay {
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        background: rgba(0, 0, 0, 0.5);
-                        backdrop-filter: blur(4px);
-                        z-index: 99999;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        animation: fadeIn 0.2s ease;
+                        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                        background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
+                        z-index: 99999; display: flex; align-items: center; justify-content: center;
+                        animation: fadeIn 0.2s ease; padding: 1rem;
                     }
-
-                    @keyframes fadeIn {
-                        from { opacity: 0; }
-                        to { opacity: 1; }
-                    }
-
+                    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                     .custom-modal {
-                        background: var(--bg-card, #ffffff);
-                        border-radius: 16px;
-                        padding: 2rem;
-                        max-width: 420px;
-                        width: 90%;
-                        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+                        background: var(--bg-card, #ffffff); border-radius: 16px; padding: 1.5rem;
+                        max-width: 420px; width: 100%; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
                         animation: slideUp 0.3s ease;
                     }
+                    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+                    .custom-modal-title { font-size: 1.1rem; font-weight: 600; text-align: center; margin-bottom: 0.4rem; color: var(--text-primary, #1a1a2e); }
+                    .custom-modal-message { font-size: 0.9rem; color: var(--text-secondary, #4a4a5a); text-align: center; margin-bottom: 1.2rem; line-height: 1.5; }
+                    .custom-modal-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+                    .custom-modal-btn { padding: 0.6rem 1.2rem; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; min-width: 80px; min-height: 40px; flex: 1; }
+                    .custom-modal-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+                    .custom-modal-btn-primary { background: var(--accent, #0066cc); color: white; }
+                    .custom-modal-btn-primary:hover { background: var(--accent-hover, #0052a3); }
+                    .custom-modal-btn-danger { background: var(--red, #c0392b); color: white; }
+                    .custom-modal-btn-danger:hover { background: #a93226; }
+                    .custom-modal-btn-secondary { background: var(--bg, #f5f6f8); color: var(--text-secondary, #4a4a5a); }
+                    .custom-modal-btn-secondary:hover { background: var(--border, #e2e4e8); }
 
-                    @keyframes slideUp {
-                        from { transform: translateY(20px); opacity: 0; }
-                        to { transform: translateY(0); opacity: 1; }
+                    @media (max-width: 480px) {
+                        .custom-modal { padding: 1.2rem; margin: 0.5rem; }
+                        .custom-modal-actions { flex-direction: column; }
+                        .custom-modal-btn { width: 100%; flex: none; }
+                        .custom-toast { padding: 0.7rem 0.8rem; font-size: 0.8rem; }
                     }
-
-                    .custom-modal-title {
-                        font-size: 1.2rem;
-                        font-weight: 600;
-                        text-align: center;
-                        margin-bottom: 0.5rem;
-                        color: var(--text-primary, #1a1a2e);
-                    }
-
-                    .custom-modal-message {
-                        font-size: 0.95rem;
-                        color: var(--text-secondary, #4a4a5a);
-                        text-align: center;
-                        margin-bottom: 1.5rem;
-                        line-height: 1.5;
-                    }
-
-                    .custom-modal-actions {
-                        display: flex;
-                        gap: 0.75rem;
-                        justify-content: center;
-                        flex-wrap: wrap;
-                    }
-
-                    .custom-modal-btn {
-                        padding: 0.6rem 1.5rem;
-                        border: none;
-                        border-radius: 8px;
-                        font-size: 0.9rem;
-                        font-weight: 500;
-                        cursor: pointer;
-                        transition: all 0.2s;
-                        font-family: inherit;
-                        min-width: 100px;
-                    }
-
-                    .custom-modal-btn:hover {
-                        transform: translateY(-2px);
-                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                    }
-
-                    .custom-modal-btn-primary {
-                        background: var(--accent, #0066cc);
-                        color: white;
-                    }
-                    .custom-modal-btn-primary:hover {
-                        background: var(--accent-hover, #0052a3);
-                    }
-
-                    .custom-modal-btn-danger {
-                        background: var(--red, #c0392b);
-                        color: white;
-                    }
-                    .custom-modal-btn-danger:hover {
-                        background: #a93226;
-                    }
-
-                    .custom-modal-btn-secondary {
-                        background: var(--bg, #f5f6f8);
-                        color: var(--text-secondary, #4a4a5a);
-                    }
-                    .custom-modal-btn-secondary:hover {
-                        background: var(--border, #e2e4e8);
-                    }
-
-                    @media (max-width: 768px) {
-                        .custom-toast {
-                            padding: 0.8rem 1rem;
-                            font-size: 0.9rem;
-                        }
-                        .custom-modal {
-                            padding: 1.5rem;
-                            margin: 1rem;
-                        }
-                        .custom-modal-actions {
-                            flex-direction: column;
-                        }
-                        .custom-modal-btn {
-                            width: 100%;
-                        }
-                    }
-
                     @media (prefers-color-scheme: dark) {
-                        .custom-modal {
-                            background: var(--bg-card, #1a1a22);
-                        }
-                        .custom-modal-btn-secondary {
-                            background: var(--bg-card-alt, #22222a);
-                            color: var(--text-secondary, #9a9aaa);
-                        }
+                        .custom-modal { background: var(--bg-card, #1a1a22); }
+                        .custom-modal-btn-secondary { background: var(--bg-card-alt, #22222a); color: var(--text-secondary, #9a9aaa); }
                     }
                 `;
                 document.head.appendChild(style);
@@ -1327,57 +1353,34 @@
             }
 
             showToast(options) {
-                const {
-                    message,
-                    title = '',
-                    type = 'info',
-                    duration = 4000,
-                    closable = true
-                } = typeof options === 'string' ? { message: options } : options;
-
+                const { message, title = '', type = 'info', duration = 4000, closable = true } = 
+                    typeof options === 'string' ? { message: options } : options;
                 const toast = document.createElement('div');
                 toast.className = `custom-toast ${type}`;
                 toast.setAttribute('role', 'alert');
-                toast.setAttribute('aria-live', 'polite');
-
                 toast.innerHTML = `
                     <div class="custom-toast-content">
                         ${title ? `<div class="custom-toast-title">${title}</div>` : ''}
                         <div class="custom-toast-message">${message}</div>
                     </div>
-                    ${closable ? `<button class="custom-toast-close" aria-label="Cerrar notificacion">&times;</button>` : ''}
+                    ${closable ? `<button class="custom-toast-close" aria-label="Cerrar">&times;</button>` : ''}
                     <div class="custom-toast-progress" style="width:100%"></div>
                 `;
-
                 this.toastContainer.appendChild(toast);
-
-                requestAnimationFrame(() => {
-                    toast.classList.add('show');
-                });
-
+                requestAnimationFrame(() => toast.classList.add('show'));
                 const progress = toast.querySelector('.custom-toast-progress');
                 let startTime = Date.now();
                 const updateProgress = () => {
                     const elapsed = Date.now() - startTime;
                     const remaining = Math.max(0, 1 - (elapsed / duration));
                     progress.style.width = `${remaining * 100}%`;
-                    if (remaining > 0) {
-                        requestAnimationFrame(updateProgress);
-                    }
+                    if (remaining > 0) requestAnimationFrame(updateProgress);
                 };
                 requestAnimationFrame(updateProgress);
-
                 const closeBtn = toast.querySelector('.custom-toast-close');
-                if (closeBtn) {
-                    closeBtn.addEventListener('click', () => this.dismissToast(toast));
-                }
-
-                const timeout = setTimeout(() => {
-                    this.dismissToast(toast);
-                }, duration);
-
+                if (closeBtn) closeBtn.addEventListener('click', () => this.dismissToast(toast));
+                const timeout = setTimeout(() => this.dismissToast(toast), duration);
                 toast.dataset.timeout = timeout;
-
                 return toast;
             }
 
@@ -1385,41 +1388,18 @@
                 if (!toast || !toast.parentNode) return;
                 toast.classList.remove('show');
                 toast.classList.add('hide');
-                if (toast.dataset.timeout) {
-                    clearTimeout(parseInt(toast.dataset.timeout));
-                }
-                setTimeout(() => {
-                    if (toast.parentNode) {
-                        toast.remove();
-                    }
-                }, 400);
-            }
-
-            clearToasts() {
-                while (this.toastContainer.firstChild) {
-                    this.dismissToast(this.toastContainer.firstChild);
-                }
+                if (toast.dataset.timeout) clearTimeout(parseInt(toast.dataset.timeout));
+                setTimeout(() => { if (toast.parentNode) toast.remove(); }, 400);
             }
 
             showConfirm(options) {
                 return new Promise((resolve) => {
-                    const {
-                        title = 'Confirmar',
-                        message = '¿Estas seguro?',
-                        confirmText = 'Confirmar',
-                        cancelText = 'Cancelar',
-                        type = 'warning'
-                    } = options;
-
+                    const { title = 'Confirmar', message = '¿Estas seguro?', confirmText = 'Confirmar', cancelText = 'Cancelar', type = 'warning' } = options;
                     const overlay = document.createElement('div');
                     overlay.className = 'custom-modal-overlay';
-                    overlay.setAttribute('role', 'dialog');
-                    overlay.setAttribute('aria-modal', 'true');
-                    overlay.setAttribute('aria-labelledby', 'modal-title');
-
                     overlay.innerHTML = `
                         <div class="custom-modal">
-                            <div class="custom-modal-title" id="modal-title">${title}</div>
+                            <div class="custom-modal-title">${title}</div>
                             <div class="custom-modal-message">${message}</div>
                             <div class="custom-modal-actions">
                                 <button class="custom-modal-btn custom-modal-btn-secondary" data-action="cancel">${cancelText}</button>
@@ -1427,61 +1407,27 @@
                             </div>
                         </div>
                     `;
-
                     document.body.appendChild(overlay);
-                    this.modalOverlay = overlay;
-
                     const confirmBtn = overlay.querySelector('[data-action="confirm"]');
                     const cancelBtn = overlay.querySelector('[data-action="cancel"]');
                     confirmBtn.focus();
-
-                    const closeModal = (result) => {
-                        overlay.remove();
-                        this.modalOverlay = null;
-                        resolve(result);
-                    };
-
+                    const closeModal = (result) => { overlay.remove(); resolve(result); };
                     confirmBtn.addEventListener('click', () => closeModal(true));
                     cancelBtn.addEventListener('click', () => closeModal(false));
-
-                    overlay.addEventListener('click', (e) => {
-                        if (e.target === overlay) closeModal(false);
-                    });
-
+                    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(false); });
                     const handleKeydown = (e) => {
-                        if (e.key === 'Escape') {
-                            closeModal(false);
-                            document.removeEventListener('keydown', handleKeydown);
-                        }
-                        if (e.key === 'Enter' && e.target.closest('.custom-modal')) {
-                            closeModal(true);
-                            document.removeEventListener('keydown', handleKeydown);
-                        }
+                        if (e.key === 'Escape') { closeModal(false); document.removeEventListener('keydown', handleKeydown); }
+                        if (e.key === 'Enter' && e.target.closest('.custom-modal')) { closeModal(true); document.removeEventListener('keydown', handleKeydown); }
                     };
                     document.addEventListener('keydown', handleKeydown);
                 });
             }
 
-            success(message, title = 'Exito', duration = 3000) {
-                return this.showToast({ message, title, type: 'success', duration });
-            }
-
-            error(message, title = 'Error', duration = 4000) {
-                return this.showToast({ message, title, type: 'error', duration });
-            }
-
-            warning(message, title = 'Advertencia', duration = 3500) {
-                return this.showToast({ message, title, type: 'warning', duration });
-            }
-
-            info(message, title = 'Informacion', duration = 3000) {
-                return this.showToast({ message, title, type: 'info', duration });
-            }
+            success(message, title = 'Exito', duration = 3000) { return this.showToast({ message, title, type: 'success', duration }); }
+            error(message, title = 'Error', duration = 4000) { return this.showToast({ message, title, type: 'error', duration }); }
+            warning(message, title = 'Advertencia', duration = 3500) { return this.showToast({ message, title, type: 'warning', duration }); }
+            info(message, title = 'Informacion', duration = 3000) { return this.showToast({ message, title, type: 'info', duration }); }
         }
-
-        // ============================================================
-        // INSTANCIAR SISTEMA DE ALERTAS
-        // ============================================================
 
         const alertSystem = new AlertSystem();
 
@@ -1550,7 +1496,7 @@
             }
 
             // ============================================================
-            //  REPOSITORIO DE RECETAS
+            //  REPOSITORIO DE RECETAS (COMPLETO - IGUAL QUE ANTES)
             // ============================================================
 
             const DESAYUNOS = [
@@ -1970,8 +1916,8 @@
                     tiempo: 20, dificultad: 'fácil' },
                 { nombre: "Crema de calabaza y jengibre", kcal: 160, g: 13, c: 4, p: 4,
                     ingredientes: ["200g calabaza", "Jengibre", "Caldo", "Nata", "Mantequilla"],
-                    descripcion: "Cocina calabaza con jengibre en caldo. Tritura con nata.", tiempo: 25,
-                    dificultad: 'media' },
+                    descripcion: "Cocina calabaza con jengibre en caldo. Tritura con nata.",
+                    tiempo: 25, dificultad: 'media' },
                 { nombre: "Ensalada de endivias y queso azul", kcal: 190, g: 15, c: 3, p: 5,
                     ingredientes: ["2 endivias", "50g queso azul", "Nueces", "Vinagreta"],
                     descripcion: "Separa hojas de endivia. Añade queso, nueces y aliña.", tiempo: 10,
@@ -2570,6 +2516,80 @@
             }
 
             // ============================================================
+            //  MODAL DE RECETA
+            // ============================================================
+
+            function mostrarReceta(plato, tipo) {
+                const container = document.getElementById('recipeModalContainer');
+                
+                const tipoNombres = {
+                    'desayuno': 'Desayuno',
+                    'p1c': '1º Comida',
+                    'p2c': '2º Comida',
+                    'c1': '1º Cena',
+                    'c2': '2º Cena'
+                };
+
+                const tipoDisplay = tipoNombres[tipo] || tipo;
+
+                const modal = document.createElement('div');
+                modal.className = 'recipe-modal-overlay';
+                modal.setAttribute('role', 'dialog');
+                modal.setAttribute('aria-modal', 'true');
+
+                modal.innerHTML = `
+                    <div class="recipe-modal">
+                        <button class="recipe-modal-close" aria-label="Cerrar receta">&times;</button>
+                        <div class="recipe-modal-type">${tipoDisplay}</div>
+                        <div class="recipe-modal-title">${plato.nombre}</div>
+                        <div class="recipe-modal-macros">
+                            <span><strong>${plato.kcal}</strong> kcal</span>
+                            <span><strong>${plato.p}</strong>g proteína</span>
+                            <span><strong>${plato.c}</strong>g carbos</span>
+                            <span><strong>${plato.g}</strong>g grasa</span>
+                        </div>
+                        ${plato.descripcion ? `
+                            <div class="recipe-modal-section">
+                                <div class="recipe-modal-section-title">Descripción</div>
+                                <div class="recipe-modal-description">${plato.descripcion}</div>
+                            </div>
+                        ` : ''}
+                        ${plato.ingredientes && plato.ingredientes.length > 0 ? `
+                            <div class="recipe-modal-section">
+                                <div class="recipe-modal-section-title">Ingredientes</div>
+                                <ul class="recipe-modal-ingredients">
+                                    ${plato.ingredientes.map(i => `<li>${i}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        <div class="recipe-modal-footer">
+                            ${plato.tiempo ? `<span>⏱️ ${plato.tiempo} min</span>` : ''}
+                            ${plato.dificultad ? `<span>Dificultad: ${plato.dificultad}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(modal);
+
+                const closeBtn = modal.querySelector('.recipe-modal-close');
+                closeBtn.addEventListener('click', () => modal.remove());
+
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) modal.remove();
+                });
+
+                const handleEscape = (e) => {
+                    if (e.key === 'Escape') {
+                        modal.remove();
+                        document.removeEventListener('keydown', handleEscape);
+                    }
+                };
+                document.addEventListener('keydown', handleEscape);
+
+                setTimeout(() => closeBtn.focus(), 100);
+            }
+
+            // ============================================================
             //  NAVEGACION
             // ============================================================
 
@@ -2579,7 +2599,7 @@
                 cargarUltimoMenu();
                 renderCalendario();
                 actualizarContador();
-                alertSystem.success('Planificador con memoria por día y semana activado', 'Bienvenido');
+                alertSystem.success('Toca cualquier plato para ver su receta', 'Bienvenido');
             }
 
             function salirApp() {
@@ -2597,9 +2617,7 @@
 
             function actualizarContador() {
                 const count = planner.calendario.length;
-                const counterEl = document.querySelector('#weekCounter');
                 const landingCounter = document.querySelector('#weeksCountLanding');
-                if (counterEl) counterEl.textContent = count;
                 if (landingCounter) landingCounter.textContent = count;
             }
 
@@ -2607,7 +2625,6 @@
                 const semana = planner.getLastWeek();
                 if (semana) {
                     renderMenu(semana);
-                    renderRecetas(semana);
                     renderAnalisis(semana);
                 }
             }
@@ -2780,6 +2797,10 @@
                 container.innerHTML = html;
             }
 
+            // ============================================================
+            //  RENDER MENÚ CON CLICK EN PLATOS
+            // ============================================================
+
             function renderMenu(semana) {
                 const grid = document.getElementById('weekGrid');
 
@@ -2794,37 +2815,36 @@
 
                     const ingredientesStr = d.ingredientesUsados ? d.ingredientesUsados.join(', ') : '';
 
+                    const platos = [
+                        { tipo: 'desayuno', label: 'Desayuno', dot: 'dot-bfast', plato: d.desayuno },
+                        { tipo: 'p1c', label: '1º Comida', dot: 'dot-lunch1', plato: d.p1c },
+                        { tipo: 'p2c', label: '2º Comida', dot: 'dot-lunch2', plato: d.p2c },
+                        { tipo: 'c1', label: '1º Cena', dot: 'dot-dinner1', plato: d.c1 },
+                        { tipo: 'c2', label: '2º Cena', dot: 'dot-dinner2', plato: d.c2 }
+                    ];
+
                     html += `
                         <div class="day-card">
                             <div class="day-card-header">
                                 <span class="day-name">${d.dia.nombre}</span>
                             </div>
                             <div class="day-body">
-                                <div class="meal-group">
-                                    <div class="meal-label"><span class="dot dot-bfast"></span>Desayuno</div>
-                                    <div class="meal-name">${d.desayuno.nombre}</div>
-                                    <div class="meal-macros">${mShort(d.desayuno)}</div>
+                    `;
+
+                    for (const p of platos) {
+                        html += `
+                            <div class="meal-group" onclick="mostrarReceta(${JSON.stringify(p.plato).replace(/"/g, '&quot;')}, '${p.tipo}')" role="button" tabindex="0" aria-label="Ver receta de ${p.plato.nombre}">
+                                <div class="meal-label">
+                                    <span class="dot ${p.dot}"></span>${p.label}
+                                    <span class="click-hint">👆</span>
                                 </div>
-                                <div class="meal-group">
-                                    <div class="meal-label"><span class="dot dot-lunch1"></span>1º Comida</div>
-                                    <div class="meal-name">${d.p1c.nombre}</div>
-                                    <div class="meal-macros">${mShort(d.p1c)}</div>
-                                </div>
-                                <div class="meal-group">
-                                    <div class="meal-label"><span class="dot dot-lunch2"></span>2º Comida</div>
-                                    <div class="meal-name">${d.p2c.nombre}</div>
-                                    <div class="meal-macros">${mShort(d.p2c)}</div>
-                                </div>
-                                <div class="meal-group">
-                                    <div class="meal-label"><span class="dot dot-dinner1"></span>1º Cena</div>
-                                    <div class="meal-name">${d.c1.nombre}</div>
-                                    <div class="meal-macros">${mShort(d.c1)}</div>
-                                </div>
-                                <div class="meal-group">
-                                    <div class="meal-label"><span class="dot dot-dinner2"></span>2º Cena</div>
-                                    <div class="meal-name">${d.c2.nombre}</div>
-                                    <div class="meal-macros">${mShort(d.c2)}</div>
-                                </div>
+                                <div class="meal-name">${p.plato.nombre}</div>
+                                <div class="meal-macros">${mShort(p.plato)}</div>
+                            </div>
+                        `;
+                    }
+
+                    html += `
                                 <div class="day-summary">
                                     <span>Kcal <strong>${d.total.kcal}</strong></span>
                                     <span>G <strong>${d.total.g}g</strong></span>
@@ -2839,87 +2859,20 @@
                 }
 
                 grid.innerHTML = html;
+
+                document.querySelectorAll('.meal-group[role="button"]').forEach(el => {
+                    el.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            el.click();
+                        }
+                    });
+                });
             }
 
-            function renderRecetas(semana) {
-                const container = document.getElementById('recipesContainer');
-
-                if (!semana || semana.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-state-title">Sin recetas</div>
-                            <div class="empty-state-text">Genera un menú para ver las recetas</div>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let html = '';
-
-                for (const d of semana) {
-                    const recetas = [
-                        { tipo: 'Desayuno', plato: d.desayuno },
-                        { tipo: '1º Comida', plato: d.p1c },
-                        { tipo: '2º Comida', plato: d.p2c },
-                        { tipo: '1º Cena', plato: d.c1 },
-                        { tipo: '2º Cena', plato: d.c2 }
-                    ];
-
-                    const divScore = d.diversity ? d.diversity.score : 0;
-                    const diversityLabel = divScore > 70 ? 'Alta diversidad' : divScore > 40 ? 'Media diversidad' :
-                        'Baja diversidad';
-
-                    html += `
-                        <div class="recipes-day-section">
-                            <div class="recipes-day-header">
-                                <div>
-                                    <span class="day-name">${d.dia.nombre}</span>
-                                    <span style="font-size:0.6rem;color:var(--text-tertiary);margin-left:0.4rem;">
-                                        ${diversityLabel} (${divScore}%)
-                                    </span>
-                                </div>
-                                <span style="font-size:0.6rem;color:var(--text-tertiary);">
-                                    ${d.total.kcal} kcal · ${d.total.g}g grasa
-                                </span>
-                            </div>
-                            <div class="recipes-day-grid">
-                    `;
-
-                    for (const r of recetas) {
-                        if (!r.plato || !r.plato.ingredientes) continue;
-
-                        html += `
-                            <div class="recipe-mini">
-                                <div class="recipe-mini-type">${r.tipo}</div>
-                                <div class="recipe-mini-title">${r.plato.nombre}</div>
-                                <div class="recipe-mini-macros">
-                                    ${r.plato.kcal}k · ${r.plato.g}g · ${r.plato.c}g · ${r.plato.p}g
-                                </div>
-                                <button class="recipe-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">
-                                    Ver receta
-                                </button>
-                                <div class="recipe-mini-expand">
-                                    <div><strong>Descripción:</strong> ${r.plato.descripcion}</div>
-                                    <div class="ingredients">
-                                        <strong>Ingredientes:</strong><br>
-                                        ${r.plato.ingredientes.map(i => '• ' + i).join('<br>')}
-                                    </div>
-                                    <div style="margin-top:0.2rem;font-size:0.55rem;color:var(--text-tertiary);">
-                                        Tiempo: ${r.plato.tiempo || 15} min · Dificultad: ${r.plato.dificultad || 'media'}
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }
-
-                    html += `
-                            </div>
-                        </div>
-                    `;
-                }
-
-                container.innerHTML = html;
-            }
+            // ============================================================
+            //  RENDER CALENDARIO
+            // ============================================================
 
             function renderCalendario() {
                 const grid = document.getElementById('calendarGrid');
@@ -2960,11 +2913,11 @@
                         diaDate.setDate(diaDate.getDate() + dayIndex);
 
                         const recetas = [
-                            { type: 'Desayuno', plato: d.desayuno, class: planner.getMealClass(d.desayuno) },
-                            { type: '1º Comida', plato: d.p1c, class: planner.getMealClass(d.p1c) },
-                            { type: '2º Comida', plato: d.p2c, class: planner.getMealClass(d.p2c) },
-                            { type: '1º Cena', plato: d.c1, class: planner.getMealClass(d.c1) },
-                            { type: '2º Cena', plato: d.c2, class: planner.getMealClass(d.c2) }
+                            { type: 'Desayuno', plato: d.desayuno },
+                            { type: '1º Comida', plato: d.p1c },
+                            { type: '2º Comida', plato: d.p2c },
+                            { type: '1º Cena', plato: d.c1 },
+                            { type: '2º Cena', plato: d.c2 }
                         ];
 
                         html += `
@@ -2975,7 +2928,7 @@
                                 </div>
                                 <div>
                                     ${recetas.map(r => `
-                                        <div class="calendar-meal ${r.class}">
+                                        <div class="calendar-meal" onclick="mostrarReceta(${JSON.stringify(r.plato).replace(/"/g, '&quot;')}, '${r.type.toLowerCase().replace(' ', '')}')">
                                             <span class="type">${r.type}</span><br>
                                             <span class="name">${r.plato.nombre}</span>
                                         </div>
@@ -3002,7 +2955,6 @@
                 try {
                     const result = planner.generateWeek();
                     renderMenu(result.semana);
-                    renderRecetas(result.semana);
                     renderAnalisis(result.semana);
                     renderCalendario();
                     actualizarContador();
@@ -3037,7 +2989,6 @@
                         const semana = planner.getLastWeek();
                         if (semana) {
                             renderMenu(semana);
-                            renderRecetas(semana);
                             renderAnalisis(semana);
                         } else {
                             renderAnalisis(null);
@@ -3045,12 +2996,6 @@
                                 <div class="empty-state">
                                     <div class="empty-state-title">Genera tu menú</div>
                                     <div class="empty-state-text">Pulsa "Generar" para comenzar</div>
-                                </div>
-                            `;
-                            document.getElementById('recipesContainer').innerHTML = `
-                                <div class="empty-state">
-                                    <div class="empty-state-title">Sin recetas</div>
-                                    <div class="empty-state-text">Genera un menú para ver las recetas</div>
                                 </div>
                             `;
                         }
@@ -3081,12 +3026,6 @@
                             <div class="empty-state">
                                 <div class="empty-state-title">Genera tu menú</div>
                                 <div class="empty-state-text">Pulsa "Generar" para comenzar</div>
-                            </div>
-                        `;
-                        document.getElementById('recipesContainer').innerHTML = `
-                            <div class="empty-state">
-                                <div class="empty-state-title">Sin recetas</div>
-                                <div class="empty-state-text">Genera un menú para ver las recetas</div>
                             </div>
                         `;
                         renderAnalisis(null);
@@ -3128,11 +3067,16 @@
             //  EVENTOS
             // ============================================================
 
-            document.getElementById('entrarBtn').addEventListener('click', entrarApp);
+            document.getElementById('entrarBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                entrarApp();
+            });
+
             document.getElementById('salirBtn').addEventListener('click', salirApp);
             document.getElementById('btnGenerar').addEventListener('click', generarMenu);
             document.getElementById('clearAllBtn').addEventListener('click', limpiarTodo);
 
+            window.mostrarReceta = mostrarReceta;
             window.eliminarSemana = eliminarSemana;
 
             // ============================================================
@@ -3140,7 +3084,7 @@
             // ============================================================
 
             actualizarContador();
-            console.log('Keto Planner con memoria por día y semana cargado');
+            console.log('Keto Planner con modal de recetas al hacer click');
 
             if (planner.calendario.length > 0) {
                 document.querySelector('#weeksCountLanding').textContent = planner.calendario.length;
@@ -3150,8 +3094,8 @@
 
             setTimeout(() => {
                 alertSystem.info(
-                    'Planificador keto con memoria de ingredientes. Genera tu primera semana y descubre la variedad.',
-                    'Bienvenido a Keto Planner'
+                    'Toca cualquier plato del menú para ver la receta completa con ingredientes y descripción.',
+                    'Novedad: Recetas al hacer click'
                 );
             }, 1500);
 
