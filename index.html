@@ -400,6 +400,3323 @@
         }
 
         /* ============================================================
+           WEEK GRID - VERSIÓN CON SCROLL HORIZONTAL EN MÓVIL
+           ============================================================ */
+        .week-grid-wrapper {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.8rem;
+        }
+
+        /* --- En móvil: scroll horizontal con snap --- */
+        @media (max-width: 768px) {
+            .week-grid-wrapper {
+                overflow-x: auto;
+                overflow-y: visible;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+                scroll-behavior: smooth;
+                padding: 0.5rem 0 2.5rem 0;
+                margin: 0 -0.6rem;
+                padding-left: 0.6rem;
+                padding-right: 0.6rem;
+                width: calc(100% + 1.2rem);
+            }
+
+            .week-grid {
+                display: flex;
+                gap: 0.8rem;
+                width: 100%;
+                flex-wrap: nowrap;
+                padding: 0.2rem 0;
+            }
+
+            .week-grid .day-card {
+                flex: 0 0 calc(100% - 1.2rem);
+                max-width: calc(100% - 1.2rem);
+                scroll-snap-align: center;
+                margin: 0 0.1rem;
+                min-height: 420px;
+            }
+
+            /* Dots indicadores */
+            .week-dots {
+                display: flex;
+                justify-content: center;
+                gap: 0.5rem;
+                margin-top: 0.5rem;
+                padding: 0.2rem 0;
+            }
+
+            .week-dots .dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--border);
+                transition: var(--transition);
+                cursor: pointer;
+                border: none;
+                padding: 0;
+                flex-shrink: 0;
+            }
+
+            .week-dots .dot.active {
+                background: var(--accent);
+                width: 24px;
+                border-radius: 4px;
+            }
+
+            /* Botones de navegación */
+            .week-nav-buttons {
+                display: flex;
+                justify-content: space-between;
+                position: absolute;
+                top: 50%;
+                left: 0;
+                right: 0;
+                transform: translateY(-50%);
+                pointer-events: none;
+                padding: 0 0.2rem;
+                z-index: 5;
+            }
+
+            .week-nav-btn {
+                pointer-events: auto;
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 50%;
+                width: 36px;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1rem;
+                cursor: pointer;
+                color: var(--text-secondary);
+                transition: var(--transition);
+                box-shadow: var(--shadow-md);
+                font-family: inherit;
+                touch-action: manipulation;
+                padding: 0;
+                line-height: 1;
+            }
+
+            .week-nav-btn:hover {
+                background: var(--accent);
+                color: white;
+                border-color: var(--accent);
+            }
+
+            .week-nav-btn:active {
+                transform: scale(0.92);
+            }
+
+            .week-nav-btn.prev {
+                margin-left: 0.2rem;
+            }
+
+            .week-nav-btn.next {
+                margin-right: 0.2rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .week-dots, .week-nav-buttons {
+                display: none !important;
+            }
+            .week-grid-wrapper {
+                overflow: visible;
+                padding: 0;
+                margin: 0;
+                width: 100%;
+            }
+        }
+
+        /* ============================================================
+           DAY CARD - TEXTO OCUPA TODO EL ANCHO
+           ============================================================ */
+        .day-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .day-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        .day-card-header {
+            padding: 0.6rem 0.8rem;
+            background: var(--bg-card-alt);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .day-name {
+            font-weight: 600;
+            font-size: clamp(0.7rem, 1vw, 0.8rem);
+            color: var(--text-primary);
+        }
+
+        .day-body {
+            padding: 0.6rem 0.8rem 0.8rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .meal-group {
+            padding: 0.15rem 0.2rem;
+            border-radius: 6px;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            width: 100%;
+        }
+
+        .meal-group:active {
+            transform: scale(0.98);
+            background: var(--accent-light);
+        }
+
+        .meal-group:hover {
+            background: var(--bg-card-alt);
+        }
+
+        .meal-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .meal-group .click-hint {
+            font-size: 0.4rem;
+            color: var(--text-tertiary);
+            opacity: 0.5;
+            margin-left: 0.3rem;
+        }
+
+        .meal-label {
+            font-size: clamp(0.4rem, 0.6vw, 0.45rem);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .meal-label .dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .dot-bfast { background: var(--orange); }
+        .dot-lunch1 { background: var(--green); }
+        .dot-lunch2 { background: var(--accent); }
+        .dot-dinner1 { background: var(--green); opacity: 0.6; }
+        .dot-dinner2 { background: #5856d6; }
+
+        .meal-name {
+            font-size: clamp(0.6rem, 0.8vw, 0.7rem);
+            color: var(--text-primary);
+            line-height: 1.3;
+            font-weight: 450;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            width: 100%;
+        }
+
+        .meal-macros {
+            font-size: clamp(0.45rem, 0.6vw, 0.5rem);
+            color: var(--text-tertiary);
+            margin-top: 0.05rem;
+            width: 100%;
+        }
+
+        .diversity-badge {
+            display: inline-block;
+            font-size: clamp(0.4rem, 0.5vw, 0.45rem);
+            padding: 0.05rem 0.35rem;
+            border-radius: 10px;
+            margin-left: 0.2rem;
+            font-weight: 600;
+        }
+
+        .diversity-badge.good {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .diversity-badge.warning {
+            background: var(--orange-bg);
+            color: var(--orange);
+        }
+
+        .diversity-badge.bad {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .day-summary {
+            margin-top: 0.4rem;
+            padding-top: 0.4rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            font-size: clamp(0.5rem, 0.6vw, 0.55rem);
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .day-summary strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ============================================================
+           EMPTY STATE
+           ============================================================ */
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+        }
+
+        .empty-state-title {
+            font-size: clamp(1rem, 1.5vw, 1.1rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .empty-state-text {
+            font-size: clamp(0.8rem, 1vw, 0.85rem);
+            color: var(--text-secondary);
+        }
+
+        /* ============================================================
+           STATS CARDS - VERSIÓN SIMPLIFICADA
+           ============================================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.6rem;
+            margin-bottom: clamp(1rem, 2.5vw, 2.5rem);
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            padding: 0.8rem 0.6rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            cursor: default;
+            text-align: center;
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .stat-label {
+            font-size: clamp(0.5rem, 0.6vw, 0.6rem);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: clamp(1.2rem, 2.2vw, 2rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-top: 0.1rem;
+            color: var(--text-primary);
+        }
+
+        .stat-value .unit {
+            font-size: 0.6rem;
+            font-weight: 400;
+            color: var(--text-tertiary);
+        }
+
+        /* ============================================================
+           RATIO KETO - DESTACADO
+           ============================================================ */
+        .ratio-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 1.5rem 2rem;
+            border: 2px solid var(--accent);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .ratio-card .label {
+            font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+        }
+
+        .ratio-card .value {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1.2;
+            margin: 0.2rem 0;
+        }
+
+        .ratio-card .value .percent {
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            font-weight: 600;
+        }
+
+        .ratio-card .sub {
+            font-size: clamp(0.7rem, 0.8vw, 0.8rem);
+            color: var(--text-secondary);
+        }
+
+        .ratio-card .sub strong {
+            color: var(--text-primary);
+        }
+
+        .ratio-card .badge {
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 20px;
+            font-size: clamp(0.6rem, 0.7vw, 0.7rem);
+            font-weight: 600;
+            margin-top: 0.3rem;
+        }
+
+        .ratio-card .badge.optimal {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .ratio-card .badge.good {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .ratio-card .badge.warning {
+            background: var(--orange-bg);
+            color: var(--orange);
+        }
+
+        .ratio-card .badge.bad {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        /* ============================================================
+           MODAL DE RECETA
+           ============================================================ */
+        .recipe-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: modalFadeIn 0.25s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .recipe-modal {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
+            animation: modalSlideUp 0.3s ease;
+            position: relative;
+        }
+
+        .recipe-modal::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .recipe-modal::-webkit-scrollbar-track {
+            background: var(--bg);
+            border-radius: 4px;
+        }
+
+        .recipe-modal::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        .recipe-modal::-webkit-scrollbar-thumb:hover {
+            background: var(--text-tertiary);
+        }
+
+        @keyframes modalSlideUp {
+            from { transform: translateY(30px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .recipe-modal-close {
+            position: absolute;
+            top: 0.8rem;
+            right: 0.8rem;
+            background: var(--bg);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+        }
+
+        .recipe-modal-close:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .recipe-modal-type {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .recipe-modal-title {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            padding-right: 2rem;
+        }
+
+        .recipe-modal-macros {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .recipe-modal-macros span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .recipe-modal-macros strong {
+            color: var(--text-primary);
+        }
+
+        .recipe-modal-section {
+            margin-bottom: 0.8rem;
+        }
+
+        .recipe-modal-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .recipe-modal-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .recipe-modal-ingredients {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .recipe-modal-ingredients li {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 0.2rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recipe-modal-ingredients li:last-child {
+            border-bottom: none;
+        }
+
+        .recipe-modal-ingredients li::before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .recipe-modal-footer {
+            margin-top: 1rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+        }
+
+        .recipe-modal-footer span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* ============================================================
+           TOASTS - SISTEMA DE ALERTAS
+           ============================================================ */
+        #customToastContainer {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            left: 1rem;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: 400px;
+            width: auto;
+            margin: 0 auto;
+            pointer-events: none;
+        }
+
+        .custom-toast {
+            pointer-events: auto;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid var(--accent);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .custom-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .custom-toast.hide {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .custom-toast-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .custom-toast-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.1rem;
+            color: var(--text-primary);
+        }
+
+        .custom-toast-message {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .custom-toast-close {
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.2rem;
+            flex-shrink: 0;
+            transition: color 0.2s;
+            font-family: inherit;
+            line-height: 1;
+            min-height: 32px;
+            min-width: 32px;
+        }
+
+        .custom-toast-close:hover {
+            color: var(--text-primary);
+        }
+
+        .custom-toast.success {
+            border-left-color: var(--green);
+            background: var(--green-bg);
+        }
+
+        .custom-toast.error {
+            border-left-color: var(--red);
+            background: var(--red-bg);
+        }
+
+        .custom-toast.warning {
+            border-left-color: var(--orange);
+            background: var(--orange-bg);
+        }
+
+        .custom-toast.info {
+            border-left-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .custom-toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent);
+            transition: width 0.1s linear;
+        }
+
+        .custom-toast.success .custom-toast-progress {
+            background: var(--green);
+        }
+
+        .custom-toast.error .custom-toast-progress {
+            background: var(--red);
+        }
+
+        .custom-toast.warning .custom-toast-progress {
+            background: var(--orange);
+        }
+
+        /* ============================================================
+           MODAL DE CONFIRMACIÓN (Alert System)
+           ============================================================ */
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+            padding: 1rem;
+        }
+
+        .custom-modal {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .custom-modal-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.4rem;
+            color: var(--text-primary);
+        }
+
+        .custom-modal-message {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .custom-modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .custom-modal-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            min-width: 80px;
+            min-height: 40px;
+            flex: 1;
+        }
+
+        .custom-modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .custom-modal-btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .custom-modal-btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .custom-modal-btn-danger {
+            background: var(--red);
+            color: white;
+        }
+
+        .custom-modal-btn-danger:hover {
+            background: #a93226;
+        }
+
+        .custom-modal-btn-secondary {
+            background: var(--bg);
+            color: var(--text-secondary);
+        }
+
+        .custom-modal-btn-secondary:hover {
+            background: var(--border);
+        }
+
+        /* ============================================================
+           RESPONSIVE - OPTIMIZADO PARA MÓVILES
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 0.6rem; }
+            
+            .app-header {
+                flex-direction: row;
+                align-items: center;
+                gap: 0.6rem;
+                flex-wrap: wrap;
+            }
+            
+            .app-title-group { 
+                justify-content: flex-start;
+                flex: 1 1 auto;
+            }
+            
+            .header-actions {
+                width: auto;
+                justify-content: flex-end;
+                flex-wrap: wrap;
+                gap: 0.4rem;
+            }
+            
+            .header-action-divider { display: none; }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.4rem;
+            }
+            
+            .stat-card { padding: 0.5rem 0.5rem; }
+            
+            .tabs {
+                border-radius: var(--radius-sm);
+                padding: 0.2rem;
+                gap: 0.15rem;
+                max-width: 100%;
+            }
+            
+            .tab-btn {
+                padding: 0.5rem 0.6rem;
+                font-size: 0.7rem;
+                min-width: 50px;
+                min-height: 40px;
+            }
+            
+            .day-card-header { padding: 0.6rem 0.6rem; }
+            .day-name { font-size: 0.8rem; }
+            .day-body { padding: 0.6rem 0.6rem; }
+            
+            .meal-group {
+                padding: 0.4rem 0.3rem;
+                min-height: 44px;
+            }
+            
+            .meal-name { font-size: 0.7rem; font-weight: 500; }
+            .meal-macros { font-size: 0.55rem; }
+            .meal-label { font-size: 0.5rem; }
+            
+            .day-summary {
+                font-size: 0.55rem;
+                gap: 0.4rem;
+            }
+            
+            .day-summary strong { font-size: 0.6rem; }
+            
+            .landing-title { font-size: 1.6rem; }
+            .landing-desc {
+                font-size: 0.85rem;
+                padding: 0 0.3rem;
+            }
+            
+            .landing-actions { max-width: 280px; }
+            .landing-btn-primary {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .landing-stats {
+                gap: 1.2rem;
+                max-width: 300px;
+            }
+            
+            .landing-spacer { height: 1rem; }
+            
+            .recipe-modal {
+                padding: 1rem;
+                margin: 0.5rem;
+                max-height: 80vh;
+                border-radius: var(--radius-sm);
+            }
+            
+            .recipe-modal-title {
+                font-size: 1rem;
+                padding-right: 1.5rem;
+            }
+            
+            .recipe-modal-macros {
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+            
+            .recipe-modal-macros span { font-size: 0.7rem; }
+            .recipe-modal-description { font-size: 0.8rem; }
+            .recipe-modal-ingredients li {
+                font-size: 0.75rem;
+                padding: 0.3rem 0;
+            }
+            .recipe-modal-footer {
+                font-size: 0.65rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .recipe-modal-close {
+                width: 32px;
+                height: 32px;
+                font-size: 1.1rem;
+                top: 0.5rem;
+                right: 0.5rem;
+            }
+            
+            .app-title { font-size: 1.1rem; }
+            .app-subtitle { font-size: 0.6rem; }
+            .header-action-link {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.6rem;
+                min-height: 40px;
+            }
+            
+            .stat-card { padding: 0.6rem 0.5rem; }
+            .stat-value { font-size: 1.1rem; }
+            .stat-label { font-size: 0.55rem; }
+            
+            .ratio-card { padding: 1.2rem 1rem; }
+            .ratio-card .value { font-size: 2rem; }
+            
+            .custom-modal { padding: 1.2rem; margin: 0.5rem; }
+            .custom-modal-actions { flex-direction: column; }
+            .custom-modal-btn {
+                width: 100%;
+                flex: none;
+            }
+            
+            #customToastContainer {
+                max-width: 95%;
+                bottom: 0.5rem;
+                left: 0.5rem;
+                right: 0.5rem;
+                gap: 0.5rem;
+            }
+            
+            .custom-toast {
+                padding: 0.8rem;
+                font-size: 0.85rem;
+                border-radius: 10px;
+            }
+            
+            .custom-toast-title { font-size: 0.8rem; }
+            .custom-toast-message { font-size: 0.7rem; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0.4rem; }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.3rem;
+            }
+            
+            .stat-card { padding: 0.4rem 0.4rem; }
+            .stat-value { font-size: 0.9rem; }
+            
+            .app-title { font-size: 0.95rem; }
+            .app-subtitle { font-size: 0.55rem; }
+            
+            .landing-title { font-size: 1.3rem; }
+            .landing-stats { gap: 0.8rem; }
+            .landing-stat .number { font-size: 1rem; }
+            
+            .tabs {
+                border-radius: 8px;
+                padding: 0.15rem;
+                max-width: 100%;
+            }
+            
+            .tab-btn {
+                padding: 0.4rem 0.5rem;
+                font-size: 0.6rem;
+                min-width: 50px;
+                min-height: 32px;
+            }
+            
+            .header-action-link {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.15rem;
+                min-height: 30px;
+            }
+            
+            .day-card-header { padding: 0.3rem 0.4rem; }
+            .day-body { padding: 0.3rem 0.4rem 0.4rem; }
+            .meal-group {
+                margin-bottom: 0.15rem;
+                padding: 0.2rem 0.15rem;
+                min-height: 38px;
+            }
+            .meal-name { font-size: 0.6rem; }
+            .meal-macros { font-size: 0.45rem; }
+            .day-summary {
+                font-size: 0.5rem;
+                gap: 0.2rem;
+            }
+            
+            .landing-spacer { height: 0.8rem; }
+            
+            .ratio-card { padding: 1rem; }
+            .ratio-card .value { font-size: 1.8rem; }
+            
+            .recipe-modal { padding: 1rem; }
+            .recipe-modal-title { font-size: 1.1rem; }
+            .recipe-modal-description { font-size: 0.8rem; }
+            .recipe-modal-ingredients li { font-size: 0.75rem; }
+        }
+
+        @media (max-width: 400px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.3rem;
+            }
+            
+            .landing-title { font-size: 1.4rem; }
+            .landing-desc { font-size: 0.8rem; }
+            .landing-btn-entrar {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            body { padding: 0.3rem; }
+            .container { padding: 0 0.2rem; }
+        }
+
+        @media (max-width: 360px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.2rem;
+            }
+            
+            .stat-card { padding: 0.3rem 0.3rem; }
+            .stat-value { font-size: 0.8rem; }
+            .stat-label { font-size: 0.45rem; }
+            
+            .tab-btn {
+                font-size: 0.5rem;
+                padding: 0.2rem 0.3rem;
+                min-width: 35px;
+            }
+        }
+
+        /* ============================================================
+           PRINT STYLES
+           ============================================================ */
+        @media print {
+            .btn-primary, .btn-secondary, .btn-danger, .landing-btn-entrar,
+            .recipe-toggle, .tabs, .header-actions, .landing-page,
+            .recipe-modal-overlay, .week-dots, .week-nav-buttons {
+                display: none !important;
+            }
+            
+            .app-header { margin-bottom: 0.8rem; }
+            .day-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+            
+            .week-grid { display: block; }
+            .day-card { margin-bottom: 0.3rem; }
+            .stats-grid { display: none; }
+            .app-content.visible { display: block !important; }
+        }
+
+        /* ============================================================
+           DARK MODE OVERRIDES PARA MODALES Y TOASTS
+           ============================================================ */
+        @media (prefers-color-scheme: dark) {
+            .custom-modal { background: var(--bg-card); }
+            .custom-modal-btn-secondary {
+                background: var(--bg-card-alt);
+                color: var(--text-secondary);
+            }
+            
+            .meal-group:active {
+                background: rgba(255, 255, 255, 0.05);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- LANDING PAGE -->
+        <div id="landingPage" class="landing-page">
+            <div class="landing-logo">
+                <span class="landing-logo-text">Keto<span>Planner</span></span>
+            </div>
+            <div class="landing-hero">
+                <span class="landing-badge">By EspacioIrikinome</span>
+            </div>
+            <div class="landing-stats">
+                <div class="landing-stat">
+                    <span class="number">150+</span>
+                    <span class="label">Recetas</span>
+                </div>
+                <div class="landing-stat">
+                    <span class="number">5</span>
+                    <span class="label">Platos / día</span>
+                </div>
+            </div>
+            <div class="landing-spacer"></div>
+            <div class="landing-actions">
+                <button class="landing-btn-entrar" id="entrarBtn">Entrar</button>
+            </div>
+        </div>
+
+        <!-- APP CONTENT -->
+        <div id="appContent" class="app-content">
+
+            <header class="app-header">
+                <div class="app-title-group">
+                    <div>
+                        <div class="app-title">Keto Planner</div>
+                        <div class="app-subtitle">Toca un plato para ver la receta</div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="header-action-link header-action-link-primary" id="btnGenerar">Generar</button>
+                    <span class="header-action-divider"></span>
+                    <button class="header-action-link header-action-link-danger" id="clearAllBtn">Limpiar</button>
+                    <span class="header-action-divider"></span>
+                    <button class="header-action-link" id="salirBtn">Inicio</button>
+                </div>
+            </header>
+
+            <!-- TABS - SOLO MENÚ Y ANÁLISIS -->
+            <div class="tabs" id="tabs" role="tablist">
+                <button class="tab-btn active" data-tab="menu" role="tab" aria-selected="true">Menú</button>
+                <button class="tab-btn" data-tab="analisis" role="tab" aria-selected="false">Análisis</button>
+            </div>
+
+            <div id="tab-menu" class="tab-content active" role="tabpanel">
+                <div class="week-grid-wrapper" id="weekGridWrapper">
+                    <div class="week-grid" id="weekGrid">
+                        <div class="empty-state">
+                            <div class="empty-state-title">Genera tu menú</div>
+                            <div class="empty-state-text">Pulsa "Generar" para comenzar</div>
+                        </div>
+                    </div>
+                    <!-- Botones de navegación (solo móvil) -->
+                    <div class="week-nav-buttons" id="weekNavButtons">
+                        <button class="week-nav-btn prev" id="weekNavPrev" aria-label="Día anterior">◀</button>
+                        <button class="week-nav-btn next" id="weekNavNext" aria-label="Día siguiente">▶</button>
+                    </div>
+                </div>
+                <!-- Puntos indicadores (solo móvil) -->
+                <div class="week-dots" id="weekDots"></div>
+            </div>
+
+            <div id="tab-analisis" class="tab-content" role="tabpanel">
+                <div id="analisisContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-title">Sin datos para analizar</div>
+                        <div class="empty-state-text">Genera un menú para ver el análisis</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL DE RECETA -->
+    <div id="recipeModalContainer"></div>
+
+    <script>
+        // ============================================================
+        // SISTEMA DE ALERTAS
+        // ============================================================
+
+        class AlertSystem {
+            constructor() {
+                this.toastContainer = this.createToastContainer();
+                this.alertStyles = this.createAlertStyles();
+                this.modalOverlay = null;
+            }
+
+            createToastContainer() {
+                let container = document.getElementById('customToastContainer');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'customToastContainer';
+                    container.style.cssText = `
+                        position: fixed;
+                        bottom: 1rem;
+                        right: 1rem;
+                        left: 1rem;
+                        z-index: 10000;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.75rem;
+                        max-width: 400px;
+                        width: auto;
+                        margin: 0 auto;
+                        pointer-events: none;
+                    `;
+                    document.body.appendChild(container);
+                }
+                return container;
+            }
+
+            createAlertStyles() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .custom-toast {
+                        pointer-events: auto;
+                        background: var(--bg-card, #ffffff);
+                        color: var(--text-primary, #1a1a2e);
+                        padding: 0.8rem 1rem;
+                        border-radius: 12px;
+                        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+                        border-left: 4px solid var(--accent, #0066cc);
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 0.75rem;
+                        transform: translateX(100%);
+                        opacity: 0;
+                        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                        max-width: 100%;
+                        position: relative;
+                        overflow: hidden;
+                    }
+                    .custom-toast.show { transform: translateX(0); opacity: 1; }
+                    .custom-toast.hide { transform: translateX(100%); opacity: 0; }
+                    .custom-toast-content { flex: 1; min-width: 0; }
+                    .custom-toast-title { font-weight: 600; font-size: 0.85rem; margin-bottom: 0.1rem; color: var(--text-primary, #1a1a2e); }
+                    .custom-toast-message { font-size: 0.75rem; color: var(--text-secondary, #4a4a5a); line-height: 1.4; }
+                    .custom-toast-close { background: none; border: none; color: var(--text-tertiary, #8a8a9a); cursor: pointer; font-size: 1.2rem; padding: 0.2rem; flex-shrink: 0; transition: color 0.2s; font-family: inherit; line-height: 1; min-height: 32px; min-width: 32px; }
+                    .custom-toast-close:hover { color: var(--text-primary, #1a1a2e); }
+                    .custom-toast.success { border-left-color: var(--green, #2d8f4e); background: var(--green-bg, #e6f2ea); }
+                    .custom-toast.error { border-left-color: var(--red, #c0392b); background: var(--red-bg, #f0e4e2); }
+                    .custom-toast.warning { border-left-color: var(--orange, #c97d2b); background: var(--orange-bg, #f5ede4); }
+                    .custom-toast.info { border-left-color: var(--accent, #0066cc); background: var(--accent-light, #ebf3fa); }
+                    .custom-toast-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--accent, #0066cc); transition: width 0.1s linear; }
+                    .custom-toast.success .custom-toast-progress { background: var(--green, #2d8f4e); }
+                    .custom-toast.error .custom-toast-progress { background: var(--red, #c0392b); }
+                    .custom-toast.warning .custom-toast-progress { background: var(--orange, #c97d2b); }
+
+                    .custom-modal-overlay {
+                        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                        background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
+                        z-index: 99999; display: flex; align-items: center; justify-content: center;
+                        animation: fadeIn 0.2s ease; padding: 1rem;
+                    }
+                    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                    .custom-modal {
+                        background: var(--bg-card, #ffffff); border-radius: 16px; padding: 1.5rem;
+                        max-width: 420px; width: 100%; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+                        animation: slideUp 0.3s ease;
+                    }
+                    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+                    .custom-modal-title { font-size: 1.1rem; font-weight: 600; text-align: center; margin-bottom: 0.4rem; color: var(--text-primary, #1a1a2e); }
+                    .custom-modal-message { font-size: 0.9rem; color: var(--text-secondary, #4a4a5a); text-align: center; margin-bottom: 1.2rem; line-height: 1.5; }
+                    .custom-modal-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+                    .custom-modal-btn { padding: 0.6rem 1.2rem; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; min-width: 80px; min-height: 40px; flex: 1; }
+                    .custom-modal-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+                    .custom-modal-btn-primary { background: var(--accent, #0066cc); color: white; }
+                    .custom-modal-btn-primary:hover { background: var(--accent-hover, #0052a3); }
+                    .custom-modal-btn-danger { background: var(--red, #c0392b); color: white; }
+                    .custom-modal-btn-danger:hover { background: #a93226; }
+                    .custom-modal-btn-secondary { background: var(--bg, #f5f6f8); color: var(--text-secondary, #4a4a5a); }
+                    .custom-modal-btn-secondary:hover { background: var(--border, #e2e4e8); }
+
+                    @media (max-width: 480px) {
+                        .custom-modal { padding: 1.2rem; margin: 0.5rem; }
+                        .custom-modal-actions { flex-direction: column; }
+                        .custom-modal-btn { width: 100%; flex: none; }
+                        .custom-toast { padding: 0.7rem 0.8rem; font-size: 0.8rem; }
+                    }
+                    @media (prefers-color-scheme: dark) {
+                        .custom-modal { background: var(--bg-card, #1a1a22); }
+                        .custom-modal-btn-secondary { background: var(--bg-card-alt, #22222a); color: var(--text-secondary, #9a9aaa); }
+                    }
+                `;
+                document.head.appendChild(style);
+                return style;
+            }
+
+            showToast(options) {
+                const { message, title = '', type = 'info', duration = 4000, closable = true } = 
+                    typeof options === 'string' ? { message: options } : options;
+                const toast = document.createElement('div');
+                toast.className = `custom-toast ${type}`;
+                toast.setAttribute('role', 'alert');
+                toast.innerHTML = `
+                    <div class="custom-toast-content">
+                        ${title ? `<div class="custom-toast-title">${title}</div>` : ''}
+                        <div class="custom-toast-message">${message}</div>
+                    </div>
+                    ${closable ? `<button class="custom-toast-close" aria-label="Cerrar">&times;</button>` : ''}
+                    <div class="custom-toast-progress" style="width:100%"></div>
+                `;
+                this.toastContainer.appendChild(toast);
+                requestAnimationFrame(() => toast.classList.add('show'));
+                const progress = toast.querySelector('.custom-toast-progress');
+                let startTime = Date.now();
+                const updateProgress = () => {
+                    const elapsed = Date.now() - startTime;
+                    const remaining = Math.max(0, 1 - (elapsed / duration));
+                    progress.style.width = `${remaining * 100}%`;
+                    if (remaining > 0) requestAnimationFrame(updateProgress);
+                };
+                requestAnimationFrame(updateProgress);
+                const closeBtn = toast.querySelector('.custom-toast-close');
+                if (closeBtn) closeBtn.addEventListener('click', () => this.dismissToast(toast));
+                const timeout = setTimeout(() => this.dismissToast(toast), duration);
+                toast.dataset.timeout = timeout;
+                return toast;
+            }
+
+            dismissToast(toast) {
+                if (!toast || !toast.parentNode) return;
+                toast.classList.remove('show');
+                toast.classList.add('hide');
+                if (toast.dataset.timeout) clearTimeout(parseInt(toast.dataset.timeout));
+                setTimeout(() => { if (toast.parentNode) toast.remove(); }, 400);
+            }
+
+            showConfirm(options) {
+                return new Promise((resolve) => {
+                    const { title = 'Confirmar', message = '¿Estas seguro?', confirmText = 'Confirmar', cancelText = 'Cancelar', type = 'warning' } = options;
+                    const overlay = document.createElement('div');
+                    overlay.className = 'custom-modal-overlay';
+                    overlay.innerHTML = `
+                        <div class="custom-modal">
+                            <div class="custom-modal-title">${title}</div>
+                            <div class="custom-modal-message">${message}</div>
+                            <div class="custom-modal-actions">
+                                <button class="custom-modal-btn custom-modal-btn-secondary" data-action="cancel">${cancelText}</button>
+                                <button class="custom-modal-btn ${type === 'danger' ? 'custom-modal-btn-danger' : 'custom-modal-btn-primary'}" data-action="confirm">${confirmText}</button>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(overlay);
+                    const confirmBtn = overlay.querySelector('[data-action="confirm"]');
+                    const cancelBtn = overlay.querySelector('[data-action="cancel"]');
+                    confirmBtn.focus();
+                    const closeModal = (result) => { overlay.remove(); resolve(result); };
+                    confirmBtn.addEventListener('click', () => closeModal(true));
+                    cancelBtn.addEventListener('click', () => closeModal(false));
+                    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(false); });
+                    const handleKeydown = (e) => {
+                        if (e.key === 'Escape') { closeModal(false); document.removeEventListener('keydown', handleKeydown); }
+                        if (e.key === 'Enter' && e.target.closest('.custom-modal')) { closeModal(true); document.removeEventListener('keydown', handleKeydown); }
+                    };
+                    document.addEventListener('keydown', handleKeydown);
+                });
+            }
+
+            success(message, title = 'Exito', duration = 3000) { return this.showToast({ message, title, type: 'success', duration }); }
+            error(message, title = 'Error', duration = 4000) { return this.showToast({ message, title, type: 'error', duration }); }
+            warning(message, title = 'Advertencia', duration = 3500) { return this.showToast({ message, title, type: 'warning', duration }); }
+            info(message, title = 'Informacion', duration = 3000) { return this.showToast({ message, title, type: 'info', duration }); }
+        }
+
+        const alertSystem = new AlertSystem();
+
+        // ============================================================
+        // TODO EL CODIGO JAVASCRIPT
+        // ============================================================
+
+        (function() {
+            'use strict';
+
+            const CONFIG = {
+                STORAGE_KEY: 'keto_planner_memoria_semanal',
+                MAX_WEEKS: 52,
+                TARGET_CALORIES: 1800,
+                TARGET_PROTEIN: 120,
+                TARGET_CARBS: 30,
+                TARGET_FAT: 140,
+                KEY_INGREDIENTS: {
+                    'huevo': ['huevo', 'huevos', 'claras', 'yema'],
+                    'aguacate': ['aguacate'],
+                    'pollo': ['pollo', 'pechuga'],
+                    'salmón': ['salmón', 'salmon'],
+                    'atún': ['atún', 'atun'],
+                    'ternera': ['ternera'],
+                    'cerdo': ['cerdo', 'chuletón'],
+                    'lubina': ['lubina'],
+                    'merluza': ['merluza'],
+                    'bacalao': ['bacalao'],
+                    'chorizo': ['chorizo'],
+                    'jamón': ['jamón', 'jamon'],
+                    'queso': ['queso', 'cheddar', 'mozzarella', 'parmesano', 'feta', 'halloumi', 'cabra'],
+                    'espinacas': ['espinacas'],
+                    'coliflor': ['coliflor'],
+                    'calabacín': ['calabacín', 'calabacin'],
+                    'tomate': ['tomate', 'tomates'],
+                    'lechuga': ['lechuga'],
+                    'rúcula': ['rúcula', 'rucula'],
+                    'setas': ['setas', 'champiñones'],
+                    'gambas': ['gambas'],
+                    'nueces': ['nueces'],
+                    'almendras': ['almendras'],
+                    'pimiento': ['pimiento'],
+                    'cebolla': ['cebolla'],
+                    'brócoli': ['brócoli', 'brocoli'],
+                    'espárragos': ['espárragos', 'esparragos'],
+                    'caldo': ['caldo'],
+                    'fresas': ['fresas'],
+                    'kale': ['kale'],
+                    'remolacha': ['remolacha']
+                }
+            };
+
+            function extractIngredientCategories(plato) {
+                if (!plato || !plato.ingredientes) return [];
+                const text = (plato.nombre + ' ' + plato.ingredientes.join(' ')).toLowerCase();
+                const found = [];
+                for (const [category, keywords] of Object.entries(CONFIG.KEY_INGREDIENTS)) {
+                    for (const keyword of keywords) {
+                        if (text.includes(keyword)) {
+                            found.push(category);
+                            break;
+                        }
+                    }
+                }
+                return found;
+            }
+
+            // ============================================================
+            //  REPOSITORIO DE RECETAS (COMPLETO)
+            // ============================================================
+
+            const DESAYUNOS = [
+                { nombre: "Huevos revueltos con aguacate y bacon", kcal: 450, g: 35, c: 3, p: 22,
+                    ingredientes: ["3 huevos", "½ aguacate", "3 tiras bacon", "Sal y pimienta"],
+                    descripcion: "Cocina el bacon crujiente. Bate los huevos, salpimienta y cocina en la misma sartén. Sirve con aguacate en rodajas.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Tortilla de queso cheddar con espinacas", kcal: 420, g: 33, c: 2, p: 20,
+                    ingredientes: ["3 huevos", "50g queso cheddar", "2 puñados espinacas", "Aceite de oliva"],
+                    descripcion: "Saltea las espinacas en aceite. Bate huevos con queso, añade espinacas y cocina como tortilla.",
+                    tiempo: 20, dificultad: 'fácil' },
+                { nombre: "Yogur griego con nueces y chía", kcal: 380, g: 28, c: 5, p: 18,
+                    ingredientes: ["200g yogur griego", "30g nueces", "1 cda semillas chía", "Canela"],
+                    descripcion: "Mezcla todos los ingredientes y reposa 5 minutos.", tiempo: 5, dificultad: 'fácil' },
+                { nombre: "Salmón ahumado con queso crema y pepino", kcal: 350, g: 26, c: 3, p: 20,
+                    ingredientes: ["100g salmón ahumado", "50g queso crema", "½ pepino", "Eneldo"],
+                    descripcion: "Corta el pepino en rodajas. Unta queso crema sobre el salmón y enrolla.",
+                    tiempo: 10, dificultad: 'fácil' },
+                { nombre: "Chaffles con mantequilla y huevo", kcal: 410, g: 34, c: 2, p: 16,
+                    ingredientes: ["1 huevo", "50g mozzarella", "1 cda harina almendra", "Mantequilla"],
+                    descripcion: "Mezcla huevo, queso y harina. Cocina en wafflera. Sirve con mantequilla.",
+                    tiempo: 15, dificultad: 'media' },
+                { nombre: "Omelette de claras con espinacas", kcal: 290, g: 18, c: 4, p: 22,
+                    ingredientes: ["4 claras", "2 puñados espinacas", "Aceite", "Sal y pimienta"],
+                    descripcion: "Saltea espinacas. Bate claras y cocina omelette. Rellena con espinacas.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Batido keto con proteína y cacahuete", kcal: 320, g: 24, c: 5, p: 20,
+                    ingredientes: ["1 scoop proteína", "1 cda mantequilla cacahuete", "200ml leche almendras", "Hielo"],
+                    descripcion: "Mezcla todos los ingredientes en batidora.", tiempo: 5, dificultad: 'fácil' },
+                { nombre: "Huevos Benedict keto", kcal: 480, g: 36, c: 4, p: 24,
+                    ingredientes: ["2 huevos", "2 lonchas jamón", "Salsa holandesa", "Espinacas"],
+                    descripcion: "Cocina huevos escalfados. Coloca sobre jamón y espinacas. Cubre con salsa holandesa.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Tortilla de champiñones y queso", kcal: 390, g: 31, c: 3, p: 21,
+                    ingredientes: ["3 huevos", "100g champiñones", "50g queso", "Aceite"],
+                    descripcion: "Saltea champiñones. Bate huevos con queso y cocina la tortilla.",
+                    tiempo: 20, dificultad: 'fácil' },
+                { nombre: "Pudding de chía con leche de coco", kcal: 350, g: 27, c: 6, p: 12,
+                    ingredientes: ["50g semillas chía", "200ml leche coco", "Vainilla", "Coco rallado"],
+                    descripcion: "Mezcla todos los ingredientes y reposa en nevera 4 horas.", tiempo: 240,
+                    dificultad: 'fácil' },
+                { nombre: "Tortilla de calabacín con queso feta", kcal: 370, g: 28, c: 4, p: 18,
+                    ingredientes: ["2 calabacines", "3 huevos", "100g queso feta", "Menta"],
+                    descripcion: "Ralla calabacines, mezcla con huevo y queso. Cocina como tortilla.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Huevos al plato con espinacas y queso", kcal: 400, g: 32, c: 3, p: 22,
+                    ingredientes: ["2 huevos", "2 puñados espinacas", "50g queso parmesano", "Mantequilla"],
+                    descripcion: "Saltea espinacas en mantequilla. Añade huevos y queso. Hornea 5 min.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Bowl de yogur con frutos rojos", kcal: 340, g: 22, c: 6, p: 16,
+                    ingredientes: ["200g yogur griego", "50g frutos rojos", "20g nueces", "Semillas de calabaza"],
+                    descripcion: "Mezcla yogur con frutos rojos y frutos secos.", tiempo: 5, dificultad: 'fácil' },
+                { nombre: "Crepes keto con crema de queso", kcal: 420, g: 34, c: 4, p: 18,
+                    ingredientes: ["2 huevos", "50g queso crema", "1 cda harina de coco", "Mantequilla"],
+                    descripcion: "Mezcla todos los ingredientes. Cocina crepes en sartén. Sirve con queso crema.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Tortilla de jamón y queso", kcal: 400, g: 32, c: 2, p: 24,
+                    ingredientes: ["3 huevos", "50g jamón", "50g queso", "Aceite"],
+                    descripcion: "Bate huevos con jamón y queso. Cocina como tortilla.", tiempo: 15,
+                dificultad: 'fácil' },
+                { nombre: "Aguacate relleno de huevo y bacon", kcal: 420, g: 34, c: 3, p: 20,
+                    ingredientes: ["1 aguacate", "2 huevos", "3 tiras bacon", "Queso rallado"],
+                    descripcion: "Cocina bacon. Hornea huevos dentro del aguacate. Sirve con bacon y queso.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Batido verde keto", kcal: 280, g: 20, c: 5, p: 15,
+                    ingredientes: ["1 aguacate", "200ml leche almendras", "Espinacas", "Proteína en polvo"],
+                    descripcion: "Licúa todos los ingredientes hasta obtener una mezcla homogénea.",
+                    tiempo: 5, dificultad: 'fácil' },
+                { nombre: "Huevos escalfados sobre espinacas", kcal: 350, g: 28, c: 3, p: 20,
+                    ingredientes: ["2 huevos", "2 puñados espinacas", "Vinagre", "Sal"],
+                    descripcion: "Cocina huevos escalfados. Sirve sobre espinacas salteadas.", tiempo: 15,
+                    dificultad: 'media' },
+                { nombre: "Tortilla de brócoli y queso", kcal: 380, g: 30, c: 4, p: 20,
+                    ingredientes: ["3 huevos", "100g brócoli", "50g queso", "Aceite"],
+                    descripcion: "Cocina brócoli. Bate huevos con queso. Cocina la tortilla.", tiempo: 25,
+                    dificultad: 'media' },
+                { nombre: "Muffins keto de huevo y espinacas", kcal: 360, g: 28, c: 3, p: 22,
+                    ingredientes: ["6 huevos", "100g espinacas", "50g queso", "Sal y pimienta"],
+                    descripcion: "Mezcla todos los ingredientes. Hornea en moldes 15 min a 180°C.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Ensalada de huevo y aguacate", kcal: 350, g: 28, c: 4, p: 16,
+                    ingredientes: ["2 huevos duros", "1 aguacate", "Mayonesa", "Mostaza", "Perejil"],
+                    descripcion: "Pica huevos y aguacate. Mezcla con mayonesa y mostaza.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Tortilla de espárragos trigueros", kcal: 360, g: 28, c: 3, p: 20,
+                    ingredientes: ["3 huevos", "1 manojo espárragos", "Aceite", "Sal"],
+                    descripcion: "Cocina espárragos. Bate huevos y cocina la tortilla con los espárragos.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Bowl de quark con frutos secos", kcal: 320, g: 24, c: 5, p: 18,
+                    ingredientes: ["200g quark", "30g nueces", "20g almendras", "Canela"],
+                    descripcion: "Mezcla quark con frutos secos y canela.", tiempo: 5, dificultad: 'fácil' },
+                { nombre: "Champiñones rellenos de huevo", kcal: 300, g: 24, c: 4, p: 16,
+                    ingredientes: ["8 champiñones", "2 huevos", "Queso rallado", "Perejil"],
+                    descripcion: "Limpia champiñones. Rellena con huevo y queso. Hornea 15 min.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Tortilla de cebolla y queso", kcal: 380, g: 30, c: 3, p: 20,
+                    ingredientes: ["3 huevos", "1 cebolla", "50g queso", "Aceite"],
+                    descripcion: "Sofríe cebolla. Bate huevos con queso. Cocina la tortilla.", tiempo: 20,
+                    dificultad: 'fácil' },
+                { nombre: "Salmón a la plancha con aguacate", kcal: 420, g: 32, c: 3, p: 24,
+                    ingredientes: ["2 filetes salmón", "1 aguacate", "Limón", "Aceite"],
+                    descripcion: "Cocina salmón a la plancha. Sirve con rodajas de aguacate y limón.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Huevos revueltos con setas", kcal: 350, g: 28, c: 3, p: 20,
+                    ingredientes: ["3 huevos", "100g setas", "Ajo", "Aceite"],
+                    descripcion: "Saltea setas con ajo. Añade huevos batidos y cocina revolviendo.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Batido de proteína con mantequilla de cacahuete", kcal: 330, g: 25, c: 5, p: 22,
+                    ingredientes: ["1 scoop proteína", "1 cda mantequilla cacahuete", "200ml leche de coco", "Hielo"],
+                    descripcion: "Mezcla todos los ingredientes en batidora.", tiempo: 5, dificultad: 'fácil' },
+                { nombre: "Tortilla de espinacas y queso de cabra", kcal: 400, g: 32, c: 3, p: 20,
+                    ingredientes: ["3 huevos", "2 puñados espinacas", "50g queso cabra", "Aceite"],
+                    descripcion: "Saltea espinacas. Bate huevos con queso. Cocina la tortilla.", tiempo: 20,
+                    dificultad: 'media' },
+                { nombre: "Huevos al horno con tomate y queso", kcal: 380, g: 30, c: 4, p: 22,
+                    ingredientes: ["2 huevos", "1 tomate", "50g queso", "Orégano"],
+                    descripcion: "Corta tomate en rodajas. Coloca huevos encima. Hornea 10 min.", tiempo: 20,
+                    dificultad: 'fácil' },
+                { nombre: "Tortilla de kale y queso feta", kcal: 390, g: 31, c: 4, p: 20,
+                    ingredientes: ["3 huevos", "100g kale", "50g queso feta", "Aceite"],
+                    descripcion: "Saltea kale. Bate huevos con queso. Cocina la tortilla.", tiempo: 20,
+                    dificultad: 'media' },
+                { nombre: "Huevos revueltos con salmón ahumado", kcal: 420, g: 34, c: 3, p: 24,
+                    ingredientes: ["3 huevos", "100g salmón ahumado", "Mantequilla", "Eneldo"],
+                    descripcion: "Bate huevos. Cocina en mantequilla. Añade salmón y eneldo.", tiempo: 15,
+                    dificultad: 'fácil' }
+            ];
+
+            const PRIMEROS_COMIDA = [
+                { nombre: "Ensalada de aguacate, tomate y huevo duro", kcal: 320, g: 27, c: 4, p: 12,
+                    ingredientes: ["1 aguacate", "2 tomates", "2 huevos duros", "Cebolla roja", "Vinagreta"],
+                    descripcion: "Corta el aguacate, tomates y huevos en dados. Mezcla con cebolla picada y aliña con vinagreta.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Aguacate relleno de atún con huevo duro", kcal: 380, g: 30, c: 3, p: 18,
+                    ingredientes: ["1 aguacate", "1 lata atún", "1 huevo duro", "Mayonesa", "Perejil"],
+                    descripcion: "Abre el aguacate por la mitad. Mezcla el atún con huevo picado y mayonesa. Rellena las mitades de aguacate.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Crema de aguacate y pepino con huevo poché", kcal: 290, g: 24, c: 4, p: 14,
+                    ingredientes: ["1 aguacate", "½ pepino", "2 huevos", "Caldo de verduras", "Aceite de oliva"],
+                    descripcion: "Tritura el aguacate con pepino y caldo. Sirve caliente con un huevo poché encima.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Crema de coliflor y parmesano", kcal: 180, g: 14, c: 5, p: 6,
+                    ingredientes: ["½ coliflor", "50g parmesano", "200ml nata", "Caldo", "Nuez moscada"],
+                    descripcion: "Cocina coliflor en caldo. Tritura con nata, queso y nuez moscada.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Ensalada de rúcula, nueces y queso de cabra", kcal: 260, g: 22, c: 3, p: 8,
+                    ingredientes: ["100g rúcula", "50g nueces", "100g queso cabra", "Vinagreta limón"],
+                    descripcion: "Lava rúcula, añade nueces y queso desmenuzado. Aliña.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Ensalada de espinacas con vinagreta y huevo", kcal: 220, g: 18, c: 3, p: 12,
+                    ingredientes: ["100g espinacas", "2 huevos duros", "Tomates cherry", "Vinagre balsámico", "Aceite"],
+                    descripcion: "Lava espinacas y tomates. Añade huevo duro picado. Aliña con vinagreta.",
+                    tiempo: 10, dificultad: 'fácil' },
+                { nombre: "Caldo de verduras con huevo escalfado", kcal: 190, g: 14, c: 4, p: 10,
+                    ingredientes: ["Calabacín", "Puerro", "Apio", "2 huevos", "Hierbas"],
+                    descripcion: "Cuece verduras en agua con hierbas. Sirve con un huevo escalfado en el centro.",
+                    tiempo: 30, dificultad: 'media' },
+                { nombre: "Gazpacho keto de aguacate y pepino", kcal: 190, g: 16, c: 5, p: 4,
+                    ingredientes: ["1 aguacate", "½ pepino", "1 diente ajo", "Vinagre", "Aceite"],
+                    descripcion: "Tritura todo con agua fría. Sirve bien frío.", tiempo: 10, dificultad: 'fácil' },
+                { nombre: "Ensalada César keto", kcal: 280, g: 22, c: 3, p: 15,
+                    ingredientes: ["Lechuga romana", "Pechuga pollo", "Queso parmesano", "Anchoas", "Vinagreta"],
+                    descripcion: "Lava lechuga, añade pollo desmenuzado, queso y anchoas. Aliña.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Ensalada de espárragos y huevo", kcal: 210, g: 17, c: 3, p: 11,
+                    ingredientes: ["Espárragos verdes", "2 huevos duros", "Vinagreta", "Almendras"],
+                    descripcion: "Cocina espárragos, añade huevos picados y almendras. Aliña.", tiempo: 15,
+                    dificultad: 'fácil' },
+                { nombre: "Sopa de champiñones con nata", kcal: 200, g: 17, c: 4, p: 5,
+                    ingredientes: ["250g champiñones", "200ml nata", "Cebolla", "Caldo", "Tomillo"],
+                    descripcion: "Sofríe cebolla y champiñones. Añade caldo y nata. Cocina 15 min y tritura.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Ensalada de pollo con aguacate", kcal: 300, g: 24, c: 4, p: 18,
+                    ingredientes: ["Pechuga pollo", "1 aguacate", "Lechuga", "Vinagreta", "Pepino"],
+                    descripcion: "Cocina pollo y desmenuza. Mezcla con aguacate, lechuga y vinagreta.",
+                    tiempo: 20, dificultad: 'fácil' },
+                { nombre: "Crema de calabacín y puerro", kcal: 160, g: 13, c: 4, p: 3,
+                    ingredientes: ["2 calabacines", "1 puerro", "Caldo", "Nata", "Mantequilla"],
+                    descripcion: "Sofríe puerro, añade calabacín y caldo. Cocina y tritura.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Ensalada de atún y aguacate", kcal: 290, g: 22, c: 4, p: 16,
+                    ingredientes: ["1 lata atún", "1 aguacate", "Lechuga", "Tomates cherry", "Vinagreta"],
+                    descripcion: "Mezcla atún con aguacate. Sirve sobre lechuga y tomates.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Sopa de verduras keto", kcal: 140, g: 10, c: 4, p: 4,
+                    ingredientes: ["Calabacín", "Puerro", "Apio", "Caldo", "Perejil"],
+                    descripcion: "Cuece verduras en caldo 20 min. Sirve caliente con perejil.", tiempo: 30,
+                    dificultad: 'fácil' },
+                { nombre: "Ensalada de brócoli y nueces", kcal: 240, g: 20, c: 4, p: 8,
+                    ingredientes: ["100g brócoli", "50g nueces", "Queso parmesano", "Vinagreta"],
+                    descripcion: "Cocina brócoli al vapor. Mezcla con nueces, queso y vinagreta.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Crema de espárragos trigueros", kcal: 170, g: 14, c: 3, p: 4,
+                    ingredientes: ["1 manojo espárragos", "Nata", "Mantequilla", "Caldo"],
+                    descripcion: "Cocina espárragos, tritura con nata y mantequilla.", tiempo: 25,
+                dificultad: 'media' },
+                { nombre: "Ensalada de remolacha y queso feta", kcal: 180, g: 15, c: 4, p: 6,
+                    ingredientes: ["Remolacha cocida", "100g queso feta", "Nueces", "Vinagreta"],
+                    descripcion: "Corta remolacha y queso. Añade nueces y aliña.", tiempo: 10,
+                dificultad: 'fácil' },
+                { nombre: "Gazpacho andaluz keto", kcal: 130, g: 10, c: 5, p: 2,
+                    ingredientes: ["Tomates", "Pimiento", "Pepino", "Ajo", "Vinagre"],
+                    descripcion: "Tritura todo con agua y aceite. Sirve muy frío.", tiempo: 10,
+                dificultad: 'fácil' },
+                { nombre: "Ensalada de mozzarella y tomate", kcal: 220, g: 18, c: 3, p: 10,
+                    ingredientes: ["2 tomates", "1 bola mozzarella", "Albahaca", "Aceite", "Vinagre"],
+                    descripcion: "Corta tomates y mozzarella. Alterna con albahaca y aliña.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Crema de champiñones", kcal: 150, g: 12, c: 3, p: 4,
+                    ingredientes: ["250g champiñones", "Nata", "Caldo", "Cebolla"],
+                    descripcion: "Sofríe cebolla y champiñones. Añade caldo y nata. Tritura.", tiempo: 25,
+                    dificultad: 'media' },
+                { nombre: "Ensalada de pollo y espinacas", kcal: 260, g: 20, c: 3, p: 18,
+                    ingredientes: ["Pechuga pollo", "Espinacas", "Nueces", "Vinagreta", "Queso parmesano"],
+                    descripcion: "Cocina pollo y corta en tiras. Mezcla con espinacas y nueces.",
+                    tiempo: 20, dificultad: 'fácil' },
+                { nombre: "Sopa de coliflor y queso", kcal: 190, g: 15, c: 4, p: 6,
+                    ingredientes: ["½ coliflor", "50g queso cheddar", "Caldo", "Nata", "Cebolla"],
+                    descripcion: "Cocina coliflor en caldo. Tritura con nata y queso.", tiempo: 25,
+                    dificultad: 'media' },
+                { nombre: "Ensalada de gambas y aguacate", kcal: 280, g: 22, c: 4, p: 16,
+                    ingredientes: ["150g gambas", "1 aguacate", "Lechuga", "Vinagreta", "Cebolla morada"],
+                    descripcion: "Cocina gambas. Mezcla con aguacate, lechuga y vinagreta.", tiempo: 15,
+                    dificultad: 'fácil' },
+                { nombre: "Crema de calabaza y coco", kcal: 180, g: 15, c: 5, p: 4,
+                    ingredientes: ["200g calabaza", "200ml leche coco", "Caldo", "Jengibre"],
+                    descripcion: "Cocina calabaza en caldo. Tritura con leche de coco y jengibre.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Ensalada de endivias con nueces", kcal: 200, g: 16, c: 3, p: 5,
+                    ingredientes: ["2 endivias", "30g nueces", "Queso azul", "Vinagreta", "Perejil"],
+                    descripcion: "Separa hojas de endivia. Añade nueces, queso y aliña.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Sopa de pescado keto", kcal: 200, g: 14, c: 4, p: 16,
+                    ingredientes: ["150g pescado blanco", "Caldo de pescado", "Puerro", "Apio", "Nata"],
+                    descripcion: "Cocina pescado con verduras en caldo. Añade nata y sirve.", tiempo: 30,
+                    dificultad: 'media' },
+                { nombre: "Ensalada de lentejas germinadas", kcal: 230, g: 18, c: 5, p: 12,
+                    ingredientes: ["100g lentejas germinadas", "Tomate", "Pepino", "Aceitunas", "Vinagreta"],
+                    descripcion: "Mezcla todos los ingredientes. Aliña con vinagreta.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Crema de brócoli y queso", kcal: 190, g: 15, c: 4, p: 7,
+                    ingredientes: ["½ brócoli", "50g queso cheddar", "Nata", "Caldo", "Nuez moscada"],
+                    descripcion: "Cocina brócoli en caldo. Tritura con nata y queso.", tiempo: 25,
+                    dificultad: 'media' },
+                { nombre: "Ensalada de kale y aguacate", kcal: 260, g: 20, c: 4, p: 8,
+                    ingredientes: ["100g kale", "1 aguacate", "Semillas calabaza", "Vinagreta", "Limón"],
+                    descripcion: "Masajea kale con limón. Añade aguacate y aliña.", tiempo: 15,
+                dificultad: 'fácil' },
+                { nombre: "Crema de champiñones y trufa", kcal: 170, g: 14, c: 3, p: 4,
+                    ingredientes: ["250g champiñones", "Aceite trufa", "Nata", "Caldo", "Cebolla"],
+                    descripcion: "Sofríe champiñones. Añade caldo y nata. Sirve con aceite de trufa.",
+                    tiempo: 25, dificultad: 'media' }
+            ];
+
+            const SEGUNDOS_COMIDA = [
+                { nombre: "Chuletón de cerdo con espárragos", kcal: 480, g: 35, c: 3, p: 38,
+                    ingredientes: ["1 chuletón", "Espárragos", "Aceite", "Sal y pimienta"],
+                    descripcion: "Sazona y cocina a la plancha 5-7 min por lado. Acompaña con espárragos.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Salmón al horno con costra de mostaza", kcal: 450, g: 28, c: 5, p: 40,
+                    ingredientes: ["2 filetes salmón", "2 cdas mostaza", "Pan rallado keto", "Eneldo"],
+                    descripcion: "Unta con mostaza, espolvorea pan rallado. Hornea 15 min a 180°C.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Muslos de pollo al curry de coco", kcal: 430, g: 30, c: 4, p: 36,
+                    ingredientes: ["4 muslos pollo", "200ml leche coco", "Curry", "Jengibre", "Ajo"],
+                    descripcion: "Dora pollo, añade ajo y jengibre. Añade leche de coco y curry. Cocina 25 min.",
+                    tiempo: 35, dificultad: 'media' },
+                { nombre: "Albóndigas en salsa de tomate keto", kcal: 460, g: 33, c: 5, p: 34,
+                    ingredientes: ["500g carne picada", "1 huevo", "Salsa tomate sin azúcar", "Orégano"],
+                    descripcion: "Forma albóndigas con carne y huevo. Cocina en salsa 20 min.", tiempo: 30,
+                    dificultad: 'media' },
+                { nombre: "Filete de lubina a la mantequilla", kcal: 380, g: 24, c: 3, p: 35,
+                    ingredientes: ["2 filetes lubina", "Mantequilla", "Limón", "Alcaparras"],
+                    descripcion: "Cocina pescado en mantequilla 4 min por lado. Añade limón y alcaparras.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Costillas de ternera estofadas", kcal: 520, g: 38, c: 4, p: 40,
+                    ingredientes: ["1kg costillas", "Cebolla", "Zanahoria", "Caldo", "Tomillo"],
+                    descripcion: "Sella costillas. Añade verdura y caldo. Cocina 2 horas.", tiempo: 120,
+                    dificultad: 'difícil' },
+                { nombre: "Hamburguesa keto con queso azul y bacon", kcal: 500, g: 38, c: 2, p: 35,
+                    ingredientes: ["200g carne picada", "50g queso azul", "3 tiras bacon", "Lechuga"],
+                    descripcion: "Forma hamburguesa y cocina. Añade bacon y queso. Sirve en lechuga.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Merluza al papillote con calabacín", kcal: 320, g: 18, c: 5, p: 33,
+                    ingredientes: ["2 lomos merluza", "1 calabacín", "Aceitunas", "Tomates cherry"],
+                    descripcion: "Coloca pescado con verduras en papel. Hornea 15 min a 200°C.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Pechuga de pollo a la plancha con verduras", kcal: 350, g: 22, c: 5, p: 38,
+                    ingredientes: ["Pechuga pollo", "Calabacín", "Pimiento", "Cebolla", "Aceite"],
+                    descripcion: "Cocina pollo y verduras a la plancha. Sirve con un chorrito de aceite.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Entrecot con champiñones y mantequilla", kcal: 510, g: 37, c: 3, p: 39,
+                    ingredientes: ["Entrecot", "Champiñones", "Mantequilla", "Tomillo", "Ajo"],
+                    descripcion: "Sella el entrecot. Saltea champiñones con mantequilla, ajo y tomillo.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Pollo al horno con romero", kcal: 420, g: 30, c: 3, p: 38,
+                    ingredientes: ["Pollo entero", "Romero", "Ajo", "Aceite", "Limón"],
+                    descripcion: "Unta pollo con aceite y especias. Hornea 1h a 180°C.", tiempo: 70,
+                    dificultad: 'difícil' },
+                { nombre: "Bacalao con pisto keto", kcal: 340, g: 18, c: 5, p: 30,
+                    ingredientes: ["2 lomos bacalao", "Calabacín", "Pimiento", "Cebolla", "Tomate"],
+                    descripcion: "Sofríe verduras para el pisto. Coloca bacalao encima. Hornea 15 min.",
+                    tiempo: 35, dificultad: 'media' },
+                { nombre: "Ternera salteada con verduras", kcal: 440, g: 30, c: 5, p: 36,
+                    ingredientes: ["500g ternera", "Pimiento", "Cebolla", "Calabacín", "Salsa soja keto"],
+                    descripcion: "Saltea carne y verduras a fuego fuerte. Añade salsa de soja.", tiempo: 25,
+                    dificultad: 'media' },
+                { nombre: "Salmón con espárragos y holandesa", kcal: 460, g: 32, c: 4, p: 38,
+                    ingredientes: ["2 filetes salmón", "Espárragos", "Mantequilla", "Huevos", "Limón"],
+                    descripcion: "Cocina salmón y espárragos al vapor. Sirve con salsa holandesa.",
+                    tiempo: 30, dificultad: 'difícil' },
+                { nombre: "Pechuga de pollo rellena de queso", kcal: 410, g: 30, c: 3, p: 36,
+                    ingredientes: ["Pechuga pollo", "Queso", "Jamón", "Aceite", "Pimienta"],
+                    descripcion: "Abre pechuga. Rellena con queso y jamón. Cocina a la plancha.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Lubina con verduras asadas", kcal: 370, g: 24, c: 5, p: 34,
+                    ingredientes: ["2 lubinas", "Calabacín", "Pimiento", "Cebolla", "Aceite"],
+                    descripcion: "Coloca lubina sobre verduras. Hornea 20 min a 200°C.", tiempo: 30,
+                    dificultad: 'media' },
+                { nombre: "Costillas de cerdo BBQ keto", kcal: 490, g: 36, c: 4, p: 38,
+                    ingredientes: ["1kg costillas", "Salsa BBQ keto", "Ajo", "Pimentón"],
+                    descripcion: "Unta costillas con salsa. Hornea 1.5h a 160°C.", tiempo: 100,
+                dificultad: 'difícil' },
+                { nombre: "Merluza con salsa de almendras", kcal: 360, g: 24, c: 5, p: 34,
+                    ingredientes: ["2 lomos merluza", "Almendras", "Ajo", "Nata", "Perejil"],
+                    descripcion: "Cocina merluza. Saltea almendras con ajo, añade nata y perejil.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Pollo al curry con coliflor", kcal: 400, g: 28, c: 5, p: 36,
+                    ingredientes: ["Pechuga pollo", "Coliflor", "Curry", "Leche coco", "Cebolla"],
+                    descripcion: "Dora pollo. Añade cebolla, curry y coliflor. Cocina 20 min.", tiempo: 35,
+                    dificultad: 'media' },
+                { nombre: "Entrecot con salsa de champiñones", kcal: 520, g: 38, c: 4, p: 38,
+                    ingredientes: ["Entrecot", "Champiñones", "Nata", "Cebolla", "Mantequilla"],
+                    descripcion: "Sella entrecot. Prepara salsa con champiñones, nata y cebolla.",
+                    tiempo: 30, dificultad: 'media' },
+                { nombre: "Salmón en papillote con verduras", kcal: 400, g: 28, c: 5, p: 36,
+                    ingredientes: ["Salmón", "Calabacín", "Pimiento", "Tomates cherry", "Limón"],
+                    descripcion: "Coloca salmón con verduras en papel. Hornea 20 min a 180°C.",
+                    tiempo: 30, dificultad: 'media' },
+                { nombre: "Hamburguesa de ternera con queso", kcal: 480, g: 36, c: 3, p: 34,
+                    ingredientes: ["200g ternera picada", "Queso cheddar", "Lechuga", "Tomate", "Cebolla"],
+                    descripcion: "Forma hamburguesa. Cocina y añade queso. Sirve en lechuga.",
+                    tiempo: 20, dificultad: 'fácil' },
+                { nombre: "Pechuga de pollo con espinacas y queso", kcal: 390, g: 28, c: 4, p: 36,
+                    ingredientes: ["Pechuga pollo", "Espinacas", "Queso parmesano", "Nata", "Ajo"],
+                    descripcion: "Cocina pollo. Saltea espinacas con ajo y nata. Sirve con queso.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Albóndigas de pollo y calabacín", kcal: 380, g: 26, c: 4, p: 32,
+                    ingredientes: ["500g pollo picado", "1 calabacín", "Huevo", "Orégano", "Salsa tomate"],
+                    descripcion: "Mezcla pollo con calabacín rallado. Forma albóndigas. Cocina en salsa.",
+                    tiempo: 35, dificultad: 'media' },
+                { nombre: "Lubina a la plancha con alcaparras", kcal: 360, g: 22, c: 3, p: 34,
+                    ingredientes: ["Lubina", "Alcaparras", "Limón", "Mantequilla", "Perejil"],
+                    descripcion: "Cocina lubina a la plancha. Sirve con mantequilla, alcaparras y limón.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Costillas de cordero al horno", kcal: 510, g: 38, c: 3, p: 36,
+                    ingredientes: ["1kg costillas cordero", "Ajo", "Romero", "Aceite", "Sal"],
+                    descripcion: "Unta costillas con aceite y especias. Hornea 45 min a 200°C.",
+                    tiempo: 60, dificultad: 'difícil' },
+                { nombre: "Merluza con salsa verde", kcal: 340, g: 20, c: 4, p: 32,
+                    ingredientes: ["Merluza", "Perejil", "Ajo", "Vino blanco", "Aceite"],
+                    descripcion: "Cocina merluza. Prepara salsa con perejil, ajo y vino blanco.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Pollo al ajillo", kcal: 380, g: 26, c: 4, p: 34,
+                    ingredientes: ["Pechuga pollo", "Ajo", "Perejil", "Vino blanco", "Aceite"],
+                    descripcion: "Dora pollo con ajos. Añade vino blanco y perejil. Cocina 15 min.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Hamburguesa de salmón y aguacate", kcal: 430, g: 32, c: 4, p: 30,
+                    ingredientes: ["Salmón picado", "Huevo", "Pan rallado keto", "Aguacate", "Lechuga"],
+                    descripcion: "Forma hamburguesas con salmón. Cocina y sirve con aguacate.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Pechuga de pavo con verduras", kcal: 340, g: 22, c: 4, p: 36,
+                    ingredientes: ["Pechuga pavo", "Calabacín", "Pimiento", "Cebolla", "Aceite"],
+                    descripcion: "Cocina pavo y verduras a la plancha.", tiempo: 25, dificultad: 'media' }
+            ];
+
+            const PRIMEROS_CENA = [
+                { nombre: "Crema de aguacate y cilantro", kcal: 200, g: 18, c: 3, p: 5,
+                    ingredientes: ["1 aguacate", "Cilantro fresco", "Caldo", "Limón", "Aceite"],
+                    descripcion: "Tritura el aguacate con cilantro y caldo. Sirve con un chorrito de limón.",
+                    tiempo: 10, dificultad: 'fácil' },
+                { nombre: "Ensalada de aguacate, naranja y huevo", kcal: 240, g: 19, c: 4, p: 8,
+                    ingredientes: ["1 aguacate", "1 naranja", "2 huevos", "Lechuga", "Vinagreta"],
+                    descripcion: "Corta aguacate, naranja y huevos. Mezcla con lechuga y aliña.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Crema de calabacín con queso de cabra", kcal: 150, g: 12, c: 4, p: 5,
+                    ingredientes: ["2 calabacines", "50g queso cabra", "Caldo", "Mantequilla"],
+                    descripcion: "Cocina calabacines en caldo, tritura con mantequilla. Sirve con queso.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Ensalada de tomate y mozzarella ligera", kcal: 160, g: 13, c: 3, p: 6,
+                    ingredientes: ["2 tomates", "1 bola mozzarella ligera", "Albahaca", "Aceite"],
+                    descripcion: "Corta tomates y mozzarella. Alterna con albahaca y aliña.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Sopa de verduras keto", kcal: 120, g: 8, c: 4, p: 3,
+                    ingredientes: ["Calabacín", "Puerro", "Apio", "Caldo"],
+                    descripcion: "Cuece verduras en caldo 20 min. Sirve caliente.", tiempo: 30,
+                dificultad: 'fácil' },
+                { nombre: "Gazpacho andaluz keto", kcal: 130, g: 10, c: 5, p: 2,
+                    ingredientes: ["Tomates", "Pimiento", "Pepino", "Ajo", "Vinagre"],
+                    descripcion: "Tritura todo con agua y aceite. Sirve muy frío.", tiempo: 10,
+                dificultad: 'fácil' },
+                { nombre: "Crema de espárragos trigueros", kcal: 160, g: 13, c: 3, p: 4,
+                    ingredientes: ["1 manojo espárragos", "Nata", "Mantequilla", "Caldo"],
+                    descripcion: "Cocina espárragos, tritura con nata y mantequilla.", tiempo: 25,
+                dificultad: 'media' },
+                { nombre: "Ensalada de remolacha y queso feta", kcal: 180, g: 15, c: 4, p: 6,
+                    ingredientes: ["Remolacha cocida", "100g queso feta", "Nueces", "Vinagreta"],
+                    descripcion: "Corta remolacha y queso. Añade nueces y aliña.", tiempo: 10,
+                dificultad: 'fácil' },
+                { nombre: "Crema de champiñones", kcal: 140, g: 11, c: 3, p: 3,
+                    ingredientes: ["250g champiñones", "Nata", "Caldo", "Cebolla"],
+                    descripcion: "Sofríe cebolla y champiñones. Añade caldo y nata. Tritura.", tiempo: 25,
+                    dificultad: 'media' },
+                { nombre: "Ensalada de pollo y aguacate", kcal: 260, g: 20, c: 3, p: 18,
+                    ingredientes: ["Pechuga pollo", "1 aguacate", "Lechuga", "Vinagreta"],
+                    descripcion: "Cocina pollo y corta en tiras. Mezcla con aguacate y lechuga.",
+                    tiempo: 20, dificultad: 'fácil' },
+                { nombre: "Crema de calabaza y jengibre", kcal: 160, g: 13, c: 4, p: 4,
+                    ingredientes: ["200g calabaza", "Jengibre", "Caldo", "Nata", "Mantequilla"],
+                    descripcion: "Cocina calabaza con jengibre en caldo. Tritura con nata.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Ensalada de endivias y queso azul", kcal: 190, g: 15, c: 3, p: 5,
+                    ingredientes: ["2 endivias", "50g queso azul", "Nueces", "Vinagreta"],
+                    descripcion: "Separa hojas de endivia. Añade queso, nueces y aliña.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Sopa de pescado keto", kcal: 180, g: 12, c: 4, p: 14,
+                    ingredientes: ["150g pescado", "Caldo", "Puerro", "Apio", "Nata"],
+                    descripcion: "Cocina pescado con verduras en caldo. Añade nata.", tiempo: 30,
+                    dificultad: 'media' },
+                { nombre: "Ensalada de rúcula y parmesano", kcal: 200, g: 16, c: 3, p: 8,
+                    ingredientes: ["100g rúcula", "50g parmesano", "Vinagreta", "Nueces"],
+                    descripcion: "Lava rúcula. Añade parmesano en láminas, nueces y aliña.",
+                    tiempo: 10, dificultad: 'fácil' },
+                { nombre: "Crema de brócoli y queso cheddar", kcal: 180, g: 14, c: 4, p: 6,
+                    ingredientes: ["½ brócoli", "50g queso cheddar", "Nata", "Caldo"],
+                    descripcion: "Cocina brócoli en caldo. Tritura con nata y queso.", tiempo: 25,
+                    dificultad: 'media' },
+                { nombre: "Ensalada templada de calabacín", kcal: 170, g: 14, c: 4, p: 4,
+                    ingredientes: ["2 calabacines", "Queso feta", "Aceitunas", "Vinagreta", "Orégano"],
+                    descripcion: "Corta calabacines. Saltea ligeramente. Añade queso y aliña.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Crema de puerros y patata keto", kcal: 150, g: 12, c: 4, p: 3,
+                    ingredientes: ["2 puerros", "1 patata pequeña", "Caldo", "Nata", "Mantequilla"],
+                    descripcion: "Sofríe puerros. Añade patata y caldo. Tritura con nata.", tiempo: 30,
+                    dificultad: 'media' },
+                { nombre: "Ensalada de espinacas y fresas", kcal: 170, g: 14, c: 4, p: 4,
+                    ingredientes: ["Espinacas", "Fresas", "Nueces", "Queso feta", "Vinagreta"],
+                    descripcion: "Mezcla espinacas con fresas, nueces y queso. Aliña.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Sopa de tomate keto", kcal: 130, g: 10, c: 5, p: 3,
+                    ingredientes: ["Tomates", "Caldo", "Cebolla", "Ajo", "Albahaca"],
+                    descripcion: "Sofríe cebolla y ajo. Añade tomates y caldo. Tritura.", tiempo: 30,
+                    dificultad: 'media' },
+                { nombre: "Ensalada de coliflor y tahini", kcal: 190, g: 16, c: 4, p: 5,
+                    ingredientes: ["Coliflor", "Tahini", "Limón", "Perejil", "Aceite"],
+                    descripcion: "Cocina coliflor al vapor. Prepara salsa con tahini y limón.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Crema de champiñones y trufa", kcal: 160, g: 13, c: 3, p: 3,
+                    ingredientes: ["Champiñones", "Aceite trufa", "Nata", "Caldo", "Cebolla"],
+                    descripcion: "Sofríe champiñones. Añade caldo y nata. Sirve con aceite de trufa.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Ensalada de kale y aguacate", kcal: 220, g: 18, c: 4, p: 6,
+                    ingredientes: ["Kale", "Aguacate", "Semillas calabaza", "Vinagreta", "Limón"],
+                    descripcion: "Masajea kale con limón. Añade aguacate y aliña.", tiempo: 15,
+                    dificultad: 'fácil' },
+                { nombre: "Sopa de coliflor y curry", kcal: 150, g: 12, c: 4, p: 4,
+                    ingredientes: ["Coliflor", "Curry", "Caldo", "Nata", "Cebolla"],
+                    descripcion: "Sofríe cebolla y curry. Añade coliflor y caldo. Tritura con nata.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Ensalada de atún y huevo", kcal: 220, g: 18, c: 3, p: 14,
+                    ingredientes: ["Lata atún", "2 huevos duros", "Lechuga", "Aceitunas", "Vinagreta"],
+                    descripcion: "Mezcla atún con huevos picados. Sirve sobre lechuga.", tiempo: 10,
+                    dificultad: 'fácil' }
+            ];
+
+            const SEGUNDOS_CENA = [
+                { nombre: "Tortilla francesa con jamón y aguacate", kcal: 380, g: 30, c: 3, p: 24,
+                    ingredientes: ["3 huevos", "2 lonchas jamón", "½ aguacate", "Queso rallado"],
+                    descripcion: "Bate huevos con jamón y queso. Cocina como tortilla. Sirve con aguacate en rodajas.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Wrap de lechuga con atún y aguacate", kcal: 290, g: 18, c: 4, p: 24,
+                    ingredientes: ["Hojas lechuga", "1 lata atún", "½ aguacate", "Mayonesa"],
+                    descripcion: "Mezcla atún, aguacate y mayonesa. Enrolla en lechuga.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Revuelto de setas con gambas", kcal: 310, g: 20, c: 4, p: 25,
+                    ingredientes: ["200g setas", "150g gambas", "Ajo", "Perejil", "Aceite"],
+                    descripcion: "Saltea ajo, añade setas y gambas. Cocina 5 min.", tiempo: 20,
+                dificultad: 'media' },
+                { nombre: "Ensalada templada de pollo asado", kcal: 380, g: 27, c: 4, p: 28,
+                    ingredientes: ["Pechuga pollo asada", "Lechuga", "Aguacate", "Vinagreta"],
+                    descripcion: "Mezcla lechuga con pollo y aguacate. Aliña.", tiempo: 15,
+                dificultad: 'fácil' },
+                { nombre: "Huevos al plato con chorizo", kcal: 360, g: 28, c: 3, p: 22,
+                    ingredientes: ["2 huevos", "50g chorizo", "Pimiento morrón", "Mantequilla"],
+                    descripcion: "Sofríe chorizo y pimiento. Añade huevos y hornea 5 min.", tiempo: 20,
+                    dificultad: 'media' },
+                { nombre: "Bacalao al horno con pisto", kcal: 340, g: 18, c: 5, p: 30,
+                    ingredientes: ["2 lomos bacalao", "Pisto keto", "Aceite"],
+                    descripcion: "Coloca bacalao sobre pisto y hornea 15 min a 180°C.", tiempo: 30,
+                    dificultad: 'media' },
+                { nombre: "Queso halloumi a la plancha", kcal: 360, g: 28, c: 3, p: 20,
+                    ingredientes: ["250g halloumi", "Tomate", "Orégano", "Aceite"],
+                    descripcion: "Corta halloumi y cocina a la plancha. Acompaña con tomate.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Huevos nube con aguacate", kcal: 330, g: 27, c: 2, p: 18,
+                    ingredientes: ["2 huevos", "½ aguacate", "Sal", "Pimienta"],
+                    descripcion: "Monta claras a punto de nieve. Hornea con yema encima. Sirve con aguacate.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Sardinas con aguacate", kcal: 370, g: 28, c: 3, p: 22,
+                    ingredientes: ["1 lata sardinas", "½ aguacate", "Limón", "Perejil"],
+                    descripcion: "Sirve sardinas con aguacate y aliña con limón.", tiempo: 10,
+                dificultad: 'fácil' },
+                { nombre: "Tortilla de calabacín con feta", kcal: 340, g: 25, c: 4, p: 22,
+                    ingredientes: ["2 calabacines", "3 huevos", "100g queso feta", "Menta"],
+                    descripcion: "Ralla calabacines, mezcla con huevo y queso. Cocina.", tiempo: 25,
+                    dificultad: 'media' },
+                { nombre: "Pechuga de pollo con espinacas", kcal: 320, g: 20, c: 4, p: 32,
+                    ingredientes: ["Pechuga pollo", "Espinacas", "Ajo", "Nata", "Queso parmesano"],
+                    descripcion: "Cocina pollo. Saltea espinacas con ajo y nata. Sirve con queso.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Salteado de verduras y tofu", kcal: 280, g: 22, c: 5, p: 18,
+                    ingredientes: ["Tofu", "Calabacín", "Pimiento", "Cebolla", "Salsa soja"],
+                    descripcion: "Saltea tofu con verduras. Añade salsa de soja.", tiempo: 20,
+                dificultad: 'media' },
+                { nombre: "Huevos revueltos con salmón ahumado", kcal: 350, g: 28, c: 3, p: 22,
+                    ingredientes: ["3 huevos", "100g salmón ahumado", "Mantequilla", "Eneldo"],
+                    descripcion: "Bate huevos. Cocina en mantequilla. Añade salmón y eneldo.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Tortilla de espárragos y queso", kcal: 340, g: 26, c: 3, p: 20,
+                    ingredientes: ["3 huevos", "Espárragos", "Queso", "Aceite"],
+                    descripcion: "Cocina espárragos. Bate huevos con queso. Cocina la tortilla.",
+                    tiempo: 20, dificultad: 'media' },
+                { nombre: "Revuelto de champiñones y huevo", kcal: 300, g: 24, c: 3, p: 18,
+                    ingredientes: ["3 huevos", "200g champiñones", "Ajo", "Perejil", "Aceite"],
+                    descripcion: "Saltea champiñones con ajo. Añade huevos y cocina.", tiempo: 15,
+                    dificultad: 'fácil' },
+                { nombre: "Wrap de lechuga con pollo", kcal: 320, g: 24, c: 4, p: 26,
+                    ingredientes: ["Hojas lechuga", "Pechuga pollo", "Aguacate", "Mayonesa", "Mostaza"],
+                    descripcion: "Cocina pollo. Mezcla con mayonesa. Enrolla en lechuga.", tiempo: 20,
+                    dificultad: 'fácil' },
+                { nombre: "Huevos al horno con espinacas", kcal: 300, g: 24, c: 3, p: 20,
+                    ingredientes: ["2 huevos", "Espinacas", "Queso parmesano", "Mantequilla"],
+                    descripcion: "Coloca espinacas en fuente. Añade huevos y queso. Hornea 10 min.",
+                    tiempo: 20, dificultad: 'fácil' },
+                { nombre: "Tortilla de cebolla y calabacín", kcal: 320, g: 24, c: 4, p: 18,
+                    ingredientes: ["3 huevos", "1 calabacín", "1 cebolla", "Aceite", "Sal"],
+                    descripcion: "Sofríe cebolla y calabacín. Bate huevos y cocina la tortilla.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Salteado de gambas y aguacate", kcal: 330, g: 26, c: 4, p: 22,
+                    ingredientes: ["150g gambas", "1 aguacate", "Ajo", "Perejil", "Limón"],
+                    descripcion: "Saltea gambas con ajo. Sirve con aguacate en rodajas y limón.",
+                    tiempo: 15, dificultad: 'fácil' },
+                { nombre: "Tortilla de espinacas y champiñones", kcal: 340, g: 26, c: 3, p: 20,
+                    ingredientes: ["3 huevos", "Espinacas", "Champiñones", "Queso", "Aceite"],
+                    descripcion: "Saltea verduras. Bate huevos con queso. Cocina la tortilla.",
+                    tiempo: 25, dificultad: 'media' },
+                { nombre: "Huevos poché con salsa holandesa", kcal: 380, g: 32, c: 3, p: 20,
+                    ingredientes: ["2 huevos", "Mantequilla", "Yemas", "Limón", "Sal"],
+                    descripcion: "Prepara salsa holandesa. Cocina huevos escalfados. Sirve cubiertos.",
+                    tiempo: 30, dificultad: 'difícil' },
+                { nombre: "Wrap de lechuga con salmón", kcal: 310, g: 24, c: 3, p: 22,
+                    ingredientes: ["Hojas lechuga", "Salmón ahumado", "Queso crema", "Pepino", "Eneldo"],
+                    descripcion: "Unta queso crema en lechuga. Añade salmón y enrolla.", tiempo: 10,
+                    dificultad: 'fácil' },
+                { nombre: "Tortilla de jamón y queso", kcal: 350, g: 28, c: 2, p: 22,
+                    ingredientes: ["3 huevos", "Jamón", "Queso", "Aceite"],
+                    descripcion: "Bate huevos con jamón y queso. Cocina como tortilla.", tiempo: 15,
+                    dificultad: 'fácil' },
+                { nombre: "Revuelto de verduras y huevo", kcal: 280, g: 22, c: 4, p: 16,
+                    ingredientes: ["3 huevos", "Calabacín", "Pimiento", "Cebolla", "Aceite"],
+                    descripcion: "Saltea verduras. Añade huevos y cocina.", tiempo: 20, dificultad: 'fácil' },
+                { nombre: "Queso halloumi con verduras asadas", kcal: 370, g: 30, c: 4, p: 20,
+                    ingredientes: ["250g halloumi", "Calabacín", "Pimiento", "Cebolla", "Aceite"],
+                    descripcion: "Asa verduras. Cocina halloumi a la plancha. Sirve junto.", tiempo: 25,
+                    dificultad: 'media' },
+                { nombre: "Tortilla de champiñones y queso", kcal: 380, g: 30, c: 3, p: 22,
+                    ingredientes: ["3 huevos", "150g champiñones", "50g queso", "Aceite"],
+                    descripcion: "Saltea champiñones. Bate huevos con queso. Cocina la tortilla.",
+                    tiempo: 20, dificultad: 'fácil' }
+            ];
+
+            const DIAS = [
+                { nombre: "Lunes" },
+                { nombre: "Martes" },
+                { nombre: "Miércoles" },
+                { nombre: "Jueves" },
+                { nombre: "Viernes" },
+                { nombre: "Sábado" },
+                { nombre: "Domingo" }
+            ];
+
+            // ============================================================
+            //  ALGORITMO CON MEMORIA DE INGREDIENTES Y PLATOS
+            // ============================================================
+
+            class AdvancedSelector {
+                static extractCategories(plato) {
+                    return extractIngredientCategories(plato);
+                }
+
+                static calculateDayScore(dayMeals) {
+                    const allCategories = new Set();
+                    const categoryCount = {};
+                    let totalCategories = 0;
+
+                    for (const meal of dayMeals) {
+                        const cats = this.extractCategories(meal);
+                        for (const cat of cats) {
+                            allCategories.add(cat);
+                            categoryCount[cat] = (categoryCount[cat] || 0) + 1;
+                            totalCategories++;
+                        }
+                    }
+
+                    const uniqueCount = allCategories.size;
+                    const totalMeals = dayMeals.length;
+
+                    let repetitionPenalty = 0;
+                    for (const [cat, count] of Object.entries(categoryCount)) {
+                        if (count > 1) {
+                            repetitionPenalty += Math.pow(count, 2) * 15;
+                        }
+                    }
+
+                    const varietyBonus = uniqueCount * 20;
+                    const emptyMeals = dayMeals.filter(m => this.extractCategories(m).length === 0).length;
+                    const emptyPenalty = emptyMeals * 10;
+
+                    let severePenalty = 0;
+                    for (const [cat, count] of Object.entries(categoryCount)) {
+                        if (count >= 3) {
+                            severePenalty += 30;
+                        }
+                    }
+
+                    let score = varietyBonus - repetitionPenalty - emptyPenalty - severePenalty;
+                    const maxScore = totalMeals * 20;
+                    score = Math.max(0, Math.min(100, (score / maxScore) * 100));
+
+                    return {
+                        score: Math.round(score),
+                        uniqueCount,
+                        totalCategories,
+                        repetitionPenalty,
+                        categoryCount,
+                        severePenalty
+                    };
+                }
+
+                static seleccionarDiaCompleto(poolDesayunos, poolP1, poolP2, poolC1, poolC2) {
+                    const ingredientesUsados = new Set();
+
+                    const extraerCategorias = (plato) => {
+                        if (!plato || !plato.ingredientes) return [];
+                        const text = (plato.nombre + ' ' + plato.ingredientes.join(' ')).toLowerCase();
+                        const encontrados = [];
+                        for (const [categoria, keywords] of Object.entries(CONFIG.KEY_INGREDIENTS)) {
+                            for (const keyword of keywords) {
+                                if (text.includes(keyword)) {
+                                    encontrados.push(categoria);
+                                    break;
+                                }
+                            }
+                        }
+                        return encontrados;
+                    };
+
+                    const seleccionarPlato = (pool, usados, intentos = 0) => {
+                        if (intentos > 100) {
+                            return pool[Math.floor(Math.random() * pool.length)];
+                        }
+
+                        const scored = pool.map(plato => {
+                            const ingredientes = extraerCategorias(plato);
+                            let penalty = 0;
+                            let nuevos = 0;
+
+                            for (const ing of ingredientes) {
+                                if (usados.has(ing)) {
+                                    const vecesUsado = usados.has(ing) ? 2 : 1;
+                                    penalty += Math.pow(vecesUsado, 2) * 25;
+                                } else {
+                                    nuevos++;
+                                }
+                            }
+
+                            const repetidos = ingredientes.filter(ing => usados.has(ing));
+                            const extraPenalty = repetidos.length * 15;
+                            const bonus = nuevos * 20;
+
+                            return {
+                                plato,
+                                score: bonus - penalty - extraPenalty,
+                                ingredientes,
+                                repetidos: repetidos.length
+                            };
+                        });
+
+                        scored.sort((a, b) => b.score - a.score);
+
+                        if (scored[0] && scored[0].repetidos >= 2 && intentos < 50) {
+                            const index = pool.indexOf(scored[0].plato);
+                            if (index > -1) {
+                                const newPool = [...pool];
+                                newPool.splice(index, 1);
+                                if (newPool.length > 0) {
+                                    return seleccionarPlato(newPool, usados, intentos + 1);
+                                }
+                            }
+                        }
+
+                        const topScore = scored[0] ? scored[0].score : -999;
+                        const topCandidates = scored.filter(s => s.score >= topScore - 10);
+                        const elegido = topCandidates[Math.floor(Math.random() * topCandidates.length)];
+
+                        return elegido ? elegido.plato : pool[Math.floor(Math.random() * pool.length)];
+                    };
+
+                    const dPool = [...poolDesayunos];
+                    const p1Pool = [...poolP1];
+                    const p2Pool = [...poolP2];
+                    const c1Pool = [...poolC1];
+                    const c2Pool = [...poolC2];
+
+                    const desayuno = seleccionarPlato(dPool, ingredientesUsados);
+                    const ingDesayuno = extraerCategorias(desayuno);
+                    ingDesayuno.forEach(ing => ingredientesUsados.add(ing));
+
+                    const p1 = seleccionarPlato(p1Pool, ingredientesUsados);
+                    const ingP1 = extraerCategorias(p1);
+                    ingP1.forEach(ing => ingredientesUsados.add(ing));
+
+                    const p2 = seleccionarPlato(p2Pool, ingredientesUsados);
+                    const ingP2 = extraerCategorias(p2);
+                    ingP2.forEach(ing => ingredientesUsados.add(ing));
+
+                    const c1 = seleccionarPlato(c1Pool, ingredientesUsados);
+                    const ingC1 = extraerCategorias(c1);
+                    ingC1.forEach(ing => ingredientesUsados.add(ing));
+
+                    const c2 = seleccionarPlato(c2Pool, ingredientesUsados);
+                    const ingC2 = extraerCategorias(c2);
+                    ingC2.forEach(ing => ingredientesUsados.add(ing));
+
+                    return {
+                        desayuno,
+                        p1,
+                        p2,
+                        c1,
+                        c2,
+                        ingredientesUsados: Array.from(ingredientesUsados)
+                    };
+                }
+
+                static seleccionarDiaCompletoConMemoriaSemanal(
+                    poolDesayunos, poolP1, poolP2, poolC1, poolC2, platosUsadosSemana
+                ) {
+                    const nombresUsados = new Set(platosUsadosSemana);
+
+                    const filtrarPool = (pool) => {
+                        const filtrados = pool.filter(p => !nombresUsados.has(p.nombre));
+                        return filtrados.length > 0 ? filtrados : pool;
+                    };
+
+                    const dPool = filtrarPool(poolDesayunos);
+                    const p1Pool = filtrarPool(poolP1);
+                    const p2Pool = filtrarPool(poolP2);
+                    const c1Pool = filtrarPool(poolC1);
+                    const c2Pool = filtrarPool(poolC2);
+
+                    return this.seleccionarDiaCompleto(dPool, p1Pool, p2Pool, c1Pool, c2Pool);
+                }
+
+                static analyzeDayDiversity(dayMeals) {
+                    return this.calculateDayScore(dayMeals);
+                }
+            }
+
+            // ============================================================
+            //  CLASE KETO PLANNER (SIN CALENDARIO)
+            // ============================================================
+
+            class KetoPlanner {
+                constructor() {
+                    this.semanaActual = null;
+                    this.loadFromStorage();
+                }
+
+                loadFromStorage() {
+                    try {
+                        const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+                        if (saved) {
+                            const parsed = JSON.parse(saved);
+                            this.semanaActual = parsed;
+                        }
+                    } catch (error) {
+                        console.error('Error loading data:', error);
+                        this.semanaActual = null;
+                    }
+                }
+
+                saveToStorage() {
+                    try {
+                        localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(this.semanaActual));
+                    } catch (error) {
+                        console.error('Error saving data:', error);
+                    }
+                }
+
+                generateWeek() {
+                    let semana = [];
+                    let totalK = 0,
+                        totalP = 0,
+                        totalC = 0,
+                        totalG = 0;
+                    let diversityScores = [];
+                    const platosUsadosSemana = [];
+
+                    for (let i = 0; i < 7; i++) {
+                        const dia = AdvancedSelector.seleccionarDiaCompletoConMemoriaSemanal(
+                            DESAYUNOS,
+                            PRIMEROS_COMIDA,
+                            SEGUNDOS_COMIDA,
+                            PRIMEROS_CENA,
+                            SEGUNDOS_CENA,
+                            platosUsadosSemana
+                        );
+
+                        platosUsadosSemana.push(dia.desayuno.nombre);
+                        platosUsadosSemana.push(dia.p1.nombre);
+                        platosUsadosSemana.push(dia.p2.nombre);
+                        platosUsadosSemana.push(dia.c1.nombre);
+                        platosUsadosSemana.push(dia.c2.nombre);
+
+                        const diaK = dia.desayuno.kcal + dia.p1.kcal + dia.p2.kcal + dia.c1.kcal + dia.c2.kcal;
+                        const diaP = dia.desayuno.p + dia.p1.p + dia.p2.p + dia.c1.p + dia.c2.p;
+                        const diaC = dia.desayuno.c + dia.p1.c + dia.p2.c + dia.c1.c + dia.c2.c;
+                        const diaG = dia.desayuno.g + dia.p1.g + dia.p2.g + dia.c1.g + dia.c2.g;
+
+                        totalK += diaK;
+                        totalP += diaP;
+                        totalC += diaC;
+                        totalG += diaG;
+
+                        const dayMeals = [dia.desayuno, dia.p1, dia.p2, dia.c1, dia.c2];
+                        const diversity = AdvancedSelector.analyzeDayDiversity(dayMeals);
+                        diversityScores.push(diversity.score);
+
+                        semana.push({
+                            dia: DIAS[i],
+                            desayuno: dia.desayuno,
+                            p1c: dia.p1,
+                            p2c: dia.p2,
+                            c1: dia.c1,
+                            c2: dia.c2,
+                            total: { kcal: diaK, p: diaP, c: diaC, g: diaG },
+                            diversity: diversity,
+                            ingredientesUsados: dia.ingredientesUsados
+                        });
+                    }
+
+                    this.semanaActual = semana;
+
+                    const avgDiversity = Math.round(diversityScores.reduce((a, b) => a + b, 0) / diversityScores.length);
+
+                    this.saveToStorage();
+
+                    return {
+                        semana: semana,
+                        stats: {
+                            kcal: Math.round(totalK / 7),
+                            p: Math.round(totalP / 7),
+                            c: Math.round(totalC / 7),
+                            g: Math.round(totalG / 7),
+                            diversity: avgDiversity
+                        }
+                    };
+                }
+
+                clearAll() {
+                    this.semanaActual = null;
+                    this.saveToStorage();
+                }
+
+                getLastWeek() {
+                    return this.semanaActual;
+                }
+
+                getWeekStats() {
+                    if (!this.semanaActual) return null;
+                    let totalK = 0,
+                        totalP = 0,
+                        totalC = 0,
+                        totalG = 0;
+                    let diversityScores = [];
+                    for (const d of this.semanaActual) {
+                        totalK += d.total.kcal;
+                        totalP += d.total.p;
+                        totalC += d.total.c;
+                        totalG += d.total.g;
+                        if (d.diversity) diversityScores.push(d.diversity.score);
+                    }
+                    const avgDiversity = diversityScores.length > 0 ? Math.round(diversityScores.reduce((a, b) => a + b, 0) / diversityScores.length) : 0;
+                    return {
+                        kcal: Math.round(totalK / 7),
+                        p: Math.round(totalP / 7),
+                        c: Math.round(totalC / 7),
+                        g: Math.round(totalG / 7),
+                        diversity: avgDiversity
+                    };
+                }
+
+                analyzeWeek(semana) {
+                    if (!semana) return null;
+
+                    const allMeals = semana.flatMap(d =>
+                        [d.desayuno, d.p1c, d.p2c, d.c1, d.c2]
+                    );
+
+                    const totalK = allMeals.reduce((sum, m) => sum + m.kcal, 0);
+                    const totalP = allMeals.reduce((sum, m) => sum + m.p, 0);
+                    const totalC = allMeals.reduce((sum, m) => sum + m.c, 0);
+                    const totalG = allMeals.reduce((sum, m) => sum + m.g, 0);
+
+                    const avgK = Math.round(totalK / 7);
+                    const avgP = Math.round(totalP / 7);
+                    const avgC = Math.round(totalC / 7);
+                    const avgG = Math.round(totalG / 7);
+
+                    const ratio = (avgG / (avgP + avgC)) * 100;
+
+                    const allCategories = new Set();
+                    for (const meal of allMeals) {
+                        const cats = AdvancedSelector.extractCategories(meal);
+                        for (const cat of cats) allCategories.add(cat);
+                    }
+
+                    return {
+                        avgK,
+                        avgP,
+                        avgC,
+                        avgG,
+                        ratio: Math.round(ratio * 10) / 10,
+                        totalK,
+                        totalP,
+                        totalC,
+                        totalG,
+                        meals: allMeals,
+                        uniqueIngredients: allCategories.size
+                    };
+                }
+
+                getMealClass(plato) {
+                    if (!plato || !plato.nombre) return '';
+                    const cats = AdvancedSelector.extractCategories(plato);
+                    if (cats.includes('aguacate') && cats.includes('huevo')) return 'both';
+                    if (cats.includes('aguacate')) return 'avocado';
+                    if (cats.includes('huevo')) return 'egg';
+                    return '';
+                }
+            }
+
+            // ============================================================
+            //  INSTANCIA
+            // ============================================================
+
+            const planner = new KetoPlanner();
+
+            // ============================================================
+            //  FUNCIONES DE TOAST
+            // ============================================================
+
+            function showToast(message, type = 'info', duration = 3000) {
+                const titles = {
+                    success: 'Exito',
+                    error: 'Error',
+                    warning: 'Advertencia',
+                    info: 'Informacion'
+                };
+                return alertSystem.showToast({ 
+                    message, 
+                    title: titles[type] || '', 
+                    type, 
+                    duration 
+                });
+            }
+
+            // ============================================================
+            //  MODAL DE RECETA
+            // ============================================================
+
+            function mostrarReceta(plato, tipo) {
+                if (document.querySelector('.recipe-modal-overlay')) {
+                    return;
+                }
+                
+                const container = document.getElementById('recipeModalContainer');
+                
+                const tipoNombres = {
+                    'desayuno': 'Desayuno',
+                    'p1c': '1º Comida',
+                    'p2c': '2º Comida',
+                    'c1': '1º Cena',
+                    'c2': '2º Cena'
+                };
+
+                const tipoDisplay = tipoNombres[tipo] || tipo;
+
+                const modal = document.createElement('div');
+                modal.className = 'recipe-modal-overlay';
+                modal.setAttribute('role', 'dialog');
+                modal.setAttribute('aria-modal', 'true');
+
+                modal.innerHTML = `
+                    <div class="recipe-modal">
+                        <button class="recipe-modal-close" aria-label="Cerrar receta">&times;</button>
+                        <div class="recipe-modal-type">${tipoDisplay}</div>
+                        <div class="recipe-modal-title">${plato.nombre}</div>
+                        <div class="recipe-modal-macros">
+                            <span><strong>${plato.kcal}</strong> kcal</span>
+                            <span><strong>${plato.p}</strong>g proteína</span>
+                            <span><strong>${plato.c}</strong>g carbos</span>
+                            <span><strong>${plato.g}</strong>g grasa</span>
+                        </div>
+                        ${plato.descripcion ? `
+                            <div class="recipe-modal-section">
+                                <div class="recipe-modal-section-title">Descripción</div>
+                                <div class="recipe-modal-description">${plato.descripcion}</div>
+                            </div>
+                        ` : ''}
+                        ${plato.ingredientes && plato.ingredientes.length > 0 ? `
+                            <div class="recipe-modal-section">
+                                <div class="recipe-modal-section-title">Ingredientes</div>
+                                <ul class="recipe-modal-ingredients">
+                                    ${plato.ingredientes.map(i => `<li>${i}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        <div class="recipe-modal-footer">
+                            ${plato.tiempo ? `<span> ${plato.tiempo} min</span>` : ''}
+                            ${plato.dificultad ? `<span>Dificultad: ${plato.dificultad}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(modal);
+
+                const closeBtn = modal.querySelector('.recipe-modal-close');
+                closeBtn.addEventListener('click', () => modal.remove());
+
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) modal.remove();
+                });
+
+                const handleEscape = (e) => {
+                    if (e.key === 'Escape') {
+                        modal.remove();
+                        document.removeEventListener('keydown', handleEscape);
+                    }
+                };
+                document.addEventListener('keydown', handleEscape);
+
+                setTimeout(() => closeBtn.focus(), 100);
+            }
+
+            // ============================================================
+            //  NAVEGACION
+            // ============================================================
+
+            function entrarApp() {
+                document.getElementById('landingPage').classList.add('hidden');
+                document.getElementById('appContent').classList.add('visible');
+                cargarUltimoMenu();
+                actualizarContador();
+                alertSystem.success('Toca cualquier plato para ver su receta', 'Bienvenido');
+            }
+
+            function salirApp() {
+                document.getElementById('landingPage').classList.remove('hidden');
+                document.getElementById('appContent').classList.remove('visible');
+            }
+
+            // ============================================================
+            //  RENDERIZADORES
+            // ============================================================
+
+            function mShort(p) {
+                return p.kcal + ' · ' + p.g + 'g · ' + p.c + 'g · ' + p.p + 'g';
+            }
+
+            function actualizarContador() {
+                const count = planner.semanaActual ? 1 : 0;
+                const landingCounter = document.querySelector('#weeksCountLanding');
+                if (landingCounter) landingCounter.textContent = count;
+            }
+
+            function cargarUltimoMenu() {
+                const semana = planner.getLastWeek();
+                if (semana) {
+                    renderMenu(semana);
+                    renderAnalisis(semana);
+                    actualizarDots(semana.length);
+                }
+            }
+
+            // ============================================================
+            //  NAVEGACIÓN HORIZONTAL (MÓVIL)
+            // ============================================================
+
+            let currentSlide = 0;
+            let totalSlides = 7;
+
+            function actualizarDots(total) {
+                totalSlides = total || 7;
+                const dotsContainer = document.getElementById('weekDots');
+                if (!dotsContainer) return;
+                
+                dotsContainer.innerHTML = '';
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement('button');
+                    dot.className = 'dot' + (i === currentSlide ? ' active' : '');
+                    dot.setAttribute('aria-label', `Día ${i + 1}`);
+                    dot.addEventListener('click', () => irASlide(i));
+                    dotsContainer.appendChild(dot);
+                }
+            }
+
+            function irASlide(index) {
+                const wrapper = document.getElementById('weekGridWrapper');
+                if (!wrapper) return;
+                
+                const cards = wrapper.querySelectorAll('.day-card');
+                if (!cards.length || index < 0 || index >= cards.length) return;
+                
+                currentSlide = index;
+                
+                // Scroll al elemento usando scrollIntoView con smooth
+                cards[index].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+                
+                // Actualizar dots
+                const dots = document.querySelectorAll('#weekDots .dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+
+            function initMobileNav() {
+                const wrapper = document.getElementById('weekGridWrapper');
+                if (!wrapper) return;
+                
+                const prevBtn = document.getElementById('weekNavPrev');
+                const nextBtn = document.getElementById('weekNavNext');
+                
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        if (currentSlide > 0) irASlide(currentSlide - 1);
+                    });
+                }
+                
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => {
+                        const cards = wrapper.querySelectorAll('.day-card');
+                        if (currentSlide < cards.length - 1) irASlide(currentSlide + 1);
+                    });
+                }
+                
+                // Detectar fin de scroll para actualizar dots
+                wrapper.addEventListener('scroll', () => {
+                    const cards = wrapper.querySelectorAll('.day-card');
+                    if (!cards.length) return;
+                    
+                    let closestIndex = 0;
+                    let closestDist = Infinity;
+                    
+                    cards.forEach((card, i) => {
+                        const rect = card.getBoundingClientRect();
+                        const wrapperRect = wrapper.getBoundingClientRect();
+                        const center = rect.left + rect.width / 2;
+                        const wrapperCenter = wrapperRect.left + wrapperRect.width / 2;
+                        const dist = Math.abs(center - wrapperCenter);
+                        if (dist < closestDist) {
+                            closestDist = dist;
+                            closestIndex = i;
+                        }
+                    });
+                    
+                    if (closestIndex !== currentSlide) {
+                        currentSlide = closestIndex;
+                        const dots = document.querySelectorAll('#weekDots .dot');
+                        dots.forEach((dot, i) => {
+                            dot.classList.toggle('active', i === closestIndex);
+                        });
+                    }
+                });
+            }
+
+            function renderAnalisis(semana) {
+                const container = document.getElementById('analisisContainer');
+                
+                if (!semana || semana.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-title">Sin datos para analizar</div>
+                            <div class="empty-state-text">Genera un menú para ver el análisis</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const stats = planner.analyzeWeek(semana);
+                
+                // Calcular diversidad media
+                let avgDiversity = 0;
+                if (semana && semana.length > 0) {
+                    let totalDiv = 0;
+                    for (const day of semana) {
+                        let divScore;
+                        if (day.diversity) {
+                            divScore = day.diversity.score;
+                        } else {
+                            const dayMeals = [day.desayuno, day.p1c, day.p2c, day.c1, day.c2];
+                            const div = AdvancedSelector.analyzeDayDiversity(dayMeals);
+                            divScore = div.score;
+                        }
+                        totalDiv += divScore;
+                    }
+                    avgDiversity = Math.round(totalDiv / semana.length);
+                }
+
+                // Determinar badge para el ratio keto
+                let badgeClass = 'optimal';
+                let badgeText = 'Óptimo';
+                if (stats.ratio < 100) {
+                    badgeClass = 'warning';
+                    badgeText = 'Bajo';
+                } else if (stats.ratio < 150) {
+                    badgeClass = 'good';
+                    badgeText = 'Bueno';
+                } else if (stats.ratio > 250) {
+                    badgeClass = 'bad';
+                    badgeText = 'Excesivo';
+                }
+
+                let html = `
+                    <!-- RATIO KETO - DESTACADO -->
+                    <div class="ratio-card">
+                        <div class="label">Ratio Keto</div>
+                        <div class="value">${stats.ratio}<span class="percent">%</span></div>
+                        <div class="sub">Grasa / <strong>(Proteína + Carbohidratos)</strong></div>
+                        <span class="badge ${badgeClass}">${badgeText}</span>
+                    </div>
+
+                    <!-- VALORES MEDIOS SEMANALES -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Calorías</div>
+                            <div class="stat-value">${stats.avgK} <span class="unit">kcal</span></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Proteína</div>
+                            <div class="stat-value">${stats.avgP} <span class="unit">g</span></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Carbohidratos</div>
+                            <div class="stat-value">${stats.avgC} <span class="unit">g</span></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Grasa</div>
+                            <div class="stat-value">${stats.avgG} <span class="unit">g</span></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Diversidad</div>
+                            <div class="stat-value">${avgDiversity} <span class="unit">%</span></div>
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML = html;
+            }
+
+            // ============================================================
+            //  RENDER MENÚ
+            // ============================================================
+
+            function renderMenu(semana) {
+                const grid = document.getElementById('weekGrid');
+
+                let html = '';
+                for (const d of semana) {
+                    const divScore = d.diversity ? d.diversity.score : 0;
+                    let badgeClass = 'bad';
+                    let badgeText = 'Repetido ' + divScore + '%';
+                    if (divScore > 70) { badgeClass = 'good';
+                        badgeText = 'Diverso ' + divScore + '%'; } else if (divScore > 40) { badgeClass = 'warning';
+                        badgeText = 'Mejorable ' + divScore + '%'; }
+
+                    const platos = [
+                        { tipo: 'desayuno', label: 'Desayuno', dot: 'dot-bfast', plato: d.desayuno },
+                        { tipo: 'p1c', label: '1º Comida', dot: 'dot-lunch1', plato: d.p1c },
+                        { tipo: 'p2c', label: '2º Comida', dot: 'dot-lunch2', plato: d.p2c },
+                        { tipo: 'c1', label: '1º Cena', dot: 'dot-dinner1', plato: d.c1 },
+                        { tipo: 'c2', label: '2º Cena', dot: 'dot-dinner2', plato: d.c2 }
+                    ];
+
+                    html += `
+                        <div class="day-card">
+                            <div class="day-card-header">
+                                <span class="day-name">${d.dia.nombre}</span>
+                            </div>
+                            <div class="day-body">
+                    `;
+
+                    for (const p of platos) {
+                        html += `
+                            <div class="meal-group" onclick="mostrarReceta(${JSON.stringify(p.plato).replace(/"/g, '&quot;')}, '${p.tipo}')" role="button" tabindex="0" aria-label="Ver receta de ${p.plato.nombre}">
+                                <div class="meal-label">
+                                    <span class="dot ${p.dot}"></span>${p.label}
+                                </div>
+                                <div class="meal-name">${p.plato.nombre}</div>
+                                <div class="meal-macros">${mShort(p.plato)}</div>
+                            </div>
+                        `;
+                    }
+
+                    html += `
+                                <div class="day-summary">
+                                    <span>Kcal <strong>${d.total.kcal}</strong></span>
+                                    <span>G <strong>${d.total.g}g</strong></span>
+                                    <span>C <strong>${d.total.c}g</strong></span>
+                                    <span>P <strong>${d.total.p}g</strong></span>
+                                    <span class="diversity-badge ${badgeClass}">${badgeText}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                grid.innerHTML = html;
+
+                document.querySelectorAll('.meal-group[role="button"]').forEach(el => {
+                    el.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            el.click();
+                        }
+                    });
+                });
+
+                // Actualizar dots y navegación móvil
+                const total = semana.length;
+                actualizarDots(total);
+                currentSlide = 0;
+                
+                // Inicializar navegación móvil después de renderizar
+                setTimeout(() => {
+                    initMobileNav();
+                    // Asegurar que el primer slide esté visible
+                    const wrapper = document.getElementById('weekGridWrapper');
+                    if (wrapper) {
+                        const firstCard = wrapper.querySelector('.day-card');
+                        if (firstCard) {
+                            firstCard.scrollIntoView({ block: 'nearest', inline: 'center' });
+                        }
+                    }
+                }, 100);
+            }
+
+            // ============================================================
+            //  ACCIONES
+            // ============================================================
+
+            async function generarMenu() {
+                try {
+                    const result = planner.generateWeek();
+                    renderMenu(result.semana);
+                    renderAnalisis(result.semana);
+                    actualizarContador();
+
+                    let totalDiv = 0;
+                    for (const day of result.semana) {
+                        if (day.diversity) totalDiv += day.diversity.score;
+                    }
+                    const avgDiv = Math.round(totalDiv / result.semana.length);
+
+                    await alertSystem.success('Menú generado con diversidad ' + avgDiv + '%', 'Menú creado');
+                } catch (error) {
+                    console.error('Error generating menu:', error);
+                    await alertSystem.error('Error al generar el menú. Inténtalo de nuevo.', 'Error');
+                }
+            }
+
+            async function limpiarTodo() {
+                const confirmed = await alertSystem.showConfirm({
+                    title: 'Limpiar todo',
+                    message: 'Esta acción eliminará permanentemente el menú actual. ¿Estás seguro?',
+                    confirmText: 'Sí, limpiar todo',
+                    cancelText: 'Cancelar',
+                    type: 'danger'
+                });
+                
+                if (confirmed) {
+                    try {
+                        planner.clearAll();
+                        actualizarContador();
+                        
+                        document.getElementById('weekGrid').innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-state-title">Genera tu menú</div>
+                                <div class="empty-state-text">Pulsa "Generar" para comenzar</div>
+                            </div>
+                        `;
+                        renderAnalisis(null);
+                        
+                        // Limpiar dots
+                        document.getElementById('weekDots').innerHTML = '';
+                        
+                        await alertSystem.success('Todo ha sido limpiado correctamente', 'Limpiado');
+                    } catch (error) {
+                        await alertSystem.error('Error al limpiar los datos', 'Error');
+                        console.error('Error:', error);
+                    }
+                }
+            }
+
+            // ============================================================
+            //  TABS
+            // ============================================================
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-btn').forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                    });
+                    this.classList.add('active');
+                    this.setAttribute('aria-selected', 'true');
+                    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                    document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+
+                    if (this.dataset.tab === 'analisis') {
+                        const semana = planner.getLastWeek();
+                        renderAnalisis(semana);
+                    }
+                });
+            });
+
+            // ============================================================
+            //  EVENTOS
+            // ============================================================
+
+            document.getElementById('entrarBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                entrarApp();
+            });
+
+            document.getElementById('salirBtn').addEventListener('click', salirApp);
+            document.getElementById('btnGenerar').addEventListener('click', generarMenu);
+            document.getElementById('clearAllBtn').addEventListener('click', limpiarTodo);
+
+            window.mostrarReceta = mostrarReceta;
+
+            // ============================================================
+            //  INIT
+            // ============================================================
+
+            actualizarContador();
+            console.log('Keto Planner con scroll horizontal en móvil');
+
+            if (planner.semanaActual && planner.semanaActual.length > 0) {
+                document.querySelector('#weeksCountLanding').textContent = '1';
+                const semana = planner.getLastWeek();
+                renderAnalisis(semana);
+                renderMenu(semana);
+            }
+
+            setTimeout(() => {
+                alertSystem.info(
+                    'Desliza horizontalmente para ver los días. Toca cualquier plato para ver la receta completa.',
+                    'Navegación en móvil'
+                );
+            }, 1500);
+
+        })();
+    </script>
+
+</body>
+</html>
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: clamp(0.6rem, 2vw, 2.5rem) clamp(0.6rem, 2vw, 2rem);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ============================================================
+           LANDING PAGE
+           ============================================================ */
+        .landing-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 85vh;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .landing-page.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .landing-logo {
+            margin-bottom: 1.5rem;
+        }
+
+        .landing-logo-text {
+            font-size: clamp(1.6rem, 5vw, 2.0rem);
+            font-weight: 200;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .landing-logo-text span {
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .landing-hero {
+            max-width: 680px;
+            margin-bottom: 1.5rem;
+        }
+
+        .landing-badge {
+            display: inline-block;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.8rem;
+        }
+
+        .landing-title {
+            font-size: clamp(1.8rem, 6vw, 3.6rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+            line-height: 1.1;
+            margin-bottom: 0.6rem;
+        }
+
+        .landing-title .highlight {
+            color: var(--accent);
+        }
+
+        .landing-desc {
+            font-size: clamp(0.9rem, 1.4vw, 1.15rem);
+            color: var(--text-secondary);
+            max-width: 520px;
+            line-height: 1.6;
+            margin: 0 auto 0.5rem;
+            padding: 0 0.5rem;
+        }
+
+        .landing-actions {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1.5rem;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .landing-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding-top: 1.2rem;
+            border-top: 1px solid var(--border);
+            width: 100%;
+            max-width: 350px;
+            margin-top: 1rem;
+        }
+
+        .landing-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 60px;
+        }
+
+        .landing-stat .number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .landing-stat .label {
+            font-size: 0.6rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .landing-spacer {
+            height: 1.5rem;
+        }
+
+        .landing-btn-entrar {
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 0.85rem 3rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            box-shadow: 0 2px 16px rgba(0, 102, 204, 0.2);
+            touch-action: manipulation;
+            width: 100%;
+            min-height: var(--touch-size);
+            letter-spacing: 0.01em;
+        }
+
+        .landing-btn-entrar:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 24px rgba(0, 102, 204, 0.3);
+        }
+
+        .landing-btn-entrar:active {
+            transform: scale(0.98);
+        }
+
+        /* ============================================================
+           APP CONTENT
+           ============================================================ */
+        .app-content {
+            display: none;
+        }
+
+        .app-content.visible {
+            display: block;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: clamp(1rem, 3vw, 3rem);
+            padding-bottom: clamp(0.8rem, 2vw, 2rem);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .app-title-group {
+            display: flex;
+            align-items: center;
+            gap: clamp(0.4rem, 1.5vw, 1rem);
+        }
+
+        .app-title {
+            font-size: clamp(1rem, 2.5vw, 1.6rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .app-subtitle {
+            font-size: clamp(0.6rem, 1.2vw, 0.85rem);
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .header-action-link {
+            font-size: clamp(0.75rem, 1.2vw, 0.85rem);
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font);
+            background: none;
+            border: none;
+            padding: 0.4rem 0.2rem;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-thickness: 1.5px;
+            text-decoration-color: transparent;
+            touch-action: manipulation;
+            min-height: 36px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .header-action-link:hover {
+            color: var(--text-primary);
+            text-decoration-color: var(--accent);
+        }
+
+        .header-action-link-primary {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .header-action-link-primary:hover {
+            color: var(--accent-hover);
+            text-decoration-color: var(--accent);
+        }
+
+        .header-action-link-danger {
+            color: var(--red);
+        }
+
+        .header-action-link-danger:hover {
+            color: var(--red);
+            text-decoration-color: var(--red);
+        }
+
+        .header-action-divider {
+            width: 1px;
+            height: 20px;
+            background: var(--border);
+            flex-shrink: 0;
+        }
+
+        /* ============================================================
+           TABS - SOLO MENÚ Y ANÁLISIS
+           ============================================================ */
+        .tabs {
+            display: flex;
+            gap: 0.2rem;
+            margin-bottom: clamp(1rem, 2.5vw, 2rem);
+            background: var(--bg-card);
+            padding: 0.2rem;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tab-btn {
+            padding: 0.5rem 0.8rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: clamp(0.65rem, 1.2vw, 0.8rem);
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            white-space: nowrap;
+            touch-action: manipulation;
+            min-height: 36px;
+            flex: 1;
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 102, 204, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeSlide 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
            WEEK GRID
            ============================================================ */
         .week-grid {
