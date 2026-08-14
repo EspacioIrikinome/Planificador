@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="theme-color" content="#0066cc">
     <title>Keto Meal Planner</title>
     <style>
@@ -79,7 +79,7 @@
         }
 
         /* ============================================================
-           LANDING PAGE - SIN ICONOS
+           LANDING PAGE
            ============================================================ */
         .landing-page {
             display: flex;
@@ -204,10 +204,9 @@
             height: 1.5rem;
         }
 
-        /* BOTÓN ENTRAR - ESTILO COHERENTE CON LA APP */
         .landing-btn-entrar {
-            background: var(--bg);
-            color: var(--green);
+            background: var(--accent);
+            color: #ffffff;
             border: none;
             padding: 0.85rem 3rem;
             font-size: 1rem;
@@ -224,7 +223,7 @@
         }
 
         .landing-btn-entrar:hover {
-            background: var(--bg);
+            background: var(--accent-hover);
             transform: translateY(-2px);
             box-shadow: 0 4px 24px rgba(0, 102, 204, 0.3);
         }
@@ -234,7 +233,7 @@
         }
 
         /* ============================================================
-           APP CONTENT - SIN ICONOS
+           APP CONTENT
            ============================================================ */
         .app-content {
             display: none;
@@ -734,7 +733,7 @@
         }
 
         /* ============================================================
-           MODAL DE RECETA - SIN ICONOS
+           MODAL DE RECETA
            ============================================================ */
         .recipe-modal-overlay {
             position: fixed;
@@ -983,6 +982,10 @@
             .landing-actions { 
                 max-width: 280px;
             }
+            .landing-btn-primary { 
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
             .landing-stats { 
                 gap: 1.2rem;
                 max-width: 300px;
@@ -1155,7 +1158,7 @@
 
     <div class="container">
 
-        <!-- LANDING PAGE - SIN ICONOS -->
+        <!-- LANDING PAGE -->
         <div id="landingPage" class="landing-page">
             <div class="landing-logo">
                 <span class="landing-logo-text">Keto<span>Planner</span></span>
@@ -1183,7 +1186,12 @@
         <div id="appContent" class="app-content">
 
             <header class="app-header">
-               
+                <div class="app-title-group">
+                    <div>
+                        <div class="app-title">Keto Planner</div>
+                        <div class="app-subtitle">Toca un plato para ver la receta</div>
+                    </div>
+                </div>
                 <div class="header-actions">
                     <button class="header-action-link header-action-link-primary" id="btnGenerar">Generar</button>
                     <span class="header-action-divider"></span>
@@ -1491,7 +1499,7 @@
             }
 
             // ============================================================
-            //  REPOSITORIO DE RECETAS (COMPLETO - IGUAL QUE ANTES)
+            //  REPOSITORIO DE RECETAS (COMPLETO)
             // ============================================================
 
             const DESAYUNOS = [
@@ -2514,76 +2522,81 @@
             //  MODAL DE RECETA
             // ============================================================
 
-            function mostrarReceta(plato, tipo) {
-                const container = document.getElementById('recipeModalContainer');
-                
-                const tipoNombres = {
-                    'desayuno': 'Desayuno',
-                    'p1c': '1º Comida',
-                    'p2c': '2º Comida',
-                    'c1': '1º Cena',
-                    'c2': '2º Cena'
-                };
+           // Función mostrarReceta mejorada - CORREGIDA
+function mostrarReceta(plato, tipo) {
+    // Prevenir que se abra múltiples veces
+    if (document.querySelector('.recipe-modal-overlay')) {
+        return;
+    }
+    
+    const container = document.getElementById('recipeModalContainer');
+    
+    const tipoNombres = {
+        'desayuno': 'Desayuno',
+        'p1c': '1º Comida',
+        'p2c': '2º Comida',
+        'c1': '1º Cena',
+        'c2': '2º Cena'
+    };
 
-                const tipoDisplay = tipoNombres[tipo] || tipo;
+    const tipoDisplay = tipoNombres[tipo] || tipo;
 
-                const modal = document.createElement('div');
-                modal.className = 'recipe-modal-overlay';
-                modal.setAttribute('role', 'dialog');
-                modal.setAttribute('aria-modal', 'true');
+    const modal = document.createElement('div');
+    modal.className = 'recipe-modal-overlay';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
 
-                modal.innerHTML = `
-                    <div class="recipe-modal">
-                        <button class="recipe-modal-close" aria-label="Cerrar receta">&times;</button>
-                        <div class="recipe-modal-type">${tipoDisplay}</div>
-                        <div class="recipe-modal-title">${plato.nombre}</div>
-                        <div class="recipe-modal-macros">
-                            <span><strong>${plato.kcal}</strong> kcal</span>
-                            <span><strong>${plato.p}</strong>g proteína</span>
-                            <span><strong>${plato.c}</strong>g carbos</span>
-                            <span><strong>${plato.g}</strong>g grasa</span>
-                        </div>
-                        ${plato.descripcion ? `
-                            <div class="recipe-modal-section">
-                                <div class="recipe-modal-section-title">Descripción</div>
-                                <div class="recipe-modal-description">${plato.descripcion}</div>
-                            </div>
-                        ` : ''}
-                        ${plato.ingredientes && plato.ingredientes.length > 0 ? `
-                            <div class="recipe-modal-section">
-                                <div class="recipe-modal-section-title">Ingredientes</div>
-                                <ul class="recipe-modal-ingredients">
-                                    ${plato.ingredientes.map(i => `<li>${i}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                        <div class="recipe-modal-footer">
-                            ${plato.tiempo ? `<span>⏱️ ${plato.tiempo} min</span>` : ''}
-                            ${plato.dificultad ? `<span>Dificultad: ${plato.dificultad}</span>` : ''}
-                        </div>
-                    </div>
-                `;
+    modal.innerHTML = `
+        <div class="recipe-modal">
+            <button class="recipe-modal-close" aria-label="Cerrar receta">&times;</button>
+            <div class="recipe-modal-type">${tipoDisplay}</div>
+            <div class="recipe-modal-title">${plato.nombre}</div>
+            <div class="recipe-modal-macros">
+                <span><strong>${plato.kcal}</strong> kcal</span>
+                <span><strong>${plato.p}</strong>g proteína</span>
+                <span><strong>${plato.c}</strong>g carbos</span>
+                <span><strong>${plato.g}</strong>g grasa</span>
+            </div>
+            ${plato.descripcion ? `
+                <div class="recipe-modal-section">
+                    <div class="recipe-modal-section-title">Descripción</div>
+                    <div class="recipe-modal-description">${plato.descripcion}</div>
+                </div>
+            ` : ''}
+            ${plato.ingredientes && plato.ingredientes.length > 0 ? `
+                <div class="recipe-modal-section">
+                    <div class="recipe-modal-section-title">Ingredientes</div>
+                    <ul class="recipe-modal-ingredients">
+                        ${plato.ingredientes.map(i => `<li>${i}</li>`).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+            <div class="recipe-modal-footer">
+                ${plato.tiempo ? `<span>⏱️ ${plato.tiempo} min</span>` : ''}
+                ${plato.dificultad ? `<span>Dificultad: ${plato.dificultad}</span>` : ''}
+            </div>
+        </div>
+    `;
 
-                container.appendChild(modal);
+    container.appendChild(modal);
 
-                const closeBtn = modal.querySelector('.recipe-modal-close');
-                closeBtn.addEventListener('click', () => modal.remove());
+    const closeBtn = modal.querySelector('.recipe-modal-close');
+    closeBtn.addEventListener('click', () => modal.remove());
 
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) modal.remove();
-                });
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
 
-                const handleEscape = (e) => {
-                    if (e.key === 'Escape') {
-                        modal.remove();
-                        document.removeEventListener('keydown', handleEscape);
-                    }
-                };
-                document.addEventListener('keydown', handleEscape);
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            modal.remove();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
 
-                setTimeout(() => closeBtn.focus(), 100);
-            }
-
+    setTimeout(() => closeBtn.focus(), 100);
+}
             // ============================================================
             //  NAVEGACION
             // ============================================================
@@ -2793,7 +2806,7 @@
             }
 
             // ============================================================
-            //  RENDER MENÚ CON CLICK EN PLATOS
+            //  RENDER MENÚ - CORREGIDO (recetas ocultas por defecto)
             // ============================================================
 
             function renderMenu(semana) {
@@ -2827,11 +2840,12 @@
                     `;
 
                     for (const p of platos) {
+                        // IMPORTANTE: El div recipe-mini-expand NO tiene la clase 'visible'
                         html += `
                             <div class="meal-group" onclick="mostrarReceta(${JSON.stringify(p.plato).replace(/"/g, '&quot;')}, '${p.tipo}')" role="button" tabindex="0" aria-label="Ver receta de ${p.plato.nombre}">
                                 <div class="meal-label">
                                     <span class="dot ${p.dot}"></span>${p.label}
-                                    <span class="click-hint">👆</span>
+                                   
                                 </div>
                                 <div class="meal-name">${p.plato.nombre}</div>
                                 <div class="meal-macros">${mShort(p.plato)}</div>
@@ -2847,7 +2861,7 @@
                                     <span>P <strong>${d.total.p}g</strong></span>
                                     <span class="diversity-badge ${badgeClass}">${badgeText}</span>
                                 </div>
-                                ${ingredientesStr ? '<div style="font-size:0.45rem;color:var(--text-tertiary);margin-top:0.15rem;">Ingredientes: ' + ingredientesStr + '</div>' : ''}
+                                
                             </div>
                         </div>
                     `;
