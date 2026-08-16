@@ -1967,806 +1967,508 @@
 
     <div id="recipeModalContainer"></div>
 
-    <script>
-    // ============================================================
-    // SISTEMA DE ALERTAS
-    // ============================================================
-    class AlertSystem {
-        constructor() {
-            this.toastContainer = this.createToastContainer();
-            this.alertStyles = this.createAlertStyles();
-            this.modalOverlay = null;
+ <script>
+// ============================================================
+// SISTEMA DE ALERTAS (sin cambios)
+// ============================================================
+class AlertSystem {
+    constructor() {
+        this.toastContainer = this.createToastContainer();
+        this.alertStyles = this.createAlertStyles();
+        this.modalOverlay = null;
+    }
+    createToastContainer() {
+        let container = document.getElementById('customToastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'customToastContainer';
+            container.style.cssText = `
+                position: fixed;
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+                z-index: 10000;
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                max-width: 400px;
+                width: auto;
+                margin: 0 auto;
+                pointer-events: none;
+            `;
+            document.body.appendChild(container);
         }
-        createToastContainer() {
-            let container = document.getElementById('customToastContainer');
-            if (!container) {
-                container = document.createElement('div');
-                container.id = 'customToastContainer';
-                container.style.cssText = `
-                    position: fixed;
-                    bottom: 1rem;
-                    right: 1rem;
-                    left: 1rem;
-                    z-index: 10000;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.75rem;
-                    max-width: 400px;
-                    width: auto;
-                    margin: 0 auto;
-                    pointer-events: none;
-                `;
-                document.body.appendChild(container);
+        return container;
+    }
+    createAlertStyles() {
+        const style = document.createElement('style');
+        style.textContent = `
+            .custom-toast {
+                pointer-events: auto;
+                background: var(--bg-card, #ffffff);
+                color: var(--text-primary, #1a1a2e);
+                padding: 0.8rem 1rem;
+                border-radius: 12px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+                border-left: 4px solid var(--accent, #0066cc);
+                display: flex;
+                align-items: flex-start;
+                gap: 0.75rem;
+                transform: translateX(100%);
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                max-width: 100%;
+                position: relative;
+                overflow: hidden;
             }
-            return container;
-        }
-        createAlertStyles() {
-            const style = document.createElement('style');
-            style.textContent = `
-                .custom-toast {
-                    pointer-events: auto;
-                    background: var(--bg-card, #ffffff);
-                    color: var(--text-primary, #1a1a2e);
-                    padding: 0.8rem 1rem;
-                    border-radius: 12px;
-                    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-                    border-left: 4px solid var(--accent, #0066cc);
-                    display: flex;
-                    align-items: flex-start;
-                    gap: 0.75rem;
-                    transform: translateX(100%);
-                    opacity: 0;
-                    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                    max-width: 100%;
-                    position: relative;
-                    overflow: hidden;
-                }
-                .custom-toast.show { transform: translateX(0); opacity: 1; }
-                .custom-toast.hide { transform: translateX(100%); opacity: 0; }
-                .custom-toast-content { flex: 1; min-width: 0; }
-                .custom-toast-title { font-weight: 600; font-size: 0.85rem; margin-bottom: 0.1rem; color: var(--text-primary, #1a1a2e); }
-                .custom-toast-message { font-size: 0.75rem; color: var(--text-secondary, #4a4a5a); line-height: 1.4; }
-                .custom-toast-close { background: none; border: none; color: var(--text-tertiary, #8a8a9a); cursor: pointer; font-size: 1.2rem; padding: 0.2rem; flex-shrink: 0; transition: color 0.2s; font-family: inherit; line-height: 1; min-height: 32px; min-width: 32px; }
-                .custom-toast-close:hover { color: var(--text-primary, #1a1a2e); }
-                .custom-toast.success { border-left-color: var(--green, #2d8f4e); background: var(--green-bg, #e6f2ea); }
-                .custom-toast.error { border-left-color: var(--red, #c0392b); background: var(--red-bg, #f0e4e2); }
-                .custom-toast.warning { border-left-color: var(--orange, #c97d2b); background: var(--orange-bg, #f5ede4); }
-                .custom-toast.info { border-left-color: var(--accent, #0066cc); background: var(--accent-light, #ebf3fa); }
-                .custom-toast-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--accent, #0066cc); transition: width 0.1s linear; }
-                .custom-toast.success .custom-toast-progress { background: var(--green, #2d8f4e); }
-                .custom-toast.error .custom-toast-progress { background: var(--red, #c0392b); }
-                .custom-toast.warning .custom-toast-progress { background: var(--orange, #c97d2b); }
+            .custom-toast.show { transform: translateX(0); opacity: 1; }
+            .custom-toast.hide { transform: translateX(100%); opacity: 0; }
+            .custom-toast-content { flex: 1; min-width: 0; }
+            .custom-toast-title { font-weight: 600; font-size: 0.85rem; margin-bottom: 0.1rem; color: var(--text-primary, #1a1a2e); }
+            .custom-toast-message { font-size: 0.75rem; color: var(--text-secondary, #4a4a5a); line-height: 1.4; }
+            .custom-toast-close { background: none; border: none; color: var(--text-tertiary, #8a8a9a); cursor: pointer; font-size: 1.2rem; padding: 0.2rem; flex-shrink: 0; transition: color 0.2s; font-family: inherit; line-height: 1; min-height: 32px; min-width: 32px; }
+            .custom-toast-close:hover { color: var(--text-primary, #1a1a2e); }
+            .custom-toast.success { border-left-color: var(--green, #2d8f4e); background: var(--green-bg, #e6f2ea); }
+            .custom-toast.error { border-left-color: var(--red, #c0392b); background: var(--red-bg, #f0e4e2); }
+            .custom-toast.warning { border-left-color: var(--orange, #c97d2b); background: var(--orange-bg, #f5ede4); }
+            .custom-toast.info { border-left-color: var(--accent, #0066cc); background: var(--accent-light, #ebf3fa); }
+            .custom-toast-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--accent, #0066cc); transition: width 0.1s linear; }
+            .custom-toast.success .custom-toast-progress { background: var(--green, #2d8f4e); }
+            .custom-toast.error .custom-toast-progress { background: var(--red, #c0392b); }
+            .custom-toast.warning .custom-toast-progress { background: var(--orange, #c97d2b); }
 
-                .custom-modal-overlay {
-                    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-                    background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-                    z-index: 99999; display: flex; align-items: center; justify-content: center;
-                    animation: fadeIn 0.2s ease; padding: 1rem;
-                }
-                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-                .custom-modal {
-                    background: var(--bg-card, #ffffff); border-radius: 16px; padding: 1.5rem;
-                    max-width: 420px; width: 100%; box-shadow: 0 24px 64px rgba(0,0,0,0.2);
-                    animation: slideUp 0.3s ease;
-                }
-                @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-                .custom-modal-title { font-size: 1.1rem; font-weight: 600; text-align: center; margin-bottom: 0.4rem; color: var(--text-primary, #1a1a2e); }
-                .custom-modal-message { font-size: 0.9rem; color: var(--text-secondary, #4a4a5a); text-align: center; margin-bottom: 1.2rem; line-height: 1.5; }
-                .custom-modal-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
-                .custom-modal-btn { padding: 0.6rem 1.2rem; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; min-width: 80px; min-height: 40px; flex: 1; }
-                .custom-modal-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-                .custom-modal-btn-primary { background: var(--accent, #0066cc); color: white; }
-                .custom-modal-btn-primary:hover { background: var(--accent-hover, #0052a3); }
-                .custom-modal-btn-danger { background: var(--red, #c0392b); color: white; }
-                .custom-modal-btn-danger:hover { background: #a93226; }
-                .custom-modal-btn-secondary { background: var(--bg, #f5f6f8); color: var(--text-secondary, #4a4a5a); }
-                .custom-modal-btn-secondary:hover { background: var(--border, #e2e4e8); }
+            .custom-modal-overlay {
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+                z-index: 99999; display: flex; align-items: center; justify-content: center;
+                animation: fadeIn 0.2s ease; padding: 1rem;
+            }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+            .custom-modal {
+                background: var(--bg-card, #ffffff); border-radius: 16px; padding: 1.5rem;
+                max-width: 420px; width: 100%; box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+                animation: slideUp 0.3s ease;
+            }
+            @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+            .custom-modal-title { font-size: 1.1rem; font-weight: 600; text-align: center; margin-bottom: 0.4rem; color: var(--text-primary, #1a1a2e); }
+            .custom-modal-message { font-size: 0.9rem; color: var(--text-secondary, #4a4a5a); text-align: center; margin-bottom: 1.2rem; line-height: 1.5; }
+            .custom-modal-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+            .custom-modal-btn { padding: 0.6rem 1.2rem; border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; min-width: 80px; min-height: 40px; flex: 1; }
+            .custom-modal-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+            .custom-modal-btn-primary { background: var(--accent, #0066cc); color: white; }
+            .custom-modal-btn-primary:hover { background: var(--accent-hover, #0052a3); }
+            .custom-modal-btn-danger { background: var(--red, #c0392b); color: white; }
+            .custom-modal-btn-danger:hover { background: #a93226; }
+            .custom-modal-btn-secondary { background: var(--bg, #f5f6f8); color: var(--text-secondary, #4a4a5a); }
+            .custom-modal-btn-secondary:hover { background: var(--border, #e2e4e8); }
 
-                @media (max-width: 480px) {
-                    .custom-modal { padding: 1.2rem; margin: 0.5rem; }
-                    .custom-modal-actions { flex-direction: column; }
-                    .custom-modal-btn { width: 100%; flex: none; }
-                    .custom-toast { padding: 0.7rem 0.8rem; font-size: 0.8rem; }
-                }
-                @media (prefers-color-scheme: dark) {
-                    .custom-modal { background: var(--bg-card, #1a1a22); }
-                    .custom-modal-btn-secondary { background: var(--bg-card-alt, #22222a); color: var(--text-secondary, #9a9aaa); }
-                }
-            `;
-            document.head.appendChild(style);
-            return style;
-        }
-        showToast(options) {
-            const { message, title = '', type = 'info', duration = 4000, closable = true } =
-                typeof options === 'string' ? { message: options } : options;
-            const toast = document.createElement('div');
-            toast.className = `custom-toast ${type}`;
-            toast.setAttribute('role', 'alert');
-            toast.innerHTML = `
-                <div class="custom-toast-content">
-                    ${title ? `<div class="custom-toast-title">${title}</div>` : ''}
-                    <div class="custom-toast-message">${message}</div>
-                </div>
-                ${closable ? `<button class="custom-toast-close" aria-label="Cerrar">&times;</button>` : ''}
-                <div class="custom-toast-progress" style="width:100%"></div>
-            `;
-            this.toastContainer.appendChild(toast);
-            requestAnimationFrame(() => toast.classList.add('show'));
-            const progress = toast.querySelector('.custom-toast-progress');
-            let startTime = Date.now();
-            const updateProgress = () => {
-                const elapsed = Date.now() - startTime;
-                const remaining = Math.max(0, 1 - (elapsed / duration));
-                progress.style.width = `${remaining * 100}%`;
-                if (remaining > 0) requestAnimationFrame(updateProgress);
-            };
-            requestAnimationFrame(updateProgress);
-            const closeBtn = toast.querySelector('.custom-toast-close');
-            if (closeBtn) closeBtn.addEventListener('click', () => this.dismissToast(toast));
-            const timeout = setTimeout(() => this.dismissToast(toast), duration);
-            toast.dataset.timeout = timeout;
-            return toast;
-        }
-        dismissToast(toast) {
-            if (!toast || !toast.parentNode) return;
-            toast.classList.remove('show');
-            toast.classList.add('hide');
-            if (toast.dataset.timeout) clearTimeout(parseInt(toast.dataset.timeout));
-            setTimeout(() => { if (toast.parentNode) toast.remove(); }, 400);
-        }
-        showConfirm(options) {
-            return new Promise((resolve) => {
-                const { title = 'Confirmar', message = '¿Estas seguro?', confirmText = 'Confirmar', cancelText = 'Cancelar', type = 'warning' } = options;
-                const overlay = document.createElement('div');
-                overlay.className = 'custom-modal-overlay';
-                overlay.innerHTML = `
-                    <div class="custom-modal">
-                        <div class="custom-modal-title">${title}</div>
-                        <div class="custom-modal-message">${message}</div>
-                        <div class="custom-modal-actions">
-                            <button class="custom-modal-btn custom-modal-btn-secondary" data-action="cancel">${cancelText}</button>
-                            <button class="custom-modal-btn ${type === 'danger' ? 'custom-modal-btn-danger' : 'custom-modal-btn-primary'}" data-action="confirm">${confirmText}</button>
-                        </div>
+            @media (max-width: 480px) {
+                .custom-modal { padding: 1.2rem; margin: 0.5rem; }
+                .custom-modal-actions { flex-direction: column; }
+                .custom-modal-btn { width: 100%; flex: none; }
+                .custom-toast { padding: 0.7rem 0.8rem; font-size: 0.8rem; }
+            }
+            @media (prefers-color-scheme: dark) {
+                .custom-modal { background: var(--bg-card, #1a1a22); }
+                .custom-modal-btn-secondary { background: var(--bg-card-alt, #22222a); color: var(--text-secondary, #9a9aaa); }
+            }
+        `;
+        document.head.appendChild(style);
+        return style;
+    }
+    showToast(options) {
+        const { message, title = '', type = 'info', duration = 4000, closable = true } =
+            typeof options === 'string' ? { message: options } : options;
+        const toast = document.createElement('div');
+        toast.className = `custom-toast ${type}`;
+        toast.setAttribute('role', 'alert');
+        toast.innerHTML = `
+            <div class="custom-toast-content">
+                ${title ? `<div class="custom-toast-title">${title}</div>` : ''}
+                <div class="custom-toast-message">${message}</div>
+            </div>
+            ${closable ? `<button class="custom-toast-close" aria-label="Cerrar">&times;</button>` : ''}
+            <div class="custom-toast-progress" style="width:100%"></div>
+        `;
+        this.toastContainer.appendChild(toast);
+        requestAnimationFrame(() => toast.classList.add('show'));
+        const progress = toast.querySelector('.custom-toast-progress');
+        let startTime = Date.now();
+        const updateProgress = () => {
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(0, 1 - (elapsed / duration));
+            progress.style.width = `${remaining * 100}%`;
+            if (remaining > 0) requestAnimationFrame(updateProgress);
+        };
+        requestAnimationFrame(updateProgress);
+        const closeBtn = toast.querySelector('.custom-toast-close');
+        if (closeBtn) closeBtn.addEventListener('click', () => this.dismissToast(toast));
+        const timeout = setTimeout(() => this.dismissToast(toast), duration);
+        toast.dataset.timeout = timeout;
+        return toast;
+    }
+    dismissToast(toast) {
+        if (!toast || !toast.parentNode) return;
+        toast.classList.remove('show');
+        toast.classList.add('hide');
+        if (toast.dataset.timeout) clearTimeout(parseInt(toast.dataset.timeout));
+        setTimeout(() => { if (toast.parentNode) toast.remove(); }, 400);
+    }
+    showConfirm(options) {
+        return new Promise((resolve) => {
+            const { title = 'Confirmar', message = '¿Estas seguro?', confirmText = 'Confirmar', cancelText = 'Cancelar', type = 'warning' } = options;
+            const overlay = document.createElement('div');
+            overlay.className = 'custom-modal-overlay';
+            overlay.innerHTML = `
+                <div class="custom-modal">
+                    <div class="custom-modal-title">${title}</div>
+                    <div class="custom-modal-message">${message}</div>
+                    <div class="custom-modal-actions">
+                        <button class="custom-modal-btn custom-modal-btn-secondary" data-action="cancel">${cancelText}</button>
+                        <button class="custom-modal-btn ${type === 'danger' ? 'custom-modal-btn-danger' : 'custom-modal-btn-primary'}" data-action="confirm">${confirmText}</button>
                     </div>
-                `;
-                document.body.appendChild(overlay);
-                const confirmBtn = overlay.querySelector('[data-action="confirm"]');
-                const cancelBtn = overlay.querySelector('[data-action="cancel"]');
-                confirmBtn.focus();
-                const closeModal = (result) => { overlay.remove(); resolve(result); };
-                confirmBtn.addEventListener('click', () => closeModal(true));
-                cancelBtn.addEventListener('click', () => closeModal(false));
-                overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(false); });
-                const handleKeydown = (e) => {
-                    if (e.key === 'Escape') { closeModal(false); document.removeEventListener('keydown', handleKeydown); }
-                    if (e.key === 'Enter' && e.target.closest('.custom-modal')) { closeModal(true); document.removeEventListener('keydown', handleKeydown); }
-                };
-                document.addEventListener('keydown', handleKeydown);
-            });
-        }
-        success(message, title = 'Éxito', duration = 3000) { return this.showToast({ message, title, type: 'success', duration }); }
-        error(message, title = 'Error', duration = 4000) { return this.showToast({ message, title, type: 'error', duration }); }
-        warning(message, title = 'Advertencia', duration = 3500) { return this.showToast({ message, title, type: 'warning', duration }); }
-        info(message, title = 'Información', duration = 3000) { return this.showToast({ message, title, type: 'info', duration }); }
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            const confirmBtn = overlay.querySelector('[data-action="confirm"]');
+            const cancelBtn = overlay.querySelector('[data-action="cancel"]');
+            confirmBtn.focus();
+            const closeModal = (result) => { overlay.remove(); resolve(result); };
+            confirmBtn.addEventListener('click', () => closeModal(true));
+            cancelBtn.addEventListener('click', () => closeModal(false));
+            overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(false); });
+            const handleKeydown = (e) => {
+                if (e.key === 'Escape') { closeModal(false); document.removeEventListener('keydown', handleKeydown); }
+                if (e.key === 'Enter' && e.target.closest('.custom-modal')) { closeModal(true); document.removeEventListener('keydown', handleKeydown); }
+            };
+            document.addEventListener('keydown', handleKeydown);
+        });
     }
-    const alertSystem = new AlertSystem();
+    success(message, title = 'Éxito', duration = 3000) { return this.showToast({ message, title, type: 'success', duration }); }
+    error(message, title = 'Error', duration = 4000) { return this.showToast({ message, title, type: 'error', duration }); }
+    warning(message, title = 'Advertencia', duration = 3500) { return this.showToast({ message, title, type: 'warning', duration }); }
+    info(message, title = 'Información', duration = 3000) { return this.showToast({ message, title, type: 'info', duration }); }
+}
+const alertSystem = new AlertSystem();
 
-    // ============================================================
-    // CONFIGURACIÓN Y UTILIDADES
-    // ============================================================
-    const CONFIG = {
-        STORAGE_KEY: 'keto_planner_memoria_semanal',
-        PROFILE_KEY: 'keto_user_profile',
-        KEY_INGREDIENTS: {
-            'huevo': ['huevo', 'huevos', 'claras', 'yema'],
-            'aguacate': ['aguacate'],
-            'pollo': ['pollo', 'pechuga'],
-            'salmón': ['salmón', 'salmon'],
-            'atún': ['atún', 'atun'],
-            'ternera': ['ternera'],
-            'cerdo': ['cerdo', 'chuletón'],
-            'lubina': ['lubina'],
-            'merluza': ['merluza'],
-            'bacalao': ['bacalao'],
-            'chorizo': ['chorizo'],
-            'jamón': ['jamón', 'jamon'],
-            'queso': ['queso', 'cheddar', 'mozzarella', 'parmesano', 'feta', 'halloumi', 'cabra'],
-            'espinacas': ['espinacas'],
-            'coliflor': ['coliflor'],
-            'calabacín': ['calabacín', 'calabacin'],
-            'tomate': ['tomate', 'tomates'],
-            'lechuga': ['lechuga'],
-            'rúcula': ['rúcula', 'rucula'],
-            'setas': ['setas', 'champiñones'],
-            'gambas': ['gambas'],
-            'nueces': ['nueces'],
-            'almendras': ['almendras'],
-            'pimiento': ['pimiento'],
-            'cebolla': ['cebolla'],
-            'brócoli': ['brócoli', 'brocoli'],
-            'espárragos': ['espárragos', 'esparragos'],
-            'caldo': ['caldo'],
-            'fresas': ['fresas'],
-            'kale': ['kale'],
-            'remolacha': ['remolacha']
+// ============================================================
+// TABLA DE COMPOSICIÓN NUTRICIONAL (por 100g o por unidad)
+// ============================================================
+const NUTRIENTES = {
+    'huevo': { kcal: 143, g: 10, c: 0.7, p: 13, porUnidad: 50 },
+    'huevos': { kcal: 143, g: 10, c: 0.7, p: 13, porUnidad: 50 },
+    'claras': { kcal: 52, g: 0.2, c: 0.7, p: 11, porUnidad: 33 },
+    'yema': { kcal: 322, g: 27, c: 0.6, p: 16, porUnidad: 17 },
+    'aguacate': { kcal: 160, g: 15, c: 1.8, p: 2 }, // Corregido a neto
+    'bacon': { kcal: 541, g: 42, c: 1.2, p: 37 },
+    'queso cheddar': { kcal: 404, g: 33, c: 1.3, p: 25 },
+    'queso': { kcal: 404, g: 33, c: 1.3, p: 25 },
+    'mozzarella': { kcal: 280, g: 22, c: 2.2, p: 22 },
+    'parmesano': { kcal: 431, g: 29, c: 4.1, p: 38 },
+    'feta': { kcal: 264, g: 21, c: 4.1, p: 14 },
+    'halloumi': { kcal: 321, g: 26, c: 2.2, p: 21 },
+    'cabra': { kcal: 364, g: 30, c: 0.8, p: 22 },
+    'queso crema': { kcal: 342, g: 34, c: 4.1, p: 6 },
+    'yogur griego': { kcal: 59, g: 0.4, c: 3.6, p: 10 },
+    'leche almendras': { kcal: 17, g: 0.7, c: 0.6, p: 0.6 },
+    'leche de coco': { kcal: 230, g: 24, c: 5.5, p: 2.3 },
+    'nata': { kcal: 345, g: 36, c: 2.8, p: 2.8 },
+    'mantequilla': { kcal: 717, g: 81, c: 0.1, p: 0.9 },
+    'aceite de oliva': { kcal: 884, g: 100, c: 0, p: 0 },
+    'aceite de coco': { kcal: 862, g: 100, c: 0, p: 0 },
+    'salmón': { kcal: 208, g: 13, c: 0, p: 22 },
+    'salmón ahumado': { kcal: 208, g: 13, c: 0, p: 22 },
+    'atún en lata': { kcal: 184, g: 8, c: 0, p: 26 },
+    'atún': { kcal: 184, g: 8, c: 0, p: 26 },
+    'pollo': { kcal: 165, g: 3.6, c: 0, p: 31 },
+    'pechuga pollo': { kcal: 165, g: 3.6, c: 0, p: 31 },
+    'ternera': { kcal: 250, g: 15, c: 0, p: 26 },
+    'cerdo': { kcal: 242, g: 14, c: 0, p: 27 },
+    'chuletón': { kcal: 242, g: 14, c: 0, p: 27 },
+    'lubina': { kcal: 97, g: 2.3, c: 0, p: 18 },
+    'merluza': { kcal: 82, g: 1.2, c: 0, p: 17 },
+    'bacalao': { kcal: 82, g: 1.2, c: 0, p: 17 },
+    'chorizo': { kcal: 455, g: 38, c: 3.3, p: 24 },
+    'jamón': { kcal: 145, g: 6, c: 0, p: 21 },
+    'jamón serrano': { kcal: 145, g: 6, c: 0, p: 21 },
+    'espinacas': { kcal: 23, g: 0.4, c: 1.4, p: 2.9 }, // Corregido a neto
+    'coliflor': { kcal: 25, g: 0.3, c: 3.0, p: 1.9 }, // Corregido a neto
+    'calabacín': { kcal: 17, g: 0.3, c: 2.1, p: 1.2 }, // Corregido a neto
+    'tomate': { kcal: 18, g: 0.2, c: 2.7, p: 0.9 }, // Corregido a neto
+    'tomates cherry': { kcal: 18, g: 0.2, c: 2.7, p: 0.9 }, // Corregido a neto
+    'lechuga': { kcal: 15, g: 0.2, c: 1.6, p: 1.4 }, // Corregido a neto
+    'rúcula': { kcal: 25, g: 0.7, c: 2.0, p: 2.6 }, // Corregido a neto
+    'setas': { kcal: 22, g: 0.3, c: 2.3, p: 3.1 }, // Corregido a neto
+    'champiñones': { kcal: 22, g: 0.3, c: 2.3, p: 3.1 }, // Corregido a neto
+    'gambas': { kcal: 85, g: 0.6, c: 0, p: 20 },
+    'nueces': { kcal: 654, g: 65, c: 7.0, p: 15 }, // Corregido a neto
+    'almendras': { kcal: 579, g: 50, c: 10.0, p: 21 }, // Corregido a neto
+    'pimiento': { kcal: 20, g: 0.2, c: 2.9, p: 0.9 }, // Corregido a neto
+    'cebolla': { kcal: 40, g: 0.1, c: 7.9, p: 1.1 }, // Corregido a neto
+    'brócoli': { kcal: 34, g: 0.4, c: 4.0, p: 2.8 }, // Corregido a neto
+    'espárragos': { kcal: 20, g: 0.1, c: 1.8, p: 2.2 }, // Corregido a neto
+    'caldo de verduras': { kcal: 4, g: 0, c: 0.5, p: 0.5 },
+    'caldo': { kcal: 4, g: 0, c: 0.5, p: 0.5 },
+    'fresas': { kcal: 32, g: 0.3, c: 5.7, p: 0.7 }, // Corregido a neto
+    'kale': { kcal: 49, g: 0.9, c: 5.2, p: 4.3 }, // Corregido a neto
+    'remolacha': { kcal: 43, g: 0.2, c: 6.8, p: 1.6 }, // Corregido a neto
+    'pepino': { kcal: 15, g: 0.1, c: 3.1, p: 0.6 }, // Corregido a neto
+    'semillas chía': { kcal: 486, g: 31, c: 8.0, p: 17 }, // Corregido a neto
+    'coco rallado': { kcal: 660, g: 65, c: 7.0, p: 6.9 }, // Corregido a neto
+    'canela': { kcal: 247, g: 1.2, c: 27.0, p: 4 }, // Corregido a neto (alta en fibra)
+    'eneldo': { kcal: 43, g: 1.1, c: 4.9, p: 3.1 }, // Corregido a neto
+    'perejil': { kcal: 36, g: 0.8, c: 3.0, p: 3 }, // Corregido a neto
+    'albahaca': { kcal: 44, g: 0.6, c: 6.6, p: 3.2 }, // Corregido a neto
+    'orégano': { kcal: 265, g: 10, c: 26.0, p: 9 }, // Corregido a neto
+    'tomillo': { kcal: 101, g: 1.7, c: 10.0, p: 5.6 }, // Corregido a neto
+    'romero': { kcal: 131, g: 5.9, c: 6.0, p: 4.9 }, // Corregido a neto
+    'menta': { kcal: 44, g: 0.9, c: 1.6, p: 3.3 }, // Corregido a neto
+    'jengibre': { kcal: 80, g: 0.8, c: 16.0, p: 1.8 }, // Corregido a neto
+    'ajo': { kcal: 149, g: 0.5, c: 31.0, p: 6.4 }, // Corregido a neto
+    'limón': { kcal: 29, g: 0.3, c: 6.5, p: 1.1 }, // Corregido a neto
+    'vinagre balsámico': { kcal: 88, g: 0, c: 17, p: 0.5 }, // Sin fibra (los carbohidratos vienen del azúcar de la uva)
+    'vinagre': { kcal: 18, g: 0, c: 0.1, p: 0.1 },
+    'salsa holandesa': { kcal: 526, g: 58, c: 0.2, p: 2.6 },
+    'mayonesa': { kcal: 717, g: 79, c: 0.1, p: 1.1 },
+    'mostaza': { kcal: 66, g: 3.3, c: 4.0, p: 3.7 }, // Corregido a neto
+    'salsa BBQ keto': { kcal: 50, g: 0.2, c: 10, p: 0.5 }, // Depende de la marca, mantenido igual
+    'salsa soja': { kcal: 53, g: 0.6, c: 3.3, p: 5.5 }, // Corregido a neto
+    'vino blanco': { kcal: 82, g: 0, c: 1.5, p: 0.1 },
+    'pan rallado keto': { kcal: 300, g: 10, c: 5.0, p: 20 }, // Corregido estimado según ingredientes típicos altos en fibra (psyllium/linaza)
+    'harina almendra': { kcal: 633, g: 56, c: 6.0, p: 23 }, // Corregido a neto
+    'harina de coco': { kcal: 443, g: 8, c: 21.0, p: 19 }, // Corregido a neto
+    'proteína en polvo': { kcal: 380, g: 8, c: 6, p: 75 },
+    'mantequilla cacahuete': { kcal: 588, g: 50, c: 14.0, p: 25 }, // Corregido a neto
+    'café': { kcal: 1, g: 0, c: 0, p: 0 },
+    'té verde': { kcal: 1, g: 0, c: 0, p: 0 },
+    'té matcha': { kcal: 1, g: 0, c: 0, p: 0 },
+    'infusión jengibre': { kcal: 1, g: 0, c: 0, p: 0 },
+    'aceitunas': { kcal: 145, g: 15, c: 0.5, p: 1.2 }, // Corregido a neto
+    'alcaparras': { kcal: 23, g: 0.3, c: 1.8, p: 2.3 }, // Corregido a neto
+    'anchoas': { kcal: 210, g: 10, c: 0, p: 29 },
+    'curry': { kcal: 325, g: 14, c: 22.0, p: 12 }, // Corregido a neto
+    'pimentón': { kcal: 282, g: 13, c: 19.0, p: 14 }, // Corregido a neto
+    'nuez moscada': { kcal: 525, g: 36, c: 28.0, p: 6 }, // Corregido a neto
+    'tahini': { kcal: 595, g: 53, c: 12.0, p: 17 }, // Corregido a neto
+    'tofu': { kcal: 76, g: 4.8, c: 0.7, p: 8 }, // Corregido a neto
+    'lentejas germinadas': { kcal: 106, g: 0.5, c: 19.0, p: 9 }, // Corregido a neto
+    'quark': { kcal: 67, g: 0.2, c: 4, p: 12 },
+    'calabaza': { kcal: 26, g: 0.1, c: 5.5, p: 1 }, // Corregido a neto
+    'puerro': { kcal: 61, g: 0.3, c: 12.0, p: 1.5 }, // Corregido a neto
+    'apio': { kcal: 16, g: 0.2, c: 1.4, p: 0.7 }, // Corregido a neto
+    'endivias': { kcal: 17, g: 0.2, c: 0.3, p: 1.3 }, // Corregido a neto
+    'pescado blanco': { kcal: 82, g: 1.2, c: 0, p: 17 },
+    'sardinas en lata': { kcal: 208, g: 11, c: 0, p: 24 },
+    'costillas': { kcal: 250, g: 15, c: 0, p: 26 },
+    'entrecot': { kcal: 250, g: 15, c: 0, p: 26 },
+    'pavo': { kcal: 135, g: 3, c: 0, p: 25 },
+    'cordero': { kcal: 294, g: 21, c: 0, p: 25 },
+    'pisto keto': { kcal: 30, g: 0.5, c: 4.5, p: 1 }, // Corregido estimado neto
+    'salsa tomate sin azúcar': { kcal: 24, g: 0.2, c: 3.5, p: 1 }, // Corregido a neto
+    'hielo': { kcal: 0, g: 0, c: 0, p: 0 },
+    'sal': { kcal: 0, g: 0, c: 0, p: 0 },
+    'pimienta': { kcal: 0, g: 0, c: 0, p: 0 },
+    'naranja': { kcal: 47, g: 0.1, c: 9.6, p: 0.9 }, // Corregido a neto
+    'hierbas': { kcal: 50, g: 1, c: 6.0, p: 2 }, // Corregido estimado neto
+    'vainilla': { kcal: 288, g: 0.1, c: 12, p: 0.1 },
+    'cilantro fresco': { kcal: 23, g: 0.5, c: 0.9, p: 2.1 }, // Corregido a neto
+    'cebolla roja': { kcal: 40, g: 0.1, c: 7.9, p: 1.1 }, // Corregido a neto
+    'vinagreta': { kcal: 400, g: 40, c: 10, p: 0 },
+    'vinagreta limón': { kcal: 400, g: 40, c: 10, p: 0 },
+    'queso azul': { kcal: 353, g: 29, c: 2.3, p: 21 },
+    'queso rallado': { kcal: 404, g: 33, c: 1.3, p: 25 },
+    'caldo de pescado': { kcal: 4, g: 0, c: 0.5, p: 0.5 },
+    'pimiento morrón': { kcal: 20, g: 0.2, c: 2.9, p: 0.9 }, // Corregido a neto
+    'espárragos verdes': { kcal: 20, g: 0.1, c: 1.8, p: 2.2 }, // Corregido a neto
+    'lechuga romana': { kcal: 15, g: 0.2, c: 1.6, p: 1.4 }, // Corregido a neto
+    'mozzarella ligera': { kcal: 200, g: 14, c: 2, p: 18 },
+    'carne picada': { kcal: 250, g: 15, c: 0, p: 26 },
+    'muslos pollo': { kcal: 165, g: 3.6, c: 0, p: 31 },
+    'pechuga pollo asada': { kcal: 165, g: 3.6, c: 0, p: 31 }
+};
+
+
+// ============================================================
+// FUNCIONES PARA CALCULAR MACROS DESDE INGREDIENTES
+// ============================================================
+function parseIngrediente(texto) {
+    const regex = /^([\d.]+)\s*(g|ml|unidad|huevo)?\s*(.*)$/;
+    const match = texto.match(regex);
+    if (!match) return null;
+    let cantidad = parseFloat(match[1]);
+    let unidad = match[2] || 'g';
+    let nombre = match[3] || match[1];
+    if (!match[2] && (nombre.toLowerCase().includes('huevo') || nombre.toLowerCase() === 'huevos')) {
+        unidad = 'unidad';
+        nombre = 'huevo';
+    }
+    nombre = nombre.trim().toLowerCase();
+    let nutriente = null;
+    for (const [key, val] of Object.entries(NUTRIENTES)) {
+        if (nombre.includes(key) || key.includes(nombre)) {
+            nutriente = { ...val, nombre: key };
+            break;
         }
-    };
+    }
+    if (!nutriente) return { cantidad, unidad, nombre, nutriente: null };
+    if (unidad === 'unidad' && nutriente.porUnidad) {
+        cantidad = cantidad * nutriente.porUnidad;
+    } else if (unidad === 'ml' && nutriente.porUnidad) {
+        // densidad 1
+    }
+    return { cantidad, unidad: 'g', nombre, nutriente };
+}
 
-    function extractIngredientCategories(plato) {
-        if (!plato || !plato.ingredientes) return [];
-        const text = (plato.nombre + ' ' + plato.ingredientes.join(' ')).toLowerCase();
-        const found = [];
-        for (const [category, keywords] of Object.entries(CONFIG.KEY_INGREDIENTS)) {
-            for (const keyword of keywords) {
-                if (text.includes(keyword)) {
-                    found.push(category);
-                    break;
-                }
+function calcularMacros(ingredientes) {
+    let totalKcal = 0, totalG = 0, totalC = 0, totalP = 0;
+    for (const item of ingredientes) {
+        const parsed = parseIngrediente(item);
+        if (!parsed || !parsed.nutriente) continue;
+        const { cantidad, nutriente } = parsed;
+        const factor = cantidad / 100;
+        totalKcal += (nutriente.kcal || 0) * factor;
+        totalG += (nutriente.g || 0) * factor;
+        totalC += (nutriente.c || 0) * factor;
+        totalP += (nutriente.p || 0) * factor;
+    }
+    return {
+        kcal: Math.round(totalKcal),
+        g: Math.round(totalG),
+        c: Math.round(totalC * 10) / 10,
+        p: Math.round(totalP)
+    };
+}
+
+// ============================================================
+// CONFIGURACIÓN Y UTILIDADES
+// ============================================================
+const CONFIG = {
+    STORAGE_KEY: 'keto_planner_memoria_semanal',
+    PROFILE_KEY: 'keto_user_profile',
+    KEY_INGREDIENTS: {
+        'huevo': ['huevo', 'huevos', 'claras', 'yema'],
+        'aguacate': ['aguacate'],
+        'pollo': ['pollo', 'pechuga'],
+        'salmón': ['salmón', 'salmon'],
+        'atún': ['atún', 'atun'],
+        'ternera': ['ternera'],
+        'cerdo': ['cerdo', 'chuletón'],
+        'lubina': ['lubina'],
+        'merluza': ['merluza'],
+        'bacalao': ['bacalao'],
+        'chorizo': ['chorizo'],
+        'jamón': ['jamón', 'jamon'],
+        'queso': ['queso', 'cheddar', 'mozzarella', 'parmesano', 'feta', 'halloumi', 'cabra'],
+        'espinacas': ['espinacas'],
+        'coliflor': ['coliflor'],
+        'calabacín': ['calabacín', 'calabacin'],
+        'tomate': ['tomate', 'tomates'],
+        'lechuga': ['lechuga'],
+        'rúcula': ['rúcula', 'rucula'],
+        'setas': ['setas', 'champiñones'],
+        'gambas': ['gambas'],
+        'nueces': ['nueces'],
+        'almendras': ['almendras'],
+        'pimiento': ['pimiento'],
+        'cebolla': ['cebolla'],
+        'brócoli': ['brócoli', 'brocoli'],
+        'espárragos': ['espárragos', 'esparragos'],
+        'caldo': ['caldo'],
+        'fresas': ['fresas'],
+        'kale': ['kale'],
+        'remolacha': ['remolacha']
+    }
+};
+
+function extractIngredientCategories(plato) {
+    if (!plato || !plato.ingredientes) return [];
+    const text = (plato.nombre + ' ' + plato.ingredientes.join(' ')).toLowerCase();
+    const found = [];
+    for (const [category, keywords] of Object.entries(CONFIG.KEY_INGREDIENTS)) {
+        for (const keyword of keywords) {
+            if (text.includes(keyword)) {
+                found.push(category);
+                break;
             }
         }
-        return found;
     }
+    return found;
+}
 
-   // ============================================================
-// REPOSITORIO DE RECETAS (COMPLETO) - NORMALIZADO Y CORREGIDO
+// ============================================================
+// REPOSITORIO DE RECETAS (REDUCIDO A 10 POR CATEGORÍA)
 // ============================================================
 const DESAYUNOS = [
-    { nombre: "Huevos revueltos con aguacate y bacon", kcal: 440, g: 35, c: 2.0, p: 22, ingredientes: ["180g huevos",
-            "100g aguacate", "60g bacon", "5g sal", "5g pimienta"
-        ], descripcion: "Cocina el bacon crujiente. Bate los huevos, salpimienta y cocina en la misma sartén. Sirve con aguacate en rodajas.",
-        tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Tortilla de queso cheddar con espinacas", kcal: 410, g: 33, c: 2.0, p: 20, ingredientes: ["180g huevos",
-            "50g queso cheddar", "100g espinacas", "10ml aceite de oliva"
-        ], descripcion: "Saltea las espinacas en aceite. Bate huevos con queso, añade espinacas y cocina como tortilla.",
-        tiempo: 20, dificultad: 'fácil' },
-    { nombre: "Yogur griego con nueces y chía", kcal: 290, g: 24, c: 5.0, p: 14, ingredientes: ["80g yogur griego",
-            "20g nueces", "10g semillas chía", "5g canela"
-        ], descripcion: "Mezcla todos los ingredientes y reposa 5 minutos.", tiempo: 5, dificultad: 'fácil' },
-    { nombre: "Salmón ahumado con queso crema y pepino", kcal: 320, g: 26, c: 3.0, p: 18, ingredientes: [
-            "100g salmón ahumado", "50g queso crema", "100g pepino", "5g eneldo"
-        ], descripcion: "Corta el pepino en rodajas. Unta queso crema sobre el salmón y enrolla.", tiempo: 10,
-        dificultad: 'fácil' },
-    { nombre: "Chaffles con mantequilla y huevo", kcal: 400, g: 34, c: 3.0, p: 16, ingredientes: ["60g huevo",
-            "50g mozzarella", "10g harina almendra", "15g mantequilla"
-        ], descripcion: "Mezcla huevo, queso y harina. Cocina en wafflera. Sirve con mantequilla.", tiempo: 15,
-        dificultad: 'media' },
-    { nombre: "Omelette de claras con espinacas", kcal: 280, g: 18, c: 2.0, p: 22, ingredientes: ["120g claras",
-            "100g espinacas", "10ml aceite", "5g sal", "5g pimienta"
-        ], descripcion: "Saltea espinacas. Bate claras y cocina omelette. Rellena con espinacas.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Batido keto con proteína y cacahuete", kcal: 310, g: 24, c: 4.0, p: 20, ingredientes: [
-            "30g proteína en polvo", "15g mantequilla cacahuete", "200ml leche almendras", "50g hielo"
-        ], descripcion: "Mezcla todos los ingredientes en batidora.", tiempo: 5, dificultad: 'fácil' },
-    { nombre: "Huevos Benedict keto", kcal: 470, g: 36, c: 3.0, p: 24, ingredientes: ["120g huevos",
-            "60g jamón", "30ml salsa holandesa", "100g espinacas"
-        ], descripcion: "Cocina huevos escalfados. Coloca sobre jamón y espinacas. Cubre con salsa holandesa.",
-        tiempo: 25, dificultad: 'media' },
-    { nombre: "Tortilla de champiñones y queso", kcal: 380, g: 31, c: 3.0, p: 21, ingredientes: ["180g huevos",
-            "100g champiñones", "50g queso", "10ml aceite"
-        ], descripcion: "Saltea champiñones. Bate huevos con queso y cocina la tortilla.", tiempo: 20,
-        dificultad: 'fácil' },
-    { nombre: "Pudding de chía con leche de coco", kcal: 340, g: 27, c: 6.0, p: 12, ingredientes: [
-            "50g semillas chía", "200ml leche coco", "5ml vainilla", "10g coco rallado"
-        ], descripcion: "Mezcla todos los ingredientes y reposa en nevera 4 horas.", tiempo: 240,
-        dificultad: 'fácil' },
-    { nombre: "Tortilla de calabacín con queso feta", kcal: 360, g: 28, c: 4.0, p: 18, ingredientes: ["180g huevos",
-            "100g calabacín rallado", "80g queso feta", "5g menta"
-        ], descripcion: "Ralla calabacines, mezcla con huevo y queso. Cocina como tortilla.", tiempo: 20,
-        dificultad: 'media' },
-    { nombre: "Huevos al plato con espinacas y queso", kcal: 390, g: 32, c: 2.0, p: 22, ingredientes: ["120g huevos",
-            "100g espinacas", "50g queso parmesano", "15g mantequilla"
-        ], descripcion: "Saltea espinacas en mantequilla. Añade huevos y queso. Hornea 5 min.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Bowl de yogur con frutos rojos", kcal: 270, g: 22, c: 6.0, p: 14, ingredientes: ["80g yogur griego",
-            "25g frutos rojos", "15g nueces", "15g semillas de calabaza"
-        ], descripcion: "Mezcla yogur con frutos rojos y frutos secos.", tiempo: 5, dificultad: 'fácil' },
-    { nombre: "Crepes keto con crema de queso", kcal: 410, g: 34, c: 4.0, p: 18, ingredientes: ["120g huevos",
-            "50g queso crema", "10g harina de coco", "15g mantequilla"
-        ], descripcion: "Mezcla todos los ingredientes. Cocina crepes en sartén. Sirve con queso crema.",
-        tiempo: 20, dificultad: 'media' },
-    { nombre: "Tortilla de jamón y queso", kcal: 390, g: 32, c: 2.0, p: 24, ingredientes: ["180g huevos", "50g jamón",
-            "50g queso", "10ml aceite"
-        ], descripcion: "Bate huevos con jamón y queso. Cocina como tortilla.", tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Aguacate relleno de huevo y bacon", kcal: 410, g: 34, c: 3.0, p: 20, ingredientes: ["100g aguacate",
-            "120g huevos", "60g bacon", "20g queso rallado"
-        ], descripcion: "Cocina bacon. Hornea huevos dentro del aguacate. Sirve con bacon y queso.", tiempo: 20,
-        dificultad: 'media' },
-    { nombre: "Batido verde keto", kcal: 270, g: 20, c: 4.0, p: 15, ingredientes: ["100g aguacate",
-            "200ml leche almendras", "100g espinacas", "30g proteína en polvo"
-        ], descripcion: "Licúa todos los ingredientes hasta obtener una mezcla homogénea.", tiempo: 5,
-        dificultad: 'fácil' },
-    { nombre: "Huevos escalfados sobre espinacas", kcal: 340, g: 28, c: 2.0, p: 20, ingredientes: ["120g huevos",
-            "100g espinacas", "5ml vinagre", "5g sal"
-        ], descripcion: "Cocina huevos escalfados. Sirve sobre espinacas salteadas.", tiempo: 15,
-        dificultad: 'media' },
-    { nombre: "Tortilla de brócoli y queso", kcal: 370, g: 30, c: 4.0, p: 20, ingredientes: ["180g huevos",
-            "80g brócoli", "50g queso", "10ml aceite"
-        ], descripcion: "Cocina brócoli. Bate huevos con queso. Cocina la tortilla.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Muffins keto de huevo y espinacas", kcal: 350, g: 28, c: 3.0, p: 22, ingredientes: ["360g huevos",
-            "100g espinacas", "50g queso", "5g sal", "5g pimienta"
-        ], descripcion: "Mezcla todos los ingredientes. Hornea en moldes 15 min a 180°C.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Ensalada de huevo y aguacate", kcal: 340, g: 28, c: 3.0, p: 16, ingredientes: ["120g huevos duros",
-            "100g aguacate", "15g mayonesa", "5g mostaza", "5g perejil"
-        ], descripcion: "Pica huevos y aguacate. Mezcla con mayonesa y mostaza.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Tortilla de espárragos trigueros", kcal: 350, g: 28, c: 3.0, p: 20, ingredientes: ["180g huevos",
-            "100g espárragos", "10ml aceite", "5g sal"
-        ], descripcion: "Cocina espárragos. Bate huevos y cocina la tortilla con los espárragos.", tiempo: 20,
-        dificultad: 'media' },
-    { nombre: "Bowl de quark con frutos secos", kcal: 280, g: 24, c: 5.0, p: 16, ingredientes: ["100g quark",
-            "20g nueces", "15g almendras", "5g canela"
-        ], descripcion: "Mezcla quark con frutos secos y canela.", tiempo: 5, dificultad: 'fácil' },
-    { nombre: "Champiñones rellenos de huevo", kcal: 290, g: 24, c: 4.0, p: 16, ingredientes: ["160g champiñones",
-            "120g huevos", "20g queso rallado", "5g perejil"
-        ], descripcion: "Limpia champiñones. Rellena con huevo y queso. Hornea 15 min.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Tortilla de cebolla y queso", kcal: 370, g: 30, c: 4.0, p: 20, ingredientes: ["180g huevos",
-            "20g cebolla", "50g queso", "10ml aceite"
-        ], descripcion: "Sofríe cebolla. Bate huevos con queso. Cocina la tortilla.", tiempo: 20,
-        dificultad: 'fácil' },
-    { nombre: "Salmón a la plancha con aguacate", kcal: 410, g: 32, c: 3.0, p: 24, ingredientes: ["150g salmón",
-            "100g aguacate", "10ml limón", "10ml aceite"
-        ], descripcion: "Cocina salmón a la plancha. Sirve con rodajas de aguacate y limón.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Huevos revueltos con setas", kcal: 340, g: 28, c: 3.0, p: 20, ingredientes: ["180g huevos",
-            "100g setas", "5g ajo", "10ml aceite"
-        ], descripcion: "Saltea setas con ajo. Añade huevos batidos y cocina revolviendo.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Batido de proteína con mantequilla de cacahuete", kcal: 320, g: 25, c: 5.0, p: 22,
-        ingredientes: ["30g proteína en polvo", "15g mantequilla cacahuete", "200ml leche de coco", "50g hielo"],
-        descripcion: "Mezcla todos los ingredientes en batidora.", tiempo: 5, dificultad: 'fácil' },
-    { nombre: "Tortilla de espinacas y queso de cabra", kcal: 390, g: 32, c: 3.0, p: 20, ingredientes: ["180g huevos",
-            "100g espinacas", "50g queso cabra", "10ml aceite"
-        ], descripcion: "Saltea espinacas. Bate huevos con queso. Cocina la tortilla.", tiempo: 20,
-        dificultad: 'media' },
-    { nombre: "Huevos al horno con tomate y queso", kcal: 370, g: 30, c: 4.0, p: 22, ingredientes: ["120g huevos",
-            "100g tomate", "50g queso", "5g orégano"
-        ], descripcion: "Corta tomate en rodajas. Coloca huevos encima. Hornea 10 min.", tiempo: 20,
-        dificultad: 'fácil' },
-    { nombre: "Tortilla de kale y queso feta", kcal: 380, g: 31, c: 4.0, p: 20, ingredientes: ["180g huevos",
-            "100g kale", "50g queso feta", "10ml aceite"
-        ], descripcion: "Saltea kale. Bate huevos con queso. Cocina la tortilla.", tiempo: 20, dificultad: 'media' },
-    { nombre: "Huevos revueltos con salmón ahumado", kcal: 410, g: 34, c: 3.0, p: 24, ingredientes: ["180g huevos",
-            "100g salmón ahumado", "15g mantequilla", "5g eneldo"
-        ], descripcion: "Bate huevos. Cocina en mantequilla. Añade salmón y eneldo.", tiempo: 15,
-        dificultad: 'fácil' }
+    { nombre: "Huevos revueltos con aguacate y bacon", ingredientes: ["1 huevo", "100g aguacate", "60g bacon", "5g sal", "5g pimienta"], descripcion: "Cocina el bacon crujiente. Bate los huevos, salpimienta y cocina en la misma sartén. Sirve con aguacate en rodajas.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Tortilla de queso cheddar con espinacas", ingredientes: ["1 huevo", "50g queso cheddar", "100g espinacas", "10ml aceite de oliva"], descripcion: "Saltea las espinacas en aceite. Bate huevos con queso, añade espinacas y cocina como tortilla.", tiempo: 20, dificultad: 'fácil' },
+    { nombre: "Yogur griego con nueces y chía", ingredientes: ["80g yogur griego", "20g nueces", "10g semillas chía", "5g canela"], descripcion: "Mezcla todos los ingredientes y reposa 5 minutos.", tiempo: 5, dificultad: 'fácil' },
+    { nombre: "Salmón ahumado con queso crema y pepino", ingredientes: ["100g salmón ahumado", "50g queso crema", "100g pepino", "5g eneldo"], descripcion: "Corta el pepino en rodajas. Unta queso crema sobre el salmón y enrolla.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Chaffles con mantequilla y huevo", ingredientes: ["1 huevo", "50g mozzarella", "10g harina almendra", "15g mantequilla"], descripcion: "Mezcla huevo, queso y harina. Cocina en wafflera. Sirve con mantequilla.", tiempo: 15, dificultad: 'media' },
+    { nombre: "Omelette de claras con espinacas", ingredientes: ["1 huevo", "100g espinacas", "10ml aceite", "5g sal", "5g pimienta"], descripcion: "Saltea espinacas. Bate claras y cocina omelette. Rellena con espinacas.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Batido keto con proteína y cacahuete", ingredientes: ["30g proteína en polvo", "15g mantequilla cacahuete", "200ml leche almendras", "50g hielo"], descripcion: "Mezcla todos los ingredientes en batidora.", tiempo: 5, dificultad: 'fácil' },
+    { nombre: "Huevos Benedict keto", ingredientes: ["1 huevo", "60g jamón", "30ml salsa holandesa", "100g espinacas"], descripcion: "Cocina huevos escalfados. Coloca sobre jamón y espinacas. Cubre con salsa holandesa.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Tortilla de champiñones y queso", ingredientes: ["1 huevo", "100g champiñones", "50g queso", "10ml aceite"], descripcion: "Saltea champiñones. Bate huevos con queso y cocina la tortilla.", tiempo: 20, dificultad: 'fácil' },
+    { nombre: "Pudding de chía con leche de coco", ingredientes: ["50g semillas chía", "200ml leche coco", "5ml vainilla", "10g coco rallado"], descripcion: "Mezcla todos los ingredientes y reposa en nevera 4 horas.", tiempo: 240, dificultad: 'fácil' }
 ];
 
 const DESAYUNOS_LIGEROS = [
-    { nombre: "Café con aceite de coco y huevo duro", kcal: 180, g: 16, c: 1.0, p: 10, ingredientes: ["200ml café",
-            "15ml aceite coco", "60g huevo duro"
-        ], descripcion: "Toma el café con aceite de coco y acompaña con un huevo duro.", tiempo: 5,
-        dificultad: 'fácil' },
-    { nombre: "Té verde con nueces y queso fresco", kcal: 190, g: 17, c: 2.0, p: 9, ingredientes: ["200ml té verde",
-            "20g nueces", "30g queso fresco"
-        ], descripcion: "Infusión de té verde con nueces y queso fresco.", tiempo: 5, dificultad: 'fácil' },
-    { nombre: "Infusión de jengibre con jamón serrano", kcal: 150, g: 12, c: 1.0, p: 12, ingredientes: [
-            "200ml infusión jengibre", "60g jamón serrano"
-        ], descripcion: "Toma la infusión y acompaña con jamón serrano.", tiempo: 5, dificultad: 'fácil' },
-    { nombre: "Café con mantequilla y aguacate", kcal: 200, g: 18, c: 2.0, p: 4, ingredientes: ["200ml café",
-            "15g mantequilla", "50g aguacate"
-        ], descripcion: "Café con mantequilla y medio aguacate pequeño.", tiempo: 5, dificultad: 'fácil' },
-    { nombre: "Té matcha con leche de almendras", kcal: 170, g: 15, c: 3.0, p: 6, ingredientes: [
-            "200ml té matcha", "150ml leche almendras", "15g almendras"
-        ], descripcion: "Prepara el té matcha con leche de almendras y acompaña con almendras.", tiempo: 5,
-        dificultad: 'fácil' }
+    { nombre: "Café con aceite de coco y huevo duro", ingredientes: ["200ml café", "15ml aceite coco", "1 huevo duro"], descripcion: "Toma el café con aceite de coco y acompaña con un huevo duro.", tiempo: 5, dificultad: 'fácil' },
+    { nombre: "Té verde con nueces y queso fresco", ingredientes: ["200ml té verde", "20g nueces", "30g queso fresco"], descripcion: "Infusión de té verde con nueces y queso fresco.", tiempo: 5, dificultad: 'fácil' },
+    { nombre: "Infusión de jengibre con jamón serrano", ingredientes: ["200ml infusión jengibre", "60g jamón serrano"], descripcion: "Toma la infusión y acompaña con jamón serrano.", tiempo: 5, dificultad: 'fácil' },
+    { nombre: "Café con mantequilla y aguacate (pequeño)", ingredientes: ["200ml café", "15g mantequilla", "50g aguacate"], descripcion: "Café con mantequilla y medio aguacate pequeño.", tiempo: 5, dificultad: 'fácil' },
+    { nombre: "Té matcha con leche de almendras y almendras", ingredientes: ["200ml té matcha", "150ml leche almendras", "15g almendras"], descripcion: "Prepara el té matcha con leche de almendras y acompaña con almendras.", tiempo: 5, dificultad: 'fácil' }
 ];
 
 const PRIMEROS_COMIDA = [
-    { nombre: "Ensalada de aguacate, tomate y huevo duro", kcal: 460, g: 42, c: 4.0, p: 14, ingredientes: [
-            "100g aguacate", "100g tomate", "120g huevos duros", "20g cebolla roja", "30ml vinagreta"
-        ], descripcion: "Corta el aguacate, tomates y huevos en dados. Mezcla con cebolla picada y aliña con vinagreta.",
-        tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Aguacate relleno de atún con huevo duro", kcal: 370, g: 30, c: 3.0, p: 18, ingredientes: [
-            "100g aguacate", "100g atún en lata", "60g huevo duro", "15g mayonesa", "5g perejil"
-        ], descripcion: "Abre el aguacate por la mitad. Mezcla el atún con huevo picado y mayonesa. Rellena las mitades de aguacate.",
-        tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Crema de aguacate y pepino con huevo poché", kcal: 320, g: 28, c: 4.0, p: 16, ingredientes: [
-            "100g aguacate", "100g pepino", "120g huevos", "200ml caldo de verduras", "10ml aceite de oliva"
-        ], descripcion: "Tritura el aguacate con pepino y caldo. Sirve caliente con un huevo poché encima.",
-        tiempo: 20, dificultad: 'media' },
-    { nombre: "Crema de coliflor y parmesano", kcal: 270, g: 24, c: 5.0, p: 10, ingredientes: ["100g coliflor",
-            "50g parmesano", "100ml nata", "200ml caldo", "5g nuez moscada"
-        ], descripcion: "Cocina coliflor en caldo. Tritura con nata, queso y nuez moscada.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Ensalada de rúcula, nueces y queso de cabra", kcal: 310, g: 28, c: 4.0, p: 10, ingredientes: [
-            "80g rúcula", "20g nueces", "80g queso cabra", "30ml vinagreta limón"
-        ], descripcion: "Lava rúcula, añade nueces y queso desmenuzado. Aliña.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Ensalada de espinacas con vinagreta y huevo", kcal: 260, g: 22, c: 3.0, p: 14, ingredientes: [
-            "100g espinacas", "120g huevos duros", "50g tomates cherry", "10ml vinagre balsámico", "10ml aceite"
-        ], descripcion: "Lava espinacas y tomates. Añade huevo duro picado. Aliña con vinagreta.", tiempo: 10,
-        dificultad: 'fácil' },
-    { nombre: "Caldo de verduras con huevo escalfado", kcal: 210, g: 16, c: 5.0, p: 12, ingredientes: ["100g calabacín",
-            "20g puerro", "20g apio", "120g huevos", "5g hierbas"
-        ], descripcion: "Cuece verduras en agua con hierbas. Sirve con un huevo escalfado en el centro.",
-        tiempo: 30, dificultad: 'media' },
-    { nombre: "Gazpacho keto de aguacate y pepino", kcal: 270, g: 24, c: 4.0, p: 4, ingredientes: ["100g aguacate",
-            "100g pepino", "5g ajo", "10ml vinagre", "10ml aceite"
-        ], descripcion: "Tritura todo con agua fría. Sirve bien frío.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Ensalada César keto", kcal: 340, g: 30, c: 4.0, p: 18, ingredientes: ["30g lechuga romana",
-            "150g pechuga pollo", "20g queso parmesano", "10g anchoas", "30ml vinagreta"
-        ], descripcion: "Lava lechuga, añade pollo desmenuzado, queso y anchoas. Aliña.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Ensalada de espárragos y huevo", kcal: 250, g: 22, c: 4.0, p: 14, ingredientes: ["100g espárragos verdes",
-            "120g huevos duros", "30ml vinagreta", "15g almendras"
-        ], descripcion: "Cocina espárragos, añade huevos picados y almendras. Aliña.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Sopa de champiñones con nata", kcal: 290, g: 28, c: 4.0, p: 8, ingredientes: ["150g champiñones",
-            "150ml nata", "20g cebolla", "200ml caldo", "5g tomillo"
-        ], descripcion: "Sofríe cebolla y champiñones. Añade caldo y nata. Cocina 15 min y tritura.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Ensalada de pollo con aguacate", kcal: 370, g: 30, c: 4.0, p: 20, ingredientes: ["150g pechuga pollo",
-            "100g aguacate", "30g lechuga", "30ml vinagreta", "50g pepino"
-        ], descripcion: "Cocina pollo y desmenuza. Mezcla con aguacate, lechuga y vinagreta.", tiempo: 20,
-        dificultad: 'fácil' },
-    { nombre: "Crema de calabacín y puerro", kcal: 240, g: 22, c: 5.0, p: 6, ingredientes: ["100g calabacín",
-            "20g puerro", "200ml caldo", "100ml nata", "15g mantequilla"
-        ], descripcion: "Sofríe puerro, añade calabacín y caldo. Cocina y tritura.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Ensalada de atún y aguacate", kcal: 330, g: 28, c: 3.0, p: 18, ingredientes: ["100g atún en lata",
-            "100g aguacate", "30g lechuga", "50g tomates cherry", "30ml vinagreta"
-        ], descripcion: "Mezcla atún con aguacate. Sirve sobre lechuga y tomates.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Sopa de verduras keto", kcal: 170, g: 14, c: 5.0, p: 6, ingredientes: ["100g calabacín", "20g puerro",
-            "20g apio", "200ml caldo", "5g perejil"
-        ], descripcion: "Cuece verduras en caldo 20 min. Sirve caliente con perejil.", tiempo: 30,
-        dificultad: 'fácil' },
-    { nombre: "Ensalada de brócoli y nueces", kcal: 290, g: 26, c: 5.0, p: 10, ingredientes: ["80g brócoli",
-            "20g nueces", "20g queso parmesano", "30ml vinagreta"
-        ], descripcion: "Cocina brócoli al vapor. Mezcla con nueces, queso y vinagreta.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Crema de espárragos trigueros", kcal: 250, g: 22, c: 4.0, p: 6, ingredientes: ["100g espárragos",
-            "100ml nata", "15g mantequilla", "200ml caldo"
-        ], descripcion: "Cocina espárragos, tritura con nata y mantequilla.", tiempo: 25, dificultad: 'media' },
-    { nombre: "Ensalada de remolacha y queso feta", kcal: 260, g: 22, c: 5.0, p: 8, ingredientes: [
-            "30g remolacha cocida", "80g queso feta", "20g nueces", "30ml vinagreta"
-        ], descripcion: "Corta remolacha y queso. Añade nueces y aliña.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Gazpacho andaluz keto", kcal: 170, g: 14, c: 5.0, p: 4, ingredientes: ["100g tomate", "50g pimiento",
-            "100g pepino", "5g ajo", "10ml vinagre"
-        ], descripcion: "Tritura todo con agua y aceite. Sirve muy frío.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Ensalada de mozzarella y tomate", kcal: 310, g: 28, c: 4.0, p: 12, ingredientes: ["150g tomates",
-            "100g mozzarella", "5g albahaca", "10ml aceite", "10ml vinagre"
-        ], descripcion: "Corta tomates y mozzarella. Alterna con albahaca y aliña.", tiempo: 10,
-        dificultad: 'fácil' },
-    { nombre: "Crema de champiñones", kcal: 230, g: 20, c: 4.0, p: 6, ingredientes: ["150g champiñones",
-            "100ml nata", "20g cebolla", "200ml caldo"
-        ], descripcion: "Sofríe cebolla y champiñones. Añade caldo y nata. Tritura.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Ensalada de pollo y espinacas", kcal: 320, g: 26, c: 4.0, p: 20, ingredientes: ["150g pechuga pollo",
-            "100g espinacas", "20g nueces", "30ml vinagreta", "20g queso parmesano"
-        ], descripcion: "Cocina pollo y corta en tiras. Mezcla con espinacas y nueces.", tiempo: 20,
-        dificultad: 'fácil' },
-    { nombre: "Sopa de coliflor y queso", kcal: 270, g: 24, c: 5.0, p: 10, ingredientes: ["100g coliflor",
-            "50g queso cheddar", "200ml caldo", "100ml nata", "20g cebolla"
-        ], descripcion: "Cocina coliflor en caldo. Tritura con nata y queso.", tiempo: 25, dificultad: 'media' },
-    { nombre: "Ensalada de gambas y aguacate", kcal: 330, g: 28, c: 4.0, p: 18, ingredientes: ["150g gambas",
-            "100g aguacate", "30g lechuga", "20g cebolla morada", "30ml vinagreta"
-        ], descripcion: "Cocina gambas. Mezcla con aguacate, lechuga y vinagreta.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Crema de calabaza y coco", kcal: 260, g: 22, c: 6.0, p: 6, ingredientes: ["80g calabaza",
-            "150ml leche coco", "200ml caldo", "5g jengibre"
-        ], descripcion: "Cocina calabaza en caldo. Tritura con leche de coco y jengibre.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Ensalada de endivias con nueces", kcal: 270, g: 24, c: 4.0, p: 8, ingredientes: ["150g endivias",
-            "20g nueces", "30g queso azul", "30ml vinagreta", "5g perejil"
-        ], descripcion: "Separa hojas de endivia. Añade nueces, queso y aliña.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Sopa de pescado keto", kcal: 240, g: 18, c: 5.0, p: 18, ingredientes: ["150g pescado blanco",
-            "200ml caldo de pescado", "20g puerro", "20g apio", "100ml nata"
-        ], descripcion: "Cocina pescado con verduras en caldo. Añade nata y sirve.", tiempo: 30,
-        dificultad: 'media' },
-    { nombre: "Ensalada de lentejas germinadas", kcal: 250, g: 20, c: 6.0, p: 14, ingredientes: [
-            "100g lentejas germinadas", "100g tomate", "50g pepino", "20g aceitunas", "30ml vinagreta"
-        ], descripcion: "Mezcla todos los ingredientes. Aliña con vinagreta.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Crema de brócoli y queso", kcal: 270, g: 24, c: 5.0, p: 10, ingredientes: ["100g brócoli",
-            "50g queso cheddar", "100ml nata", "200ml caldo", "5g nuez moscada"
-        ], descripcion: "Cocina brócoli en caldo. Tritura con nata y queso.", tiempo: 25, dificultad: 'media' },
-    { nombre: "Ensalada de kale y aguacate", kcal: 310, g: 28, c: 4.0, p: 10, ingredientes: ["100g kale",
-            "100g aguacate", "15g semillas calabaza", "30ml vinagreta", "10ml limón"
-        ], descripcion: "Masajea kale con limón. Añade aguacate y aliña.", tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Crema de champiñones y trufa", kcal: 270, g: 24, c: 4.0, p: 6, ingredientes: ["150g champiñones",
-            "10ml aceite trufa", "100ml nata", "20g cebolla", "200ml caldo"
-        ], descripcion: "Sofríe champiñones. Añade caldo y nata. Sirve con aceite de trufa.", tiempo: 25,
-        dificultad: 'media' }
+    { nombre: "Ensalada de aguacate, tomate y huevo duro", ingredientes: ["100g aguacate", "100g tomate", "1 huevo duros", "20g cebolla roja", "30ml vinagreta"], descripcion: "Corta el aguacate, tomates y huevos en dados. Mezcla con cebolla picada y aliña con vinagreta.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Aguacate relleno de atún con huevo duro", ingredientes: ["100g aguacate", "100g atún en lata", "1 huevo duro", "15g mayonesa", "5g perejil"], descripcion: "Abre el aguacate por la mitad. Mezcla el atún con huevo picado y mayonesa. Rellena las mitades de aguacate.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Crema de aguacate y pepino con huevo poché", ingredientes: ["100g aguacate", "100g pepino", "1 huevo", "200ml caldo de verduras", "10ml aceite de oliva"], descripcion: "Tritura el aguacate con pepino y caldo. Sirve caliente con un huevo poché encima.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Crema de coliflor y parmesano", ingredientes: ["100g coliflor", "50g parmesano", "100ml nata", "200ml caldo", "5g nuez moscada"], descripcion: "Cocina coliflor en caldo. Tritura con nata, queso y nuez moscada.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Ensalada de rúcula, nueces y queso de cabra", ingredientes: ["80g rúcula", "20g nueces", "80g queso cabra", "30ml vinagreta limón"], descripcion: "Lava rúcula, añade nueces y queso desmenuzado. Aliña.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Ensalada de espinacas con vinagreta y huevo", ingredientes: ["100g espinacas", "1 huevo duros", "50g tomates cherry", "10ml vinagre balsámico", "10ml aceite"], descripcion: "Lava espinacas y tomates. Añade huevo duro picado. Aliña con vinagreta.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Caldo de verduras con huevo escalfado", ingredientes: ["100g calabacín", "20g puerro", "20g apio", "1 huevo", "5g hierbas"], descripcion: "Cuece verduras en agua con hierbas. Sirve con un huevo escalfado en el centro.", tiempo: 30, dificultad: 'media' },
+    { nombre: "Gazpacho keto de aguacate y pepino", ingredientes: ["100g aguacate", "100g pepino", "5g ajo", "10ml vinagre", "10ml aceite"], descripcion: "Tritura todo con agua fría. Sirve bien frío.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Ensalada César keto", ingredientes: ["30g lechuga romana", "150g pechuga pollo", "20g queso parmesano", "10g anchoas", "30ml vinagreta"], descripcion: "Lava lechuga, añade pollo desmenuzado, queso y anchoas. Aliña.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Ensalada de espárragos y huevo", ingredientes: ["100g espárragos verdes", "1 huevo duros", "30ml vinagreta", "15g almendras"], descripcion: "Cocina espárragos, añade huevos picados y almendras. Aliña.", tiempo: 15, dificultad: 'fácil' }
 ];
 
 const SEGUNDOS_COMIDA = [
-    { nombre: "Chuletón de cerdo con espárragos", kcal: 470, g: 35, c: 3.0, p: 38, ingredientes: ["250g chuletón",
-            "100g espárragos", "10ml aceite", "5g sal", "5g pimienta"
-        ], descripcion: "Sazona y cocina a la plancha 5-7 min por lado. Acompaña con espárragos.", tiempo: 20,
-        dificultad: 'media' },
-    { nombre: "Salmón al horno con costra de mostaza", kcal: 450, g: 30, c: 4.0, p: 40, ingredientes: [
-            "150g salmón", "30ml mostaza", "20g pan rallado keto", "5g eneldo"
-        ], descripcion: "Unta con mostaza, espolvorea pan rallado. Hornea 15 min a 180°C.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Muslos de pollo al curry de coco", kcal: 440, g: 32, c: 5.0, p: 36, ingredientes: ["600g muslos pollo",
-            "150ml leche coco", "10g curry", "5g jengibre", "5g ajo"
-        ], descripcion: "Dora pollo, añade ajo y jengibre. Añade leche de coco y curry. Cocina 25 min.",
-        tiempo: 35, dificultad: 'media' },
-    { nombre: "Albóndigas en salsa de tomate keto", kcal: 450, g: 33, c: 5.0, p: 34, ingredientes: [
-            "500g carne picada", "60g huevo", "50g salsa tomate sin azúcar", "5g orégano"
-        ], descripcion: "Forma albóndigas con carne y huevo. Cocina en salsa 20 min.", tiempo: 30,
-        dificultad: 'media' },
-    { nombre: "Filete de lubina a la mantequilla", kcal: 370, g: 24, c: 3.0, p: 35, ingredientes: [
-            "150g lubina", "15g mantequilla", "10ml limón", "10g alcaparras"
-        ], descripcion: "Cocina pescado en mantequilla 4 min por lado. Añade limón y alcaparras.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Costillas de ternera estofadas", kcal: 530, g: 40, c: 4.0, p: 42, ingredientes: ["1000g costillas",
-            "20g cebolla", "200ml caldo", "5g tomillo"
-        ], descripcion: "Sella costillas. Añade verdura y caldo. Cocina 2 horas.", tiempo: 120,
-        dificultad: 'difícil' },
-    { nombre: "Hamburguesa keto con queso azul y bacon", kcal: 510, g: 40, c: 2.0, p: 38, ingredientes: [
-            "150g carne picada", "50g queso azul", "60g bacon", "30g lechuga"
-        ], descripcion: "Forma hamburguesa y cocina. Añade bacon y queso. Sirve en lechuga.", tiempo: 20,
-        dificultad: 'media' },
-    { nombre: "Merluza al papillote con calabacín", kcal: 330, g: 20, c: 5.0, p: 34, ingredientes: [
-            "150g merluza", "100g calabacín", "20g aceitunas", "50g tomates cherry"
-        ], descripcion: "Coloca pescado con verduras en papel. Hornea 15 min a 200°C.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Pechuga de pollo a la plancha con verduras", kcal: 350, g: 24, c: 6.0, p: 38, ingredientes: [
-            "150g pechuga pollo", "100g calabacín", "50g pimiento", "20g cebolla", "10ml aceite"
-        ], descripcion: "Cocina pollo y verduras a la plancha. Sirve con un chorrito de aceite.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Entrecot con champiñones y mantequilla", kcal: 510, g: 38, c: 4.0, p: 40, ingredientes: ["250g entrecot",
-            "150g champiñones", "15g mantequilla", "5g ajo"
-        ], descripcion: "Sella el entrecot. Saltea champiñones con mantequilla, ajo y tomillo.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Pollo al horno con romero", kcal: 430, g: 32, c: 3.0, p: 38, ingredientes: ["1500g pollo entero", "5g romero",
-            "5g ajo", "10ml aceite", "10ml limón"
-        ], descripcion: "Unta pollo con aceite y especias. Hornea 1h a 180°C.", tiempo: 70, dificultad: 'difícil' },
-    { nombre: "Bacalao con pisto keto", kcal: 350, g: 20, c: 5.0, p: 32, ingredientes: ["150g bacalao",
-            "100g calabacín", "50g pimiento", "20g cebolla", "50g tomate"
-        ], descripcion: "Sofríe verduras para el pisto. Coloca bacalao encima. Hornea 15 min.", tiempo: 35,
-        dificultad: 'media' },
-    { nombre: "Ternera salteada con verduras", kcal: 450, g: 32, c: 6.0, p: 38, ingredientes: ["500g ternera",
-            "50g pimiento", "20g cebolla", "100g calabacín", "10ml salsa soja keto"
-        ], descripcion: "Saltea carne y verduras a fuego fuerte. Añade salsa de soja.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Salmón con espárragos y holandesa", kcal: 470, g: 34, c: 4.0, p: 38, ingredientes: [
-            "150g salmón", "100g espárragos", "15g mantequilla", "120g huevos", "10ml limón"
-        ], descripcion: "Cocina salmón y espárragos al vapor. Sirve con salsa holandesa.", tiempo: 30,
-        dificultad: 'difícil' },
-    { nombre: "Pechuga de pollo rellena de queso", kcal: 410, g: 30, c: 3.0, p: 38, ingredientes: ["150g pechuga pollo",
-            "50g queso", "30g jamón", "10ml aceite", "5g pimienta"
-        ], descripcion: "Abre pechuga. Rellena con queso y jamón. Cocina a la plancha.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Lubina con verduras asadas", kcal: 370, g: 26, c: 5.0, p: 36, ingredientes: ["150g lubinas",
-            "100g calabacín", "50g pimiento", "20g cebolla", "10ml aceite"
-        ], descripcion: "Coloca lubina sobre verduras. Hornea 20 min a 200°C.", tiempo: 30, dificultad: 'media' },
-    { nombre: "Costillas de cerdo BBQ keto", kcal: 490, g: 38, c: 5.0, p: 38, ingredientes: ["1000g costillas",
-            "30ml salsa BBQ keto", "5g ajo", "5g pimentón"
-        ], descripcion: "Unta costillas con salsa. Hornea 1.5h a 160°C.", tiempo: 100, dificultad: 'difícil' },
-    { nombre: "Merluza con salsa de almendras", kcal: 370, g: 26, c: 5.0, p: 36, ingredientes: ["150g merluza",
-            "20g almendras", "5g ajo", "100ml nata", "5g perejil"
-        ], descripcion: "Cocina merluza. Saltea almendras con ajo, añade nata y perejil.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Pollo al curry con coliflor", kcal: 410, g: 30, c: 6.0, p: 38, ingredientes: ["150g pechuga pollo",
-            "100g coliflor", "10g curry", "150ml leche coco", "20g cebolla"
-        ], descripcion: "Dora pollo. Añade cebolla, curry y coliflor. Cocina 20 min.", tiempo: 35,
-        dificultad: 'media' },
-    { nombre: "Entrecot con salsa de champiñones", kcal: 520, g: 40, c: 5.0, p: 40, ingredientes: ["250g entrecot",
-            "150g champiñones", "100ml nata", "20g cebolla", "15g mantequilla"
-        ], descripcion: "Sella entrecot. Prepara salsa con champiñones, nata y cebolla.", tiempo: 30,
-        dificultad: 'media' },
-    { nombre: "Salmón en papillote con verduras", kcal: 410, g: 30, c: 5.0, p: 38, ingredientes: ["150g salmón",
-            "100g calabacín", "50g pimiento", "50g tomates cherry", "10ml limón"
-        ], descripcion: "Coloca salmón con verduras en papel. Hornea 20 min a 180°C.", tiempo: 30,
-        dificultad: 'media' },
-    { nombre: "Hamburguesa de ternera con queso", kcal: 480, g: 38, c: 3.0, p: 36, ingredientes: [
-            "150g ternera picada", "50g queso cheddar", "30g lechuga", "100g tomate", "20g cebolla"
-        ], descripcion: "Forma hamburguesa. Cocina y añade queso. Sirve en lechuga.", tiempo: 20,
-        dificultad: 'fácil' },
-    { nombre: "Pechuga de pollo con espinacas y queso", kcal: 400, g: 30, c: 4.0, p: 38, ingredientes: [
-            "150g pechuga pollo", "100g espinacas", "20g queso parmesano", "100ml nata", "5g ajo"
-        ], descripcion: "Cocina pollo. Saltea espinacas con ajo y nata. Sirve con queso.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Albóndigas de pollo y calabacín", kcal: 390, g: 28, c: 5.0, p: 34, ingredientes: [
-            "500g pollo picado", "100g calabacín rallado", "60g huevo", "50g salsa tomate", "5g orégano"
-        ], descripcion: "Mezcla pollo con calabacín rallado. Forma albóndigas. Cocina en salsa.", tiempo: 35,
-        dificultad: 'media' },
-    { nombre: "Lubina a la plancha con alcaparras", kcal: 370, g: 24, c: 3.0, p: 36, ingredientes: ["150g lubina",
-            "10g alcaparras", "10ml limón", "15g mantequilla", "5g perejil"
-        ], descripcion: "Cocina lubina a la plancha. Sirve con mantequilla, alcaparras y limón.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Costillas de cordero al horno", kcal: 510, g: 40, c: 3.0, p: 38, ingredientes: ["1000g costillas cordero",
-            "5g ajo", "5g romero", "10ml aceite", "5g sal"
-        ], descripcion: "Unta costillas con aceite y especias. Hornea 45 min a 200°C.", tiempo: 60,
-        dificultad: 'difícil' },
-    { nombre: "Merluza con salsa verde", kcal: 350, g: 22, c: 4.0, p: 34, ingredientes: ["150g merluza", "5g perejil",
-            "5g ajo", "20ml vino blanco", "10ml aceite"
-        ], descripcion: "Cocina merluza. Prepara salsa con perejil, ajo y vino blanco.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Pollo al ajillo", kcal: 390, g: 28, c: 4.0, p: 36, ingredientes: ["150g pechuga pollo", "5g ajo", "5g perejil",
-            "20ml vino blanco", "10ml aceite"
-        ], descripcion: "Dora pollo con ajos. Añade vino blanco y perejil. Cocina 15 min.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Hamburguesa de salmón y aguacate", kcal: 430, g: 34, c: 4.0, p: 32, ingredientes: ["100g salmón picado",
-            "60g huevo", "20g pan rallado keto", "100g aguacate", "30g lechuga"
-        ], descripcion: "Forma hamburguesas con salmón. Cocina y sirve con aguacate.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Pechuga de pavo con verduras", kcal: 350, g: 24, c: 5.0, p: 38, ingredientes: ["150g pechuga pavo",
-            "100g calabacín", "50g pimiento", "20g cebolla", "10ml aceite"
-        ], descripcion: "Cocina pavo y verduras a la plancha.", tiempo: 25, dificultad: 'media' }
+    { nombre: "Chuletón de cerdo con espárragos", ingredientes: ["250g chuletón", "100g espárragos", "10ml aceite", "5g sal", "5g pimienta"], descripcion: "Sazona y cocina a la plancha 5-7 min por lado. Acompaña con espárragos.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Salmón al horno con costra de mostaza", ingredientes: ["200g salmón", "30ml mostaza", "20g pan rallado keto", "5g eneldo"], descripcion: "Unta con mostaza, espolvorea pan rallado. Hornea 15 min a 180°C.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Muslos de pollo al curry de coco", ingredientes: ["200g muslos pollo", "150ml leche coco", "10g curry", "5g jengibre", "5g ajo"], descripcion: "Dora pollo, añade ajo y jengibre. Añade leche de coco y curry. Cocina 25 min.", tiempo: 35, dificultad: 'media' },
+    { nombre: "Albóndigas en salsa de tomate keto", ingredientes: ["150g carne picada", "1 huevo", "50g salsa tomate sin azúcar", "5g orégano"], descripcion: "Forma albóndigas con carne y huevo. Cocina en salsa 20 min.", tiempo: 30, dificultad: 'media' },
+    { nombre: "Filete de lubina a la mantequilla", ingredientes: ["200g lubina", "15g mantequilla", "10ml limón", "10g alcaparras"], descripcion: "Cocina pescado en mantequilla 4 min por lado. Añade limón y alcaparras.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Costillas de ternera estofadas", ingredientes: ["300g costillas", "20g cebolla", "200ml caldo", "5g tomillo"], descripcion: "Sella costillas. Añade verdura y caldo. Cocina 2 horas.", tiempo: 120, dificultad: 'difícil' },
+    { nombre: "Hamburguesa keto con queso azul y bacon", ingredientes: ["200g carne picada", "50g queso azul", "60g bacon", "30g lechuga"], descripcion: "Forma hamburguesa y cocina. Añade bacon y queso. Sirve en lechuga.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Merluza al papillote con calabacín", ingredientes: ["200g merluza", "100g calabacín", "20g aceitunas", "50g tomates cherry"], descripcion: "Coloca pescado con verduras en papel. Hornea 15 min a 200°C.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Pechuga de pollo a la plancha con verduras", ingredientes: ["150g pechuga pollo", "100g calabacín", "50g pimiento", "20g cebolla", "10ml aceite"], descripcion: "Cocina pollo y verduras a la plancha. Sirve con un chorrito de aceite.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Entrecot con champiñones y mantequilla", ingredientes: ["250g entrecot", "150g champiñones", "15g mantequilla", "5g ajo"], descripcion: "Sella el entrecot. Saltea champiñones con mantequilla, ajo y tomillo.", tiempo: 25, dificultad: 'media' }
 ];
 
 const PRIMEROS_CENA = [
-    { nombre: "Crema de aguacate y cilantro", kcal: 270, g: 24, c: 3.0, p: 6, ingredientes: ["100g aguacate",
-            "5g cilantro fresco", "200ml caldo", "10ml limón", "10ml aceite"
-        ], descripcion: "Tritura el aguacate con cilantro y caldo. Sirve con un chorrito de limón.", tiempo: 10,
-        dificultad: 'fácil' },
-    { nombre: "Ensalada de aguacate, naranja y huevo", kcal: 290, g: 24, c: 6.0, p: 10, ingredientes: [
-            "100g aguacate", "30g naranja", "120g huevos", "30g lechuga", "30ml vinagreta"
-        ], descripcion: "Corta aguacate, naranja y huevos. Mezcla con lechuga y aliña.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Crema de calabacín con queso de cabra", kcal: 250, g: 22, c: 5.0, p: 8, ingredientes: [
-            "100g calabacín", "50g queso cabra", "200ml caldo", "15g mantequilla"
-        ], descripcion: "Cocina calabacines en caldo, tritura con mantequilla. Sirve con queso.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Ensalada de tomate y mozzarella ligera", kcal: 240, g: 20, c: 4.0, p: 10, ingredientes: ["150g tomates",
-            "100g mozzarella ligera", "5g albahaca", "10ml aceite"
-        ], descripcion: "Corta tomates y mozzarella. Alterna con albahaca y aliña.", tiempo: 10,
-        dificultad: 'fácil' },
-    { nombre: "Sopa de verduras keto", kcal: 150, g: 12, c: 5.0, p: 4, ingredientes: ["100g calabacín", "20g puerro",
-            "20g apio", "200ml caldo"
-        ], descripcion: "Cuece verduras en caldo 20 min. Sirve caliente.", tiempo: 30, dificultad: 'fácil' },
-    { nombre: "Gazpacho andaluz keto", kcal: 170, g: 14, c: 5.0, p: 4, ingredientes: ["100g tomate", "50g pimiento",
-            "100g pepino", "5g ajo", "10ml vinagre"
-        ], descripcion: "Tritura todo con agua y aceite. Sirve muy frío.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Crema de espárragos trigueros", kcal: 250, g: 22, c: 4.0, p: 6, ingredientes: ["100g espárragos",
-            "100ml nata", "15g mantequilla", "200ml caldo"
-        ], descripcion: "Cocina espárragos, tritura con nata y mantequilla.", tiempo: 25, dificultad: 'media' },
-    { nombre: "Ensalada de remolacha y queso feta", kcal: 260, g: 22, c: 5.0, p: 8, ingredientes: [
-            "30g remolacha cocida", "80g queso feta", "20g nueces", "30ml vinagreta"
-        ], descripcion: "Corta remolacha y queso. Añade nueces y aliña.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Crema de champiñones", kcal: 230, g: 20, c: 4.0, p: 6, ingredientes: ["150g champiñones",
-            "100ml nata", "20g cebolla", "200ml caldo"
-        ], descripcion: "Sofríe cebolla y champiñones. Añade caldo y nata. Tritura.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Ensalada de pollo y aguacate", kcal: 370, g: 30, c: 4.0, p: 20, ingredientes: ["150g pechuga pollo",
-            "100g aguacate", "30g lechuga", "30ml vinagreta"
-        ], descripcion: "Cocina pollo y corta en tiras. Mezcla con aguacate y lechuga.", tiempo: 20,
-        dificultad: 'fácil' },
-    { nombre: "Crema de calabaza y jengibre", kcal: 250, g: 22, c: 6.0, p: 6, ingredientes: ["80g calabaza",
-            "5g jengibre", "200ml caldo", "100ml nata", "15g mantequilla"
-        ], descripcion: "Cocina calabaza con jengibre en caldo. Tritura con nata.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Ensalada de endivias y queso azul", kcal: 260, g: 22, c: 4.0, p: 8, ingredientes: ["150g endivias",
-            "50g queso azul", "20g nueces", "30ml vinagreta"
-        ], descripcion: "Separa hojas de endivia. Añade queso, nueces y aliña.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Sopa de pescado keto", kcal: 240, g: 18, c: 5.0, p: 18, ingredientes: ["150g pescado", "200ml caldo",
-            "20g puerro", "20g apio", "100ml nata"
-        ], descripcion: "Cocina pescado con verduras en caldo. Añade nata.", tiempo: 30, dificultad: 'media' },
-    { nombre: "Ensalada de rúcula y parmesano", kcal: 270, g: 24, c: 4.0, p: 10, ingredientes: ["80g rúcula",
-            "20g parmesano", "30ml vinagreta", "20g nueces"
-        ], descripcion: "Lava rúcula. Añade parmesano en láminas, nueces y aliña.", tiempo: 10,
-        dificultad: 'fácil' },
-    { nombre: "Crema de brócoli y queso cheddar", kcal: 270, g: 24, c: 5.0, p: 10, ingredientes: ["100g brócoli",
-            "50g queso cheddar", "100ml nata", "200ml caldo"
-        ], descripcion: "Cocina brócoli en caldo. Tritura con nata y queso.", tiempo: 25, dificultad: 'media' },
-    { nombre: "Ensalada templada de calabacín", kcal: 250, g: 22, c: 5.0, p: 8, ingredientes: ["100g calabacín",
-            "50g queso feta", "20g aceitunas", "30ml vinagreta", "5g orégano"
-        ], descripcion: "Corta calabacines. Saltea ligeramente. Añade queso y aliña.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Crema de puerros y patata keto", kcal: 230, g: 20, c: 6.0, p: 6, ingredientes: ["20g puerro",
-            "30g patata", "200ml caldo", "100ml nata", "15g mantequilla"
-        ], descripcion: "Sofríe puerros. Añade patata y caldo. Tritura con nata.", tiempo: 30, dificultad: 'media' },
-    { nombre: "Ensalada de espinacas y fresas", kcal: 230, g: 20, c: 5.0, p: 8, ingredientes: ["100g espinacas",
-            "25g fresas", "20g nueces", "50g queso feta", "30ml vinagreta"
-        ], descripcion: "Mezcla espinacas con fresas, nueces y queso. Aliña.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Sopa de tomate keto", kcal: 190, g: 16, c: 6.0, p: 6, ingredientes: ["150g tomates", "200ml caldo",
-            "20g cebolla", "5g ajo", "5g albahaca"
-        ], descripcion: "Sofríe cebolla y ajo. Añade tomates y caldo. Tritura.", tiempo: 30, dificultad: 'media' },
-    { nombre: "Ensalada de coliflor y tahini", kcal: 250, g: 22, c: 5.0, p: 8, ingredientes: ["100g coliflor",
-            "15g tahini", "10ml limón", "5g perejil", "10ml aceite"
-        ], descripcion: "Cocina coliflor al vapor. Prepara salsa con tahini y limón.", tiempo: 20,
-        dificultad: 'media' },
-    { nombre: "Crema de champiñones y trufa", kcal: 270, g: 24, c: 4.0, p: 6, ingredientes: ["150g champiñones",
-            "10ml aceite trufa", "100ml nata", "20g cebolla", "200ml caldo"
-        ], descripcion: "Sofríe champiñones. Añade caldo y nata. Sirve con aceite de trufa.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Ensalada de kale y aguacate", kcal: 310, g: 28, c: 4.0, p: 10, ingredientes: ["100g kale",
-            "100g aguacate", "15g semillas calabaza", "30ml vinagreta", "10ml limón"
-        ], descripcion: "Masajea kale con limón. Añade aguacate y aliña.", tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Sopa de coliflor y curry", kcal: 230, g: 20, c: 5.0, p: 6, ingredientes: ["100g coliflor", "10g curry",
-            "200ml caldo", "100ml nata", "20g cebolla"
-        ], descripcion: "Sofríe cebolla y curry. Añade coliflor y caldo. Tritura con nata.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Ensalada de atún y huevo", kcal: 270, g: 22, c: 3.0, p: 16, ingredientes: ["100g atún en lata",
-            "120g huevos duros", "30g lechuga", "20g aceitunas", "30ml vinagreta"
-        ], descripcion: "Mezcla atún con huevos picados. Sirve sobre lechuga.", tiempo: 10, dificultad: 'fácil' }
+    { nombre: "Crema de aguacate y cilantro", ingredientes: ["100g aguacate", "5g cilantro fresco", "200ml caldo", "10ml limón", "10ml aceite"], descripcion: "Tritura el aguacate con cilantro y caldo. Sirve con un chorrito de limón.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Ensalada de aguacate, naranja y huevo", ingredientes: ["100g aguacate", "30g naranja", "1 huevo", "30g lechuga", "30ml vinagreta"], descripcion: "Corta aguacate, naranja y huevos. Mezcla con lechuga y aliña.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Crema de calabacín con queso de cabra", ingredientes: ["100g calabacín", "50g queso cabra", "200ml caldo", "15g mantequilla"], descripcion: "Cocina calabacines en caldo, tritura con mantequilla. Sirve con queso.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Ensalada de tomate y mozzarella ligera", ingredientes: ["150g tomates", "100g mozzarella ligera", "5g albahaca", "10ml aceite"], descripcion: "Corta tomates y mozzarella. Alterna con albahaca y aliña.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Sopa de verduras keto", ingredientes: ["100g calabacín", "20g puerro", "20g apio", "200ml caldo"], descripcion: "Cuece verduras en caldo 20 min. Sirve caliente.", tiempo: 30, dificultad: 'fácil' },
+    { nombre: "Gazpacho andaluz keto", ingredientes: ["100g tomate", "50g pimiento", "100g pepino", "5g ajo", "10ml vinagre"], descripcion: "Tritura todo con agua y aceite. Sirve muy frío.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Crema de espárragos trigueros", ingredientes: ["100g espárragos", "100ml nata", "15g mantequilla", "200ml caldo"], descripcion: "Cocina espárragos, tritura con nata y mantequilla.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Ensalada de remolacha y queso feta", ingredientes: ["30g remolacha cocida", "80g queso feta", "20g nueces", "30ml vinagreta"], descripcion: "Corta remolacha y queso. Añade nueces y aliña.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Crema de champiñones", ingredientes: ["200g champiñones", "100ml nata", "20g cebolla", "200ml caldo"], descripcion: "Sofríe cebolla y champiñones. Añade caldo y nata. Tritura.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Ensalada de pollo y aguacate", ingredientes: ["150g pechuga pollo", "100g aguacate", "30g lechuga", "30ml vinagreta"], descripcion: "Cocina pollo y corta en tiras. Mezcla con aguacate y lechuga.", tiempo: 20, dificultad: 'fácil' }
 ];
 
 const SEGUNDOS_CENA = [
-    { nombre: "Tortilla francesa con jamón y aguacate", kcal: 380, g: 32, c: 3.0, p: 26, ingredientes: ["180g huevos",
-            "60g jamón", "100g aguacate", "20g queso rallado"
-        ], descripcion: "Bate huevos con jamón y queso. Cocina como tortilla. Sirve con aguacate en rodajas.",
-        tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Wrap de lechuga con atún y aguacate", kcal: 300, g: 22, c: 4.0, p: 26, ingredientes: ["30g lechuga",
-            "100g atún en lata", "100g aguacate", "15g mayonesa"
-        ], descripcion: "Mezcla atún, aguacate y mayonesa. Enrolla en lechuga.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Revuelto de setas con gambas", kcal: 320, g: 24, c: 4.0, p: 28, ingredientes: ["100g setas",
-            "150g gambas", "5g ajo", "5g perejil", "10ml aceite"
-        ], descripcion: "Saltea ajo, añade setas y gambas. Cocina 5 min.", tiempo: 20, dificultad: 'media' },
-    { nombre: "Ensalada templada de pollo asado", kcal: 380, g: 30, c: 4.0, p: 30, ingredientes: [
-            "150g pechuga pollo asada", "30g lechuga", "100g aguacate", "30ml vinagreta"
-        ], descripcion: "Mezcla lechuga con pollo y aguacate. Aliña.", tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Huevos al plato con chorizo", kcal: 360, g: 30, c: 4.0, p: 24, ingredientes: ["120g huevos",
-            "50g chorizo", "50g pimiento morrón", "15g mantequilla"
-        ], descripcion: "Sofríe chorizo y pimiento. Añade huevos y hornea 5 min.", tiempo: 20, dificultad: 'media' },
-    { nombre: "Bacalao al horno con pisto", kcal: 350, g: 20, c: 5.0, p: 32, ingredientes: ["150g bacalao",
-            "150g pisto keto", "10ml aceite"
-        ], descripcion: "Coloca bacalao sobre pisto y hornea 15 min a 180°C.", tiempo: 30, dificultad: 'media' },
-    { nombre: "Queso halloumi a la plancha", kcal: 360, g: 30, c: 4.0, p: 22, ingredientes: ["250g halloumi",
-            "100g tomate", "5g orégano", "10ml aceite"
-        ], descripcion: "Corta halloumi y cocina a la plancha. Acompaña con tomate.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Huevos nube con aguacate", kcal: 330, g: 28, c: 3.0, p: 20, ingredientes: ["120g huevos",
-            "100g aguacate", "5g sal", "5g pimienta"
-        ], descripcion: "Monta claras a punto de nieve. Hornea con yema encima. Sirve con aguacate.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Sardinas con aguacate", kcal: 370, g: 30, c: 3.0, p: 24, ingredientes: ["100g sardinas en lata",
-            "100g aguacate", "10ml limón", "5g perejil"
-        ], descripcion: "Sirve sardinas con aguacate y aliña con limón.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Tortilla de calabacín con feta", kcal: 340, g: 26, c: 4.0, p: 24, ingredientes: ["180g huevos",
-            "100g calabacín rallado", "80g queso feta", "5g menta"
-        ], descripcion: "Ralla calabacines, mezcla con huevo y queso. Cocina.", tiempo: 25, dificultad: 'media' },
-    { nombre: "Pechuga de pollo con espinacas", kcal: 330, g: 24, c: 4.0, p: 34, ingredientes: ["150g pechuga pollo",
-            "100g espinacas", "5g ajo", "100ml nata", "20g queso parmesano"
-        ], descripcion: "Cocina pollo. Saltea espinacas con ajo y nata. Sirve con queso.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Salteado de verduras y tofu", kcal: 290, g: 24, c: 6.0, p: 20, ingredientes: ["150g tofu", "100g calabacín",
-            "50g pimiento", "20g cebolla", "10ml salsa soja"
-        ], descripcion: "Saltea tofu con verduras. Añade salsa de soja.", tiempo: 20, dificultad: 'media' },
-    { nombre: "Huevos revueltos con salmón ahumado", kcal: 350, g: 30, c: 3.0, p: 24, ingredientes: ["180g huevos",
-            "100g salmón ahumado", "15g mantequilla", "5g eneldo"
-        ], descripcion: "Bate huevos. Cocina en mantequilla. Añade salmón y eneldo.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Tortilla de espárragos y queso", kcal: 350, g: 28, c: 4.0, p: 22, ingredientes: ["180g huevos",
-            "100g espárragos", "50g queso", "10ml aceite"
-        ], descripcion: "Cocina espárragos. Bate huevos con queso. Cocina la tortilla.", tiempo: 20,
-        dificultad: 'media' },
-    { nombre: "Revuelto de champiñones y huevo", kcal: 310, g: 26, c: 3.0, p: 20, ingredientes: ["180g huevos",
-            "150g champiñones", "5g ajo", "5g perejil", "10ml aceite"
-        ], descripcion: "Saltea champiñones con ajo. Añade huevos y cocina.", tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Wrap de lechuga con pollo", kcal: 330, g: 26, c: 4.0, p: 28, ingredientes: ["30g lechuga",
-            "150g pechuga pollo", "100g aguacate", "15g mayonesa", "5g mostaza"
-        ], descripcion: "Cocina pollo. Mezcla con mayonesa. Enrolla en lechuga.", tiempo: 20, dificultad: 'fácil' },
-    { nombre: "Huevos al horno con espinacas", kcal: 310, g: 26, c: 3.0, p: 22, ingredientes: ["120g huevos",
-            "100g espinacas", "20g queso parmesano", "15g mantequilla"
-        ], descripcion: "Coloca espinacas en fuente. Añade huevos y queso. Hornea 10 min.", tiempo: 20,
-        dificultad: 'fácil' },
-    { nombre: "Tortilla de cebolla y calabacín", kcal: 320, g: 26, c: 5.0, p: 20, ingredientes: ["180g huevos",
-            "100g calabacín", "15g cebolla", "10ml aceite", "5g sal"
-        ], descripcion: "Sofríe cebolla y calabacín. Bate huevos y cocina la tortilla.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Salteado de gambas y aguacate", kcal: 330, g: 28, c: 4.0, p: 24, ingredientes: ["150g gambas",
-            "100g aguacate", "5g ajo", "10ml limón", "5g perejil"
-        ], descripcion: "Saltea gambas con ajo. Sirve con aguacate en rodajas y limón.", tiempo: 15,
-        dificultad: 'fácil' },
-    { nombre: "Tortilla de espinacas y champiñones", kcal: 340, g: 28, c: 4.0, p: 22, ingredientes: ["180g huevos",
-            "100g espinacas", "100g champiñones", "50g queso", "10ml aceite"
-        ], descripcion: "Saltea verduras. Bate huevos con queso. Cocina la tortilla.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Huevos poché con salsa holandesa", kcal: 390, g: 34, c: 3.0, p: 22, ingredientes: ["120g huevos",
-            "15g mantequilla", "60g yemas", "10ml limón", "5g sal"
-        ], descripcion: "Prepara salsa holandesa. Cocina huevos escalfados. Sirve cubiertos.", tiempo: 30,
-        dificultad: 'difícil' },
-    { nombre: "Wrap de lechuga con salmón", kcal: 310, g: 26, c: 4.0, p: 24, ingredientes: ["30g lechuga",
-            "100g salmón ahumado", "50g queso crema", "100g pepino", "5g eneldo"
-        ], descripcion: "Unta queso crema en lechuga. Añade salmón y enrolla.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Tortilla de jamón y queso", kcal: 350, g: 30, c: 3.0, p: 24, ingredientes: ["180g huevos", "50g jamón",
-            "50g queso", "10ml aceite"
-        ], descripcion: "Bate huevos con jamón y queso. Cocina como tortilla.", tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Revuelto de verduras y huevo", kcal: 300, g: 24, c: 5.0, p: 18, ingredientes: ["180g huevos",
-            "100g calabacín", "50g pimiento", "15g cebolla", "10ml aceite"
-        ], descripcion: "Saltea verduras. Añade huevos y cocina.", tiempo: 20, dificultad: 'fácil' },
-    { nombre: "Queso halloumi con verduras asadas", kcal: 370, g: 32, c: 5.0, p: 22, ingredientes: ["250g halloumi",
-            "100g calabacín", "50g pimiento", "15g cebolla", "10ml aceite"
-        ], descripcion: "Asa verduras. Cocina halloumi a la plancha. Sirve junto.", tiempo: 25,
-        dificultad: 'media' },
-    { nombre: "Tortilla de champiñones y queso", kcal: 380, g: 32, c: 4.0, p: 24, ingredientes: ["180g huevos",
-            "150g champiñones", "50g queso", "10ml aceite"
-        ], descripcion: "Saltea champiñones. Bate huevos con queso. Cocina la tortilla.", tiempo: 20,
-        dificultad: 'fácil' }
+    { nombre: "Tortilla francesa con jamón y aguacate", ingredientes: ["1 huevo", "60g jamón", "100g aguacate", "20g queso rallado"], descripcion: "Bate huevos con jamón y queso. Cocina como tortilla. Sirve con aguacate en rodajas.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Wrap de lechuga con atún y aguacate", ingredientes: ["30g lechuga", "100g atún en lata", "100g aguacate", "15g mayonesa"], descripcion: "Mezcla atún, aguacate y mayonesa. Enrolla en lechuga.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Revuelto de setas con gambas", ingredientes: ["200g setas", "150g gambas", "5g ajo", "5g perejil", "10ml aceite"], descripcion: "Saltea ajo, añade setas y gambas. Cocina 5 min.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Ensalada templada de pollo asado", ingredientes: ["150g pechuga pollo asada", "30g lechuga", "100g aguacate", "30ml vinagreta"], descripcion: "Mezcla lechuga con pollo y aguacate. Aliña.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Huevos al plato con chorizo", ingredientes: ["1 huevo", "50g chorizo", "50g pimiento morrón", "15g mantequilla"], descripcion: "Sofríe chorizo y pimiento. Añade huevos y hornea 5 min.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Bacalao al horno con pisto", ingredientes: ["200g bacalao", "200g pisto keto", "10ml aceite"], descripcion: "Coloca bacalao sobre pisto y hornea 15 min a 180°C.", tiempo: 30, dificultad: 'media' },
+    { nombre: "Queso halloumi a la plancha", ingredientes: ["100g halloumi", "100g tomate", "5g orégano", "10ml aceite"], descripcion: "Corta halloumi y cocina a la plancha. Acompaña con tomate.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Huevos nube con aguacate", ingredientes: ["1 huevo", "100g aguacate", "5g sal", "5g pimienta"], descripcion: "Monta claras a punto de nieve. Hornea con yema encima. Sirve con aguacate.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Sardinas con aguacate", ingredientes: ["100g sardinas en lata", "100g aguacate", "10ml limón", "5g perejil"], descripcion: "Sirve sardinas con aguacate y aliña con limón.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Tortilla de calabacín con feta", ingredientes: ["1 huevo", "100g calabacín rallado", "80g queso feta", "5g menta"], descripcion: "Ralla calabacines, mezcla con huevo y queso. Cocina.", tiempo: 25, dificultad: 'media' }
 ];
 
 const DIAS = [
@@ -2779,837 +2481,895 @@ const DIAS = [
     { nombre: "Domingo" }
 ];
 
-    // ============================================================
-    // ALGORITMO AVANZADO DE SELECCIÓN
-    // ============================================================
-    class AdvancedSelector {
-        static extractCategories(plato) {
-            return extractIngredientCategories(plato);
+// ============================================================
+// ALGORITMO AVANZADO DE SELECCIÓN (sin cambios)
+// ============================================================
+class AdvancedSelector {
+    static extractCategories(plato) {
+        return extractIngredientCategories(plato);
+    }
+    static calculateDayScore(dayMeals) {
+        const allCategories = new Set();
+        const categoryCount = {};
+        let totalCategories = 0;
+        for (const meal of dayMeals) {
+            const cats = this.extractCategories(meal);
+            for (const cat of cats) {
+                allCategories.add(cat);
+                categoryCount[cat] = (categoryCount[cat] || 0) + 1;
+                totalCategories++;
+            }
         }
-        static calculateDayScore(dayMeals) {
-            const allCategories = new Set();
-            const categoryCount = {};
-            let totalCategories = 0;
-            for (const meal of dayMeals) {
-                const cats = this.extractCategories(meal);
-                for (const cat of cats) {
-                    allCategories.add(cat);
-                    categoryCount[cat] = (categoryCount[cat] || 0) + 1;
-                    totalCategories++;
+        const uniqueCount = allCategories.size;
+        const totalMeals = dayMeals.length;
+        let repetitionPenalty = 0;
+        for (const [cat, count] of Object.entries(categoryCount)) {
+            if (count > 1) repetitionPenalty += Math.pow(count, 2) * 15;
+        }
+        const varietyBonus = uniqueCount * 20;
+        const emptyMeals = dayMeals.filter(m => this.extractCategories(m).length === 0).length;
+        const emptyPenalty = emptyMeals * 10;
+        let severePenalty = 0;
+        for (const [cat, count] of Object.entries(categoryCount)) {
+            if (count >= 3) severePenalty += 30;
+        }
+        let score = varietyBonus - repetitionPenalty - emptyPenalty - severePenalty;
+        const maxScore = totalMeals * 20;
+        score = Math.max(0, Math.min(100, (score / maxScore) * 100));
+        return { score: Math.round(score), uniqueCount, totalCategories, repetitionPenalty, categoryCount, severePenalty };
+    }
+    static seleccionarPlato(pool, usados, intentos = 0) {
+        if (intentos > 100) return pool[Math.floor(Math.random() * pool.length)];
+        const scored = pool.map(plato => {
+            const ingredientes = this.extractCategories(plato);
+            let penalty = 0, nuevos = 0;
+            for (const ing of ingredientes) {
+                if (usados.has(ing)) {
+                    const veces = usados.has(ing) ? 2 : 1;
+                    penalty += Math.pow(veces, 2) * 25;
+                } else {
+                    nuevos++;
                 }
             }
-            const uniqueCount = allCategories.size;
-            const totalMeals = dayMeals.length;
-            let repetitionPenalty = 0;
-            for (const [cat, count] of Object.entries(categoryCount)) {
-                if (count > 1) repetitionPenalty += Math.pow(count, 2) * 15;
-            }
-            const varietyBonus = uniqueCount * 20;
-            const emptyMeals = dayMeals.filter(m => this.extractCategories(m).length === 0).length;
-            const emptyPenalty = emptyMeals * 10;
-            let severePenalty = 0;
-            for (const [cat, count] of Object.entries(categoryCount)) {
-                if (count >= 3) severePenalty += 30;
-            }
-            let score = varietyBonus - repetitionPenalty - emptyPenalty - severePenalty;
-            const maxScore = totalMeals * 20;
-            score = Math.max(0, Math.min(100, (score / maxScore) * 100));
-            return { score: Math.round(score), uniqueCount, totalCategories, repetitionPenalty, categoryCount, severePenalty };
-        }
-        static seleccionarPlato(pool, usados, intentos = 0) {
-            if (intentos > 100) return pool[Math.floor(Math.random() * pool.length)];
-            const scored = pool.map(plato => {
-                const ingredientes = this.extractCategories(plato);
-                let penalty = 0, nuevos = 0;
-                for (const ing of ingredientes) {
-                    if (usados.has(ing)) {
-                        const veces = usados.has(ing) ? 2 : 1;
-                        penalty += Math.pow(veces, 2) * 25;
-                    } else {
-                        nuevos++;
-                    }
-                }
-                const repetidos = ingredientes.filter(ing => usados.has(ing));
-                const extraPenalty = repetidos.length * 15;
-                const bonus = nuevos * 20;
-                return { plato, score: bonus - penalty - extraPenalty, ingredientes, repetidos: repetidos.length };
-            });
-            scored.sort((a, b) => b.score - a.score);
-            if (scored[0] && scored[0].repetidos >= 2 && intentos < 50) {
-                const index = pool.indexOf(scored[0].plato);
-                if (index > -1) {
-                    const newPool = [...pool];
-                    newPool.splice(index, 1);
-                    if (newPool.length > 0) return this.seleccionarPlato(newPool, usados, intentos + 1);
-                }
-            }
-            const topScore = scored[0] ? scored[0].score : -999;
-            const topCandidates = scored.filter(s => s.score >= topScore - 10);
-            const elegido = topCandidates[Math.floor(Math.random() * topCandidates.length)];
-            return elegido ? elegido.plato : pool[Math.floor(Math.random() * pool.length)];
-        }
-        static seleccionarDiaCompleto(poolDesayunos, poolP1, poolP2, poolC1, poolC2) {
-            const ingredientesUsados = new Set();
-            const extraer = (plato) => this.extractCategories(plato);
-            const dPool = [...poolDesayunos], p1Pool = [...poolP1], p2Pool = [...poolP2], c1Pool = [...poolC1], c2Pool = [...poolC2];
-            const desayuno = this.seleccionarPlato(dPool, ingredientesUsados);
-            extraer(desayuno).forEach(ing => ingredientesUsados.add(ing));
-            const p1 = this.seleccionarPlato(p1Pool, ingredientesUsados);
-            extraer(p1).forEach(ing => ingredientesUsados.add(ing));
-            const p2 = this.seleccionarPlato(p2Pool, ingredientesUsados);
-            extraer(p2).forEach(ing => ingredientesUsados.add(ing));
-            const c1 = this.seleccionarPlato(c1Pool, ingredientesUsados);
-            extraer(c1).forEach(ing => ingredientesUsados.add(ing));
-            const c2 = this.seleccionarPlato(c2Pool, ingredientesUsados);
-            extraer(c2).forEach(ing => ingredientesUsados.add(ing));
-            return { desayuno, p1, p2, c1, c2, ingredientesUsados: Array.from(ingredientesUsados) };
-        }
-        static seleccionarDiaCompletoConMemoriaSemanal(poolDesayunos, poolP1, poolP2, poolC1, poolC2, platosUsadosSemana) {
-            const nombresUsados = new Set(platosUsadosSemana);
-            const filtrar = (pool) => {
-                const filtrados = pool.filter(p => !nombresUsados.has(p.nombre));
-                return filtrados.length > 0 ? filtrados : pool;
-            };
-            const dPool = filtrar(poolDesayunos);
-            const p1Pool = filtrar(poolP1);
-            const p2Pool = filtrar(poolP2);
-            const c1Pool = filtrar(poolC1);
-            const c2Pool = filtrar(poolC2);
-            return this.seleccionarDiaCompleto(dPool, p1Pool, p2Pool, c1Pool, c2Pool);
-        }
-        static analyzeDayDiversity(dayMeals) {
-            return this.calculateDayScore(dayMeals);
-        }
-    }
-
-    // ============================================================
-    // FUNCIONES DE PERFIL (Mifflin-St Jeor)
-    // ============================================================
-    function calcularBMR(sexo, peso, altura, edad) {
-        return sexo === 'hombre' ? (10 * peso) + (6.25 * altura) - (5 * edad) + 5 : (10 * peso) + (6.25 * altura) - (5 * edad) - 161;
-    }
-
-    function calcularTDEE(bmr, factor) { return bmr * factor; }
-
-    function ajustarCalorias(tdee, objetivo) {
-        if (objetivo === 'perder') return tdee * 0.8;
-        if (objetivo === 'aumentar') return tdee * 1.15;
-        return tdee;
-    }
-
-    function recomendarMacros(calorias, peso, carbsFijos = 25) {
-        const proteinG = Math.round(peso * 1.6);
-        const proteinCal = proteinG * 4;
-        const carbCal = carbsFijos * 4;
-        const fatCal = calorias - proteinCal - carbCal;
-        const fatG = Math.round(fatCal / 9);
-        return { proteinG, carbG: carbsFijos, fatG: Math.max(0, fatG), calorias: Math.round(calorias) };
-    }
-
-    // ============================================================
-    // ESCALADO DE INGREDIENTES Y MACROS (redondeo a enteros)
-    // ============================================================
-    function escalarIngredientes(ingredientes, factor) {
-        if (!ingredientes || factor === 1.0) return ingredientes;
-        return ingredientes.map(item => {
-            const regex = /(\d+\.?\d*)/g;
-            const parts = item.split(regex);
-            const newParts = parts.map((part, index) => {
-                if (index % 2 === 1) {
-                    const num = parseFloat(part);
-                    if (!isNaN(num)) return Math.round(num * factor).toString();
-                }
-                return part;
-            });
-            return newParts.join('');
+            const repetidos = ingredientes.filter(ing => usados.has(ing));
+            const extraPenalty = repetidos.length * 15;
+            const bonus = nuevos * 20;
+            return { plato, score: bonus - penalty - extraPenalty, ingredientes, repetidos: repetidos.length };
         });
-    }
-
-    // ============================================================
-    // CLASE KETO PLANNER (CON FACTOR FIJO SEGÚN OBJETIVO)
-    // ============================================================
-    class KetoPlanner {
-        constructor() {
-            this.semanaActual = null;
-            this.scaleFactor = 1.0;
-            this.loadFromStorage();
-        }
-
-        loadFromStorage() {
-            try {
-                const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    this.semanaActual = parsed.semana || null;
-                    this.scaleFactor = parsed.scaleFactor || 1.0;
-                }
-            } catch (e) {
-                console.error(e);
-                this.semanaActual = null;
-                this.scaleFactor = 1.0;
+        scored.sort((a, b) => b.score - a.score);
+        if (scored[0] && scored[0].repetidos >= 2 && intentos < 50) {
+            const index = pool.indexOf(scored[0].plato);
+            if (index > -1) {
+                const newPool = [...pool];
+                newPool.splice(index, 1);
+                if (newPool.length > 0) return this.seleccionarPlato(newPool, usados, intentos + 1);
             }
         }
-
-        saveToStorage() {
-            try {
-                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify({
-                    semana: this.semanaActual,
-                    scaleFactor: this.scaleFactor
-                }));
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        generateWeek(perfil) {
-            if (!perfil) return null;
-
-            // Calcular calorías objetivo (solo para mostrar, no para escalar)
-            const bmr = calcularBMR(perfil.sexo, perfil.peso, perfil.altura, perfil.edad);
-            const tdee = calcularTDEE(bmr, perfil.actividad);
-            const targetCal = ajustarCalorias(tdee, perfil.objetivo);
-
-            let semana = [];
-            let totalK = 0, totalP = 0, totalC = 0, totalG = 0;
-            let diversityScores = [];
-            const platosUsadosSemana = [];
-
-            let poolDesayunos = DESAYUNOS;
-            if (perfil.objetivo === 'perder') poolDesayunos = DESAYUNOS_LIGEROS;
-
-            for (let i = 0; i < 7; i++) {
-                const dia = AdvancedSelector.seleccionarDiaCompletoConMemoriaSemanal(
-                    poolDesayunos,
-                    PRIMEROS_COMIDA,
-                    SEGUNDOS_COMIDA,
-                    PRIMEROS_CENA,
-                    SEGUNDOS_CENA,
-                    platosUsadosSemana
-                );
-
-                platosUsadosSemana.push(dia.desayuno.nombre);
-                platosUsadosSemana.push(dia.p1.nombre);
-                platosUsadosSemana.push(dia.p2.nombre);
-                platosUsadosSemana.push(dia.c1.nombre);
-                platosUsadosSemana.push(dia.c2.nombre);
-
-                const diaK = dia.desayuno.kcal + dia.p1.kcal + dia.p2.kcal + dia.c1.kcal + dia.c2.kcal;
-                const diaP = dia.desayuno.p + dia.p1.p + dia.p2.p + dia.c1.p + dia.c2.p;
-                const diaC = dia.desayuno.c + dia.p1.c + dia.p2.c + dia.c1.c + dia.c2.c;
-                const diaG = dia.desayuno.g + dia.p1.g + dia.p2.g + dia.c1.g + dia.c2.g;
-
-                totalK += diaK;
-                totalP += diaP;
-                totalC += diaC;
-                totalG += diaG;
-
-                const dayMeals = [dia.desayuno, dia.p1, dia.p2, dia.c1, dia.c2];
-                const diversity = AdvancedSelector.analyzeDayDiversity(dayMeals);
-                diversityScores.push(diversity.score);
-
-                semana.push({
-                    dia: DIAS[i],
-                    desayuno: dia.desayuno,
-                    p1c: dia.p1,
-                    p2c: dia.p2,
-                    c1: dia.c1,
-                    c2: dia.c2,
-                    total: { kcal: diaK, p: diaP, c: diaC, g: diaG },
-                    diversity: diversity,
-                    ingredientesUsados: dia.ingredientesUsados || []
-                });
-            }
-
-            // ============================================================
-            // 🟢 FACTOR DE AJUSTE FIJO SEGÚN OBJETIVO
-            // ============================================================
-            let scaleFactor;
-            if (perfil.objetivo === 'perder') {
-                scaleFactor = 1.0;
-            } else if (perfil.objetivo === 'mantener') {
-                scaleFactor = 1.25;
-            } else if (perfil.objetivo === 'aumentar') {
-                scaleFactor = 1.5;
-            } else {
-                scaleFactor = 1.0;
-            }
-            this.scaleFactor = scaleFactor;
-            // ============================================================
-
-            this.semanaActual = semana;
-            this.saveToStorage();
-
-            const avgDiversity = Math.round(diversityScores.reduce((a, b) => a + b, 0) / diversityScores.length);
-
-            return {
-                semana: semana,
-                stats: {
-                    kcal: Math.round(totalK / 7),
-                    p: Math.round(totalP / 7),
-                    c: Math.round(totalC / 7),
-                    g: Math.round(totalG / 7),
-                    diversity: avgDiversity
-                },
-                scaleFactor: this.scaleFactor,
-                targetCal: Math.round(targetCal)
-            };
-        }
-
-        clearAll() {
-            this.semanaActual = null;
-            this.scaleFactor = 1.0;
-            this.saveToStorage();
-        }
-
-        getLastWeek() {
-            return this.semanaActual;
-        }
-
-        getScaleFactor() {
-            return this.scaleFactor;
-        }
-
-        analyzeWeek(semana) {
-            if (!semana) return null;
-            const allMeals = semana.flatMap(d => [d.desayuno, d.p1c, d.p2c, d.c1, d.c2]);
-            const totalK = allMeals.reduce((s, m) => s + m.kcal, 0);
-            const totalP = allMeals.reduce((s, m) => s + m.p, 0);
-            const totalC = allMeals.reduce((s, m) => s + m.c, 0);
-            const totalG = allMeals.reduce((s, m) => s + m.g, 0);
-            const avgK = Math.round(totalK / 7);
-            const avgP = Math.round(totalP / 7);
-            const avgC = Math.round(totalC / 7);
-            const avgG = Math.round(totalG / 7);
-            const ratio = (avgG / (avgP + avgC)) * 100;
-            return {
-                avgK,
-                avgP,
-                avgC,
-                avgG,
-                ratio: Math.round(ratio * 10) / 10,
-                totalK,
-                totalP,
-                totalC,
-                totalG,
-                meals: allMeals
-            };
-        }
+        const topScore = scored[0] ? scored[0].score : -999;
+        const topCandidates = scored.filter(s => s.score >= topScore - 10);
+        const elegido = topCandidates[Math.floor(Math.random() * topCandidates.length)];
+        return elegido ? elegido.plato : pool[Math.floor(Math.random() * pool.length)];
     }
-
-    // ============================================================
-    // INSTANCIA
-    // ============================================================
-    const planner = new KetoPlanner();
-
-    // ============================================================
-    // TOAST
-    // ============================================================
-    function showToast(msg, type = 'info', dur = 3000) {
-        const titles = { success: 'Éxito', error: 'Error', warning: 'Advertencia', info: 'Información' };
-        return alertSystem.showToast({ message: msg, title: titles[type] || '', type, duration: dur });
+    static seleccionarDiaCompleto(poolDesayunos, poolP1, poolP2, poolC1, poolC2) {
+        const ingredientesUsados = new Set();
+        const extraer = (plato) => this.extractCategories(plato);
+        const dPool = [...poolDesayunos], p1Pool = [...poolP1], p2Pool = [...poolP2], c1Pool = [...poolC1], c2Pool = [...poolC2];
+        const desayuno = this.seleccionarPlato(dPool, ingredientesUsados);
+        extraer(desayuno).forEach(ing => ingredientesUsados.add(ing));
+        const p1 = this.seleccionarPlato(p1Pool, ingredientesUsados);
+        extraer(p1).forEach(ing => ingredientesUsados.add(ing));
+        const p2 = this.seleccionarPlato(p2Pool, ingredientesUsados);
+        extraer(p2).forEach(ing => ingredientesUsados.add(ing));
+        const c1 = this.seleccionarPlato(c1Pool, ingredientesUsados);
+        extraer(c1).forEach(ing => ingredientesUsados.add(ing));
+        const c2 = this.seleccionarPlato(c2Pool, ingredientesUsados);
+        extraer(c2).forEach(ing => ingredientesUsados.add(ing));
+        return { desayuno, p1, p2, c1, c2, ingredientesUsados: Array.from(ingredientesUsados) };
     }
-
-    // ============================================================
-    // MODAL DE RECETA
-    // ============================================================
-    function mostrarReceta(plato, tipo) {
-        if (document.querySelector('.recipe-modal-overlay')) return;
-        const container = document.getElementById('recipeModalContainer');
-        const scale = planner.getScaleFactor();
-        const scaledKcal = Math.round(plato.kcal * scale);
-        const scaledP = Math.round(plato.p * scale);
-        const scaledC = Math.round(plato.c * scale);
-        const scaledG = Math.round(plato.g * scale);
-        const ingredientesEscalados = escalarIngredientes(plato.ingredientes, scale);
-        const tipoNombres = { 'desayuno': 'Desayuno', 'p1c': '1º Comida', 'p2c': '2º Comida', 'c1': '1º Cena', 'c2': '2º Cena' };
-        const tipoDisplay = tipoNombres[tipo] || tipo;
-        const modal = document.createElement('div');
-        modal.className = 'recipe-modal-overlay';
-        modal.setAttribute('role', 'dialog');
-        modal.setAttribute('aria-modal', 'true');
-        modal.innerHTML = `
-            <div class="recipe-modal">
-                <button class="recipe-modal-close" aria-label="Cerrar receta">&times;</button>
-                <div class="recipe-modal-type">${tipoDisplay}</div>
-                <div class="recipe-modal-title">${plato.nombre}${scale !== 1.0 ? `<span class="scale-indicator"></span>` : ''}</div>
-                <div class="recipe-modal-macros">
-                    <span><strong>${scaledKcal}</strong> kcal</span>
-                    <span><strong>${scaledP}</strong>g proteína</span>
-                    <span><strong>${scaledC}</strong>g carbos</span>
-                    <span><strong>${scaledG}</strong>g grasa</span>
-                </div>
-                ${plato.descripcion ? `<div class="recipe-modal-section"><div class="recipe-modal-section-title">Descripción</div><div class="recipe-modal-description">${plato.descripcion}</div></div>` : ''}
-                ${ingredientesEscalados && ingredientesEscalados.length > 0 ? `
-                    <div class="recipe-modal-section"><div class="recipe-modal-section-title">Ingredientes (ajustados)</div><ul class="recipe-modal-ingredients">${ingredientesEscalados.map(i => `<li>${i}</li>`).join('')}</ul></div>
-                ` : ''}
-                <div class="recipe-modal-footer">
-                    ${plato.tiempo ? `<span> ${plato.tiempo} min</span>` : ''}
-                    ${plato.dificultad ? `<span>Dificultad: ${plato.dificultad}</span>` : ''}
-                </div>
-               
-            </div>
-        `;
-        container.appendChild(modal);
-        const close = modal.querySelector('.recipe-modal-close');
-        close.addEventListener('click', () => modal.remove());
-        modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { modal.remove(); document.removeEventListener('keydown', arguments.callee); } });
-        setTimeout(() => close.focus(), 100);
-    }
-
-    // ============================================================
-    // NAVEGACIÓN
-    // ============================================================
-    function mostrarPerfilSetup() {
-        document.getElementById('landingPage').classList.add('hidden');
-        document.getElementById('profileSetup').classList.add('visible');
-        document.getElementById('appContent').classList.remove('visible');
-    }
-
-    function entrarApp(perfil) {
-        document.getElementById('landingPage').classList.add('hidden');
-        document.getElementById('profileSetup').classList.remove('visible');
-        document.getElementById('appContent').classList.add('visible');
-        cargarUltimoMenu();
-        actualizarContador();
-        activarTab('menu');
-        renderPerfil();
-        renderAnalisis(perfil);
-        showToast('Toca cualquier plato para ver su receta', 'success');
-    }
-
-    function salirApp() {
-        document.getElementById('landingPage').classList.remove('hidden');
-        document.getElementById('profileSetup').classList.remove('visible');
-        document.getElementById('appContent').classList.remove('visible');
-    }
-
-    // ============================================================
-    // PERFIL - GUARDAR Y RENDER
-    // ============================================================
-    function guardarPerfil(e) {
-        e.preventDefault();
-        const form = document.getElementById('profileForm');
-        const fd = new FormData(form);
-        const perfil = {
-            sexo: fd.get('sexo'),
-            edad: parseInt(fd.get('edad')),
-            peso: parseFloat(fd.get('peso')),
-            altura: parseInt(fd.get('altura')),
-            actividad: parseFloat(fd.get('actividad')),
-            objetivo: fd.get('objetivo')
+    static seleccionarDiaCompletoConMemoriaSemanal(poolDesayunos, poolP1, poolP2, poolC1, poolC2, platosUsadosSemana) {
+        const nombresUsados = new Set(platosUsadosSemana);
+        const filtrar = (pool) => {
+            const filtrados = pool.filter(p => !nombresUsados.has(p.nombre));
+            return filtrados.length > 0 ? filtrados : pool;
         };
-        if (!perfil.sexo || isNaN(perfil.edad) || isNaN(perfil.peso) || isNaN(perfil.altura) || isNaN(perfil.actividad) || !perfil.objetivo) {
-            showToast('Completa todos los campos correctamente.', 'error');
-            return;
-        }
-        localStorage.setItem(CONFIG.PROFILE_KEY, JSON.stringify(perfil));
-        showToast('Perfil guardado correctamente.', 'success');
-        entrarApp(perfil);
+        const dPool = filtrar(poolDesayunos);
+        const p1Pool = filtrar(poolP1);
+        const p2Pool = filtrar(poolP2);
+        const c1Pool = filtrar(poolC1);
+        const c2Pool = filtrar(poolC2);
+        return this.seleccionarDiaCompleto(dPool, p1Pool, p2Pool, c1Pool, c2Pool);
     }
-
-    function actualizarPerfil(e) {
-        e.preventDefault();
-        const form = document.getElementById('editProfileForm');
-        if (!form) return;
-        const fd = new FormData(form);
-        const perfil = {
-            sexo: fd.get('sexo'),
-            edad: parseInt(fd.get('edad')),
-            peso: parseFloat(fd.get('peso')),
-            altura: parseInt(fd.get('altura')),
-            actividad: parseFloat(fd.get('actividad')),
-            objetivo: fd.get('objetivo')
-        };
-        if (!perfil.sexo || isNaN(perfil.edad) || isNaN(perfil.peso) || isNaN(perfil.altura) || isNaN(perfil.actividad) || !perfil.objetivo) {
-            showToast('Completa todos los campos correctamente.', 'error');
-            return;
-        }
-        localStorage.setItem(CONFIG.PROFILE_KEY, JSON.stringify(perfil));
-        showToast('Perfil actualizado correctamente. Recuerda regenerar el menú.', 'success');
-        renderPerfil(perfil);
-        if (document.getElementById('tab-analisis').classList.contains('active')) renderAnalisis(perfil);
+    static analyzeDayDiversity(dayMeals) {
+        return this.calculateDayScore(dayMeals);
     }
+}
 
-    function renderPerfil(perfil) {
-        const container = document.getElementById('perfilContainer');
-        if (!perfil) perfil = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
-        if (!perfil) {
-            container.innerHTML = `<div class="empty-state"><div class="empty-state-title">No hay perfil configurado</div><div class="empty-state-text">Ve a la pantalla de inicio para configurarlo.</div></div>`;
-            return;
-        }
-        const objetivoTexto = { 'perder': 'Perder peso (déficit 20%)', 'mantener': 'Mantener peso', 'aumentar': 'Aumentar peso (superávit 15%)' };
-        const bmr = calcularBMR(perfil.sexo, perfil.peso, perfil.altura, perfil.edad);
-        const tdee = calcularTDEE(bmr, perfil.actividad);
-        const caloriasObj = ajustarCalorias(tdee, perfil.objetivo);
-        const macros = recomendarMacros(caloriasObj, perfil.peso);
-        container.innerHTML = `
-            <div class="profile-container">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-                    <h3 style="font-size:1.1rem;">Datos personales</h3>
-                    <button class="edit-profile-btn" id="editProfileBtn">Editar perfil</button>
-                </div>
-                <div class="summary-grid">
-                    <div class="summary-item"><div class="value">${perfil.peso} kg</div><div class="label">Peso</div></div>
-                    <div class="summary-item"><div class="value">${perfil.altura} cm</div><div class="label">Altura</div></div>
-                    <div class="summary-item"><div class="value">${perfil.edad} años</div><div class="label">Edad</div></div>
-                    <div class="summary-item"><div class="value">${objetivoTexto[perfil.objetivo]}</div><div class="label">Objetivo</div></div>
-                </div>
-                <div style="margin-top:1.5rem; border-top:1px solid var(--border); padding-top:1.5rem;">
-                    <h4 style="font-size:0.9rem; margin-bottom:0.5rem;">Cálculo de necesidades</h4>
-                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
-                        <div style="background:var(--bg-card-alt); padding:0.5rem; border-radius:var(--radius-sm); text-align:center;"><div style="font-weight:700; font-size:1rem; color:var(--accent);">${Math.round(bmr)} kcal</div><div style="font-size:0.6rem; color:var(--text-tertiary);">BMR</div></div>
-                        <div style="background:var(--bg-card-alt); padding:0.5rem; border-radius:var(--radius-sm); text-align:center;"><div style="font-weight:700; font-size:1rem; color:var(--green);">${Math.round(tdee)} kcal</div><div style="font-size:0.6rem; color:var(--text-tertiary);">TDEE</div></div>
-                        <div style="background:var(--bg-card-alt); padding:0.5rem; border-radius:var(--radius-sm); text-align:center;"><div style="font-weight:700; font-size:1rem; color:var(--orange);">${macros.calorias} kcal</div><div style="font-size:0.6rem; color:var(--text-tertiary);">Objetivo diario</div></div>
-                    </div>
-                    <div class="macro-recommendation" style="margin-top:0.8rem;">
-                        <div class="macro-item"><div class="macro-value" style="color:var(--accent);">${macros.proteinG} g</div><div class="macro-label">Proteína</div></div>
-                        <div class="macro-item"><div class="macro-value" style="color:var(--orange);">${macros.carbG} g</div><div class="macro-label">Carbohidratos</div></div>
-                        <div class="macro-item"><div class="macro-value" style="color:var(--green);">${macros.fatG} g</div><div class="macro-label">Grasa</div></div>
-                    </div>
-                </div>
-                <div id="editProfileContainer" style="margin-top:1.5rem;"></div>
-            </div>
-        `;
-        document.getElementById('editProfileBtn').addEventListener('click', () => mostrarFormularioEdicion(perfil));
-    }
+// ============================================================
+// FUNCIONES DE PERFIL (Mifflin-St Jeor)
+// ============================================================
+function calcularBMR(sexo, peso, altura, edad) {
+    return sexo === 'hombre' ? (10 * peso) + (6.25 * altura) - (5 * edad) + 5 : (10 * peso) + (6.25 * altura) - (5 * edad) - 161;
+}
+function calcularTDEE(bmr, factor) { return bmr * factor; }
+function ajustarCalorias(tdee, objetivo) {
+    if (objetivo === 'perder') return tdee * 0.8;
+    if (objetivo === 'aumentar') return tdee * 1.15;
+    return tdee;
+}
+function recomendarMacros(calorias, peso, carbsFijos = 25) {
+    const proteinG = Math.round(peso * 1.6);
+    const proteinCal = proteinG * 4;
+    const carbCal = carbsFijos * 4;
+    const fatCal = calorias - proteinCal - carbCal;
+    const fatG = Math.round(fatCal / 9);
+    return { proteinG, carbG: carbsFijos, fatG: Math.max(0, fatG), calorias: Math.round(calorias) };
+}
 
-    function mostrarFormularioEdicion(perfil) {
-        const container = document.getElementById('editProfileContainer');
-        if (!container) return;
-        if (container.innerHTML !== '') { container.innerHTML = ''; return; }
-        container.innerHTML = `
-            <div class="profile-form-edit">
-                <h4 style="margin-bottom:0.8rem;">Editar perfil</h4>
-                <form id="editProfileForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="sexo_edit">Sexo</label>
-                            <div class="select-container"><select id="sexo_edit" name="sexo" required>
-                                <option value="hombre" ${perfil.sexo==='hombre'?'selected':''}>Hombre</option>
-                                <option value="mujer" ${perfil.sexo==='mujer'?'selected':''}>Mujer</option>
-                            </select></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="edad_edit">Edad (años)</label>
-                            <input type="number" id="edad_edit" name="edad" min="10" max="120" value="${perfil.edad}" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="peso_edit">Peso (kg)</label>
-                            <input type="number" id="peso_edit" name="peso" min="20" max="300" step="0.5" value="${perfil.peso}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="altura_edit">Altura (cm)</label>
-                            <input type="number" id="altura_edit" name="altura" min="100" max="250" value="${perfil.altura}" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="actividad_edit">Nivel de actividad</label>
-                            <div class="select-container"><select id="actividad_edit" name="actividad" required>
-                                <option value="1.2" ${perfil.actividad===1.2?'selected':''}>Sedentario</option>
-                                <option value="1.375" ${perfil.actividad===1.375?'selected':''}>Ligero</option>
-                                <option value="1.55" ${perfil.actividad===1.55?'selected':''}>Moderado</option>
-                                <option value="1.725" ${perfil.actividad===1.725?'selected':''}>Activo</option>
-                                <option value="1.9" ${perfil.actividad===1.9?'selected':''}>Muy activo</option>
-                            </select></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="objetivo_edit">Objetivo</label>
-                            <div class="select-container"><select id="objetivo_edit" name="objetivo" required>
-                                <option value="perder" ${perfil.objetivo==='perder'?'selected':''}>Perder peso</option>
-                                <option value="mantener" ${perfil.objetivo==='mantener'?'selected':''}>Mantener peso</option>
-                                <option value="aumentar" ${perfil.objetivo==='aumentar'?'selected':''}>Aumentar peso</option>
-                            </select></div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-update-profile">Actualizar perfil</button>
-                </form>
-            </div>
-        `;
-        document.getElementById('editProfileForm').addEventListener('submit', actualizarPerfil);
-    }
-
-    // ============================================================
-    // RENDER ANÁLISIS (con gráficos de macros)
-    // ============================================================
-    function renderAnalisis(perfil) {
-        const container = document.getElementById('analisisContainer');
-        if (!perfil) perfil = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
-        if (!perfil) {
-            container.innerHTML = `<div class="empty-state"><div class="empty-state-title">Configura tu perfil</div><div class="empty-state-text">Ve a la pestaña Perfil para configurar tus datos.</div></div>`;
-            return;
-        }
-        const bmr = calcularBMR(perfil.sexo, perfil.peso, perfil.altura, perfil.edad);
-        const tdee = calcularTDEE(bmr, perfil.actividad);
-        const caloriasObj = ajustarCalorias(tdee, perfil.objetivo);
-        const macros = recomendarMacros(caloriasObj, perfil.peso);
-        const proteinPercent = (macros.proteinG * 4) / macros.calorias * 100;
-        const carbPercent = (macros.carbG * 4) / macros.calorias * 100;
-        const fatPercent = (macros.fatG * 9) / macros.calorias * 100;
-        const semana = planner.getLastWeek();
-        const scale = planner.getScaleFactor();
-        let comparisonHtml = '';
-        if (semana && semana.length > 0) {
-            const menuStats = planner.analyzeWeek(semana);
-            const scaledAvgK = Math.round(menuStats.avgK * scale);
-            const scaledAvgP = Math.round(menuStats.avgP * scale);
-            const scaledAvgC = Math.round(menuStats.avgC * scale);
-            const scaledAvgG = Math.round(menuStats.avgG * scale);
-            const diffKcal = scaledAvgK - macros.calorias;
-            const diffP = scaledAvgP - macros.proteinG;
-            const diffC = scaledAvgC - macros.carbG;
-            const diffF = scaledAvgG - macros.fatG;
-            let statusClass = 'success', statusText = 'Tu menú ajustado se acerca perfectamente a tus necesidades.';
-            if (Math.abs(diffKcal) > 100) { statusClass = 'warning'; statusText = 'Tu menú ajustado tiene una ligera desviación.'; }
-            if (Math.abs(diffKcal) > 250) { statusClass = 'danger'; statusText = 'Tu menú ajustado está muy desviado.'; }
-            comparisonHtml = `
-                <div class="comparison-box ${statusClass}">
-                    <strong>Comparativa con tu menú ajustado (x${scale.toFixed(2)}):</strong>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.3rem; margin-top:0.3rem; font-size:0.8rem;">
-                        <span>Calorías: <strong>${scaledAvgK} kcal</strong> (${diffKcal > 0 ? '+' : ''}${Math.round(diffKcal)})</span>
-                        <span>Proteína: <strong>${scaledAvgP}g</strong> (${diffP > 0 ? '+' : ''}${Math.round(diffP)})</span>
-                        <span>Carbos: <strong>${scaledAvgC}g</strong> (${diffC > 0 ? '+' : ''}${Math.round(diffC)})</span>
-                        <span>Grasa: <strong>${scaledAvgG}g</strong> (${diffF > 0 ? '+' : ''}${Math.round(diffF)})</span>
-                    </div>
-                    <p style="margin-top:0.3rem; font-size:0.85rem;">${statusText}</p>
-                    
-                </div>
-            `;
-        } else {
-            comparisonHtml = `<div class="comparison-box" style="border-left-color:var(--text-tertiary);">Genera un menú para ver cómo se ajusta a tus necesidades.</div>`;
-        }
-        let ratio = (macros.fatG * 9) / macros.calorias * 100;
-        let badgeClass = 'optimal', badgeText = 'Óptimo';
-        if (ratio < 65) { badgeClass = 'warning'; badgeText = 'Bajo'; } else if (ratio < 75) { badgeClass = 'good'; badgeText = 'Bueno'; } else if (ratio > 85) { badgeClass = 'bad'; badgeText = 'Alto'; }
-        container.innerHTML = `
-            <div class="ratio-card">
-                <div class="label">Ratio Keto (recomendado)</div>
-                <div class="value">${ratio.toFixed(1)}<span class="percent">%</span></div>
-                <div class="sub">Grasa / <strong>Calorías totales</strong></div>
-                <span class="badge ${badgeClass}">${badgeText}</span>
-            </div>
-            <div class="macro-chart">
-                <div class="macro-chart-title">Distribución de macronutrientes (% calorías)</div>
-                <div class="macro-bar"><span class="label">Grasa</span><div class="bar-track"><div class="bar-fill fat" style="width:${fatPercent}%;"></div></div><span class="percentage">${fatPercent.toFixed(1)}%</span></div>
-                <div class="macro-bar"><span class="label">Proteína</span><div class="bar-track"><div class="bar-fill protein" style="width:${proteinPercent}%;"></div></div><span class="percentage">${proteinPercent.toFixed(1)}%</span></div>
-                <div class="macro-bar"><span class="label">Carbos</span><div class="bar-track"><div class="bar-fill carbs" style="width:${carbPercent}%;"></div></div><span class="percentage">${carbPercent.toFixed(1)}%</span></div>
-            </div>
-            <div style="margin-bottom:1rem;">
-                <div style="font-size:0.9rem; font-weight:600; margin-bottom:0.3rem;">Tus macros recomendados</div>
-                <div class="macro-recommendation">
-                    <div class="macro-item"><div class="macro-value" style="color:var(--accent);">${macros.proteinG} g</div><div class="macro-label">Proteína (${Math.round((macros.proteinG*4)/macros.calorias*100)}%)</div></div>
-                    <div class="macro-item"><div class="macro-value" style="color:var(--orange);">${macros.carbG} g</div><div class="macro-label">Carbohidratos (${Math.round((macros.carbG*4)/macros.calorias*100)}%)</div></div>
-                    <div class="macro-item"><div class="macro-value" style="color:var(--green);">${macros.fatG} g</div><div class="macro-label">Grasa (${Math.round((macros.fatG*9)/macros.calorias*100)}%)</div></div>
-                </div>
-            </div>
-            ${comparisonHtml}
-        `;
-    }
-
-    // ============================================================
-    // RENDER MENÚ (con escalado de macros e ingredientes)
-    // ============================================================
-    function renderMenu(semana, scaleFactor) {
-        const grid = document.getElementById('weekGrid');
-        const scale = scaleFactor || planner.getScaleFactor() || 1.0;
-        let html = '';
-        for (const d of semana) {
-            const divScore = d.diversity ? d.diversity.score : 0;
-            let badgeClass = 'bad', badgeText = 'Repetido ' + divScore + '%';
-            if (divScore > 70) { badgeClass = 'good'; badgeText = 'Diverso ' + divScore + '%'; } else if (divScore > 40) { badgeClass = 'warning'; badgeText = 'Mejorable ' + divScore + '%'; }
-            const platos = [
-                { tipo: 'desayuno', label: 'Desayuno', dot: 'dot-bfast', plato: d.desayuno },
-                { tipo: 'p1c', label: '1º Comida', dot: 'dot-lunch1', plato: d.p1c },
-                { tipo: 'p2c', label: '2º Comida', dot: 'dot-lunch2', plato: d.p2c },
-                { tipo: 'c1', label: '1º Cena', dot: 'dot-dinner1', plato: d.c1 },
-                { tipo: 'c2', label: '2º Cena', dot: 'dot-dinner2', plato: d.c2 }
-            ];
-            const sK = Math.round(d.total.kcal * scale);
-            const sP = Math.round(d.total.p * scale);
-            const sC = Math.round(d.total.c * scale);
-            const sG = Math.round(d.total.g * scale);
-            html += `<div class="day-card"><div class="day-card-header"><span class="day-name">${d.dia.nombre}</span>${scale !== 1.0 ? `<span class="scale-badge"></span>` : ''}</div><div class="day-body">`;
-            for (const p of platos) {
-                const sk = Math.round(p.plato.kcal * scale);
-                const sp = Math.round(p.plato.p * scale);
-                const sc = Math.round(p.plato.c * scale);
-                const sg = Math.round(p.plato.g * scale);
-                html += `<div class="meal-group" onclick="mostrarReceta(${JSON.stringify(p.plato).replace(/"/g, '&quot;')}, '${p.tipo}')" role="button" tabindex="0" aria-label="Ver receta de ${p.plato.nombre}">
-                    <div class="meal-label"><span class="dot ${p.dot}"></span>${p.label}</div>
-                    <div class="meal-name">${p.plato.nombre}</div>
-                    <div class="meal-macros">${sk} kcal · ${sg}g · ${sc}g · ${sp}g</div>
-                </div>`;
+// ============================================================
+// ESCALADO DE INGREDIENTES (factor global, sin tocar carbos)
+// ============================================================
+function escalarIngredientes(ingredientes, factor, keepCarbs = true) {
+    if (!ingredientes || factor === 1.0) return ingredientes;
+    // Si keepCarbs es true, no escalamos los ingredientes que aportan carbohidratos
+    // Para simplificar, escalamos todo pero luego ajustaremos grasas separadamente
+    return ingredientes.map(item => {
+        const regex = /(\d+\.?\d*)/g;
+        const parts = item.split(regex);
+        const newParts = parts.map((part, index) => {
+            if (index % 2 === 1) {
+                const num = parseFloat(part);
+                if (!isNaN(num)) return Math.round(num * factor).toString();
             }
-            html += `<div class="day-summary"><span>Kcal <strong>${sK}</strong></span><span>G <strong>${sG}g</strong></span><span>C <strong>${sC}g</strong></span><span>P <strong>${sP}g</strong></span><span class="diversity-badge ${badgeClass}">${badgeText}</span></div></div></div>`;
-        }
-        grid.innerHTML = html;
-        document.querySelectorAll('.meal-group[role="button"]').forEach(el => {
-            el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } });
+            return part;
         });
-        const total = semana.length;
-        actualizarDots(total);
-        currentSlide = 0;
-        setTimeout(() => {
-            initMobileNav();
-            const wrapper = document.getElementById('weekGridWrapper');
-            if (wrapper) { const first = wrapper.querySelector('.day-card'); if (first) first.scrollIntoView({ block: 'nearest', inline: 'center' }); }
-        }, 100);
-    }
-
-    // ============================================================
-    // UTILIDADES (contador, dots, navegación móvil, tabs)
-    // ============================================================
-    function actualizarContador() {
-        const count = planner.semanaActual ? 1 : 0;
-        const el = document.querySelector('#weeksCountLanding');
-        if (el) el.textContent = count;
-    }
-
-    function cargarUltimoMenu() {
-        const semana = planner.getLastWeek();
-        const scale = planner.getScaleFactor();
-        if (semana) { renderMenu(semana, scale); actualizarDots(semana.length); }
-    }
-
-    let currentSlide = 0, totalSlides = 7;
-
-    function actualizarDots(total) {
-        totalSlides = total || 7;
-        const dots = document.getElementById('weekDots');
-        if (!dots) return;
-        dots.innerHTML = '';
-        for (let i = 0; i < totalSlides; i++) {
-            const dot = document.createElement('button');
-            dot.className = 'dot' + (i === currentSlide ? ' active' : '');
-            dot.setAttribute('aria-label', `Día ${i+1}`);
-            dot.addEventListener('click', () => irASlide(i));
-            dots.appendChild(dot);
-        }
-    }
-
-    function irASlide(index) {
-        const wrapper = document.getElementById('weekGridWrapper');
-        if (!wrapper) return;
-        const cards = wrapper.querySelectorAll('.day-card');
-        if (!cards.length || index < 0 || index >= cards.length) return;
-        currentSlide = index;
-        cards[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        const dots = document.querySelectorAll('#weekDots .dot');
-        dots.forEach((d, i) => d.classList.toggle('active', i === index));
-    }
-
-    function initMobileNav() {
-        const wrapper = document.getElementById('weekGridWrapper');
-        if (!wrapper) return;
-        wrapper.addEventListener('scroll', () => {
-            const cards = wrapper.querySelectorAll('.day-card');
-            if (!cards.length) return;
-            let closest = 0, minDist = Infinity;
-            const wrapperRect = wrapper.getBoundingClientRect();
-            const wrapperCenter = wrapperRect.left + wrapperRect.width / 2;
-            cards.forEach((card, i) => {
-                const rect = card.getBoundingClientRect();
-                const center = rect.left + rect.width / 2;
-                const dist = Math.abs(center - wrapperCenter);
-                if (dist < minDist) { minDist = dist; closest = i; }
-            });
-            if (closest !== currentSlide) {
-                currentSlide = closest;
-                document.querySelectorAll('#weekDots .dot').forEach((d, i) => d.classList.toggle('active', i === closest));
-            }
-        });
-    }
-
-    function activarTab(tabId) {
-        document.querySelectorAll('.tab-btn').forEach(b => {
-            const active = b.dataset.tab === tabId;
-            b.classList.toggle('active', active);
-            b.setAttribute('aria-selected', active);
-        });
-        document.querySelectorAll('.tab-content').forEach(c => {
-            c.classList.toggle('active', c.id === 'tab-' + tabId);
-        });
-    }
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const tabId = this.dataset.tab;
-            activarTab(tabId);
-            if (tabId === 'analisis') renderAnalisis(JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY)));
-            else if (tabId === 'perfil') renderPerfil();
-        });
+        return newParts.join('');
     });
+}
 
-    // ============================================================
-    // ACCIONES PRINCIPALES
-    // ============================================================
-    async function generarMenu() {
+// ============================================================
+// CLASE KETO PLANNER (con ajuste de grasas para alcanzar calorías)
+// ============================================================
+class KetoPlanner {
+    constructor() {
+        this.semanaActual = null;
+        this.scaleFactor = 1.0;
+        this.loadFromStorage();
+    }
+    loadFromStorage() {
         try {
-            const perfil = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
-            if (!perfil) { showToast('Primero debes configurar tu perfil.', 'warning'); mostrarPerfilSetup(); return; }
-            const result = planner.generateWeek(perfil);
-            if (!result) { showToast('Error al generar el menú.', 'error'); return; }
-            renderMenu(result.semana, result.scaleFactor);
-            renderAnalisis(perfil);
-            renderPerfil(perfil);
-            actualizarContador();
-            let totalDiv = 0;
-            for (const day of result.semana) totalDiv += day.diversity.score;
-            const avgDiv = Math.round(totalDiv / result.semana.length);
-            showToast(`Menú generado (ajuste x${result.scaleFactor.toFixed(2)}) con diversidad ${avgDiv}%`, 'success');
-        } catch (e) { console.error(e); showToast('Error al generar el menú.', 'error'); }
-    }
-
-    async function limpiarTodo() {
-        const confirmed = await alertSystem.showConfirm({
-            title: 'Limpiar todo',
-            message: '¿Eliminar permanentemente el menú actual?',
-            confirmText: 'Sí',
-            cancelText: 'Cancelar',
-            type: 'danger'
-        });
-        if (confirmed) {
-            try {
-                planner.clearAll();
-                actualizarContador();
-                document.getElementById('weekGrid').innerHTML = `<div class="empty-state"><div class="empty-state-title">Genera tu menú</div><div class="empty-state-text">Pulsa "Generar" para comenzar</div></div>`;
-                document.getElementById('weekDots').innerHTML = '';
-                const perfil = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
-                if (perfil) { renderAnalisis(perfil); renderPerfil(perfil); }
-                showToast('Todo ha sido limpiado correctamente.', 'success');
-            } catch (e) { showToast('Error al limpiar.', 'error'); }
+            const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                this.semanaActual = parsed.semana || null;
+                this.scaleFactor = parsed.scaleFactor || 1.0;
+            }
+        } catch (e) {
+            console.error(e);
+            this.semanaActual = null;
+            this.scaleFactor = 1.0;
         }
     }
-
-    // ============================================================
-    // EVENTOS INICIALES
-    // ============================================================
-    document.getElementById('entrarBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        const perfil = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
-        if (perfil) entrarApp(perfil);
-        else mostrarPerfilSetup();
-    });
-    document.getElementById('salirBtn').addEventListener('click', salirApp);
-    document.getElementById('btnGenerar').addEventListener('click', generarMenu);
-    document.getElementById('clearAllBtn').addEventListener('click', limpiarTodo);
-    document.getElementById('profileForm').addEventListener('submit', guardarPerfil);
-    window.mostrarReceta = mostrarReceta;
-
-    // ============================================================
-    // INIT
-    // ============================================================
-    actualizarContador();
-    console.log('Keto Planner con factor de ajuste fijo (perder=1.0, mantener=1.25, aumentar=1.5)');
-    const perfilExistente = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
-    if (perfilExistente) {
-        const semana = planner.getLastWeek();
-        if (semana) { renderMenu(semana, planner.getScaleFactor()); actualizarDots(semana.length); }
-        renderPerfil(perfilExistente);
-        renderAnalisis(perfilExistente);
+    saveToStorage() {
+        try {
+            localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify({
+                semana: this.semanaActual,
+                scaleFactor: this.scaleFactor
+            }));
+        } catch (e) {
+            console.error(e);
+        }
     }
+    generateWeek(perfil) {
+        if (!perfil) return null;
+        const bmr = calcularBMR(perfil.sexo, perfil.peso, perfil.altura, perfil.edad);
+        const tdee = calcularTDEE(bmr, perfil.actividad);
+        const targetCal = ajustarCalorias(tdee, perfil.objetivo);
+
+        // Factor global según tabla (objetivo + actividad)
+        const factorMap = {
+            'perder': { '1.2': 0.8, '1.375': 0.9, '1.55': 1.0, '1.725': 1.1, '1.9': 1.2 },
+            'mantener': { '1.2': 0.9, '1.375': 1.0, '1.55': 1.1, '1.725': 1.2, '1.9': 1.3 },
+            'aumentar': { '1.2': 1.0, '1.375': 1.1, '1.55': 1.2, '1.725': 1.3, '1.9': 1.4 }
+        };
+        const actividadKey = perfil.actividad.toString();
+        let globalFactor = 1.0;
+        if (factorMap[perfil.objetivo] && factorMap[perfil.objetivo][actividadKey] !== undefined) {
+            globalFactor = factorMap[perfil.objetivo][actividadKey];
+        }
+        this.scaleFactor = globalFactor;
+
+        let semana = [];
+        let diversityScores = [];
+        const platosUsadosSemana = [];
+
+        let poolDesayunos = DESAYUNOS;
+        if (perfil.objetivo === 'perder') poolDesayunos = DESAYUNOS_LIGEROS;
+
+        // Primero seleccionamos los platos sin escalar
+        const diasSeleccionados = [];
+        for (let i = 0; i < 7; i++) {
+            const dia = AdvancedSelector.seleccionarDiaCompletoConMemoriaSemanal(
+                poolDesayunos,
+                PRIMEROS_COMIDA,
+                SEGUNDOS_COMIDA,
+                PRIMEROS_CENA,
+                SEGUNDOS_CENA,
+                platosUsadosSemana
+            );
+            platosUsadosSemana.push(dia.desayuno.nombre, dia.p1.nombre, dia.p2.nombre, dia.c1.nombre, dia.c2.nombre);
+            diasSeleccionados.push(dia);
+        }
+
+        // Ahora procesamos cada día con factor global + ajuste de grasa
+        for (let i = 0; i < 7; i++) {
+            const dia = diasSeleccionados[i];
+            const calcularPlato = (plato) => {
+                const macros = calcularMacros(plato.ingredientes);
+                return { ...plato, kcal: macros.kcal, g: macros.g, c: macros.c, p: macros.p };
+            };
+            // Calcular macros base (sin escalar)
+            const d = calcularPlato(dia.desayuno);
+            const p1 = calcularPlato(dia.p1);
+            const p2 = calcularPlato(dia.p2);
+            const c1 = calcularPlato(dia.c1);
+            const c2 = calcularPlato(dia.c2);
+
+            // Aplicar factor global a las cantidades (escalamos ingredientes)
+            const escalarPlatoGlobal = (plato) => {
+                const ingEscalados = escalarIngredientes(plato.ingredientes, globalFactor);
+                const macrosEsc = calcularMacros(ingEscalados);
+                return { ...plato, ingredientes: ingEscalados, kcal: macrosEsc.kcal, g: macrosEsc.g, c: macrosEsc.c, p: macrosEsc.p };
+            };
+            let dEsc = escalarPlatoGlobal(d);
+            let p1Esc = escalarPlatoGlobal(p1);
+            let p2Esc = escalarPlatoGlobal(p2);
+            let c1Esc = escalarPlatoGlobal(c1);
+            let c2Esc = escalarPlatoGlobal(c2);
+
+            // Calcular total del día después del factor global
+            let diaK = dEsc.kcal + p1Esc.kcal + p2Esc.kcal + c1Esc.kcal + c2Esc.kcal;
+            let diaP = dEsc.p + p1Esc.p + p2Esc.p + c1Esc.p + c2Esc.p;
+            let diaC = dEsc.c + p1Esc.c + p2Esc.c + c1Esc.c + c2Esc.c;
+            let diaG = dEsc.g + p1Esc.g + p2Esc.g + c1Esc.g + c2Esc.g;
+
+            // ============================================================
+            // AJUSTE DE GRASAS PARA ALCANZAR EL OBJETIVO CALÓRICO
+            // ============================================================
+            let deltaCal = targetCal - diaK;
+            // Si falta grasa, añadir aceite de oliva (100% grasa)
+            // Si sobra, reducir grasa (quitando aceite o mantequilla)
+            const platosDelDia = [dEsc, p1Esc, p2Esc, c1Esc, c2Esc];
+            let fatAdjustment = 0;
+            if (Math.abs(deltaCal) > 50) {
+                // Añadir o quitar grasa de forma distribuida
+                const fatCalPerGram = 9;
+                const fatGramsToAdjust = deltaCal / fatCalPerGram;
+                // Redondear a múltiplos de 5g para no ser demasiado preciso
+                const adjustedFatG = Math.round(fatGramsToAdjust / 5) * 5;
+                if (adjustedFatG !== 0) {
+                    // Buscar un plato que tenga aceite o mantequilla para modificar
+                    let modified = false;
+                    for (let plato of platosDelDia) {
+                        // Buscar ingredientes de grasa pura
+                        const idx = plato.ingredientes.findIndex(ing => 
+                            ing.includes('aceite') || ing.includes('mantequilla') || ing.includes('nata')
+                        );
+                        if (idx !== -1) {
+                            const ing = plato.ingredientes[idx];
+                            const regex = /(\d+\.?\d*)/;
+                            const match = ing.match(regex);
+                            if (match) {
+                                const currentAmount = parseFloat(match[1]);
+                                let newAmount = currentAmount + adjustedFatG;
+                                if (newAmount < 0) newAmount = 0;
+                                const newIng = ing.replace(regex, Math.round(newAmount).toString());
+                                plato.ingredientes[idx] = newIng;
+                                // Recalcular macros del plato
+                                const newMacros = calcularMacros(plato.ingredientes);
+                                plato.kcal = newMacros.kcal;
+                                plato.g = newMacros.g;
+                                plato.c = newMacros.c;
+                                plato.p = newMacros.p;
+                                modified = true;
+                                break;
+                            }
+                        }
+                    }
+                    // Si no hay ingrediente de grasa pura, añadir aceite al primer plato (desayuno)
+                    if (!modified && platosDelDia.length > 0) {
+                        const plato = platosDelDia[0];
+                        const newIng = `${Math.round(Math.max(0, adjustedFatG))}ml aceite de oliva`;
+                        plato.ingredientes.push(newIng);
+                        const newMacros = calcularMacros(plato.ingredientes);
+                        plato.kcal = newMacros.kcal;
+                        plato.g = newMacros.g;
+                        plato.c = newMacros.c;
+                        plato.p = newMacros.p;
+                    }
+                    // Recalcular totales del día
+                    diaK = platosDelDia.reduce((sum, p) => sum + p.kcal, 0);
+                    diaP = platosDelDia.reduce((sum, p) => sum + p.p, 0);
+                    diaC = platosDelDia.reduce((sum, p) => sum + p.c, 0);
+                    diaG = platosDelDia.reduce((sum, p) => sum + p.g, 0);
+                }
+            }
+
+            // Reasignar platos escalados
+            dEsc = platosDelDia[0];
+            p1Esc = platosDelDia[1];
+            p2Esc = platosDelDia[2];
+            c1Esc = platosDelDia[3];
+            c2Esc = platosDelDia[4];
+
+            // Calcular diversidad
+            const dayMeals = [dEsc, p1Esc, p2Esc, c1Esc, c2Esc];
+            const diversity = AdvancedSelector.analyzeDayDiversity(dayMeals);
+            diversityScores.push(diversity.score);
+
+            semana.push({
+                dia: DIAS[i],
+                desayuno: dEsc,
+                p1c: p1Esc,
+                p2c: p2Esc,
+                c1: c1Esc,
+                c2: c2Esc,
+                total: { kcal: diaK, p: diaP, c: diaC, g: diaG },
+                diversity: diversity,
+                factor: globalFactor,
+                ingredientesUsados: dia.ingredientesUsados || []
+            });
+        }
+
+        this.semanaActual = semana;
+        this.saveToStorage();
+
+        const avgDiversity = Math.round(diversityScores.reduce((a, b) => a + b, 0) / diversityScores.length);
+        const avgK = Math.round(semana.reduce((s, d) => s + d.total.kcal, 0) / 7);
+        const avgP = Math.round(semana.reduce((s, d) => s + d.total.p, 0) / 7);
+        const avgC = Math.round(semana.reduce((s, d) => s + d.total.c, 0) / 7);
+        const avgG = Math.round(semana.reduce((s, d) => s + d.total.g, 0) / 7);
+
+        return {
+            semana: semana,
+            stats: { kcal: avgK, p: avgP, c: avgC, g: avgG, diversity: avgDiversity },
+            scaleFactor: globalFactor,
+            targetCal: Math.round(targetCal)
+        };
+    }
+    clearAll() {
+        this.semanaActual = null;
+        this.scaleFactor = 1.0;
+        this.saveToStorage();
+    }
+    getLastWeek() {
+        return this.semanaActual;
+    }
+    getScaleFactor() {
+        return this.scaleFactor;
+    }
+    analyzeWeek(semana) {
+        if (!semana) return null;
+        const allMeals = semana.flatMap(d => [d.desayuno, d.p1c, d.p2c, d.c1, d.c2]);
+        const totalK = allMeals.reduce((s, m) => s + m.kcal, 0);
+        const totalP = allMeals.reduce((s, m) => s + m.p, 0);
+        const totalC = allMeals.reduce((s, m) => s + m.c, 0);
+        const totalG = allMeals.reduce((s, m) => s + m.g, 0);
+        const avgK = Math.round(totalK / 7);
+        const avgP = Math.round(totalP / 7);
+        const avgC = Math.round(totalC / 7);
+        const avgG = Math.round(totalG / 7);
+        const ratio = (avgG / (avgP + avgC)) * 100;
+        return { avgK, avgP, avgC, avgG, ratio: Math.round(ratio * 10) / 10, totalK, totalP, totalC, totalG, meals: allMeals };
+    }
+}
+
+// ============================================================
+// INSTANCIA
+// ============================================================
+const planner = new KetoPlanner();
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, type = 'info', dur = 3000) {
+    const titles = { success: 'Éxito', error: 'Error', warning: 'Advertencia', info: 'Información' };
+    return alertSystem.showToast({ message: msg, title: titles[type] || '', type, duration: dur });
+}
+
+// ============================================================
+// MODAL DE RECETA
+// ============================================================
+function mostrarReceta(plato, tipo) {
+    if (document.querySelector('.recipe-modal-overlay')) return;
+    const container = document.getElementById('recipeModalContainer');
+    const scale = planner.getScaleFactor();
+    const scaledKcal = plato.kcal;
+    const scaledP = plato.p;
+    const scaledC = plato.c;
+    const scaledG = plato.g;
+    const ingredientesEscalados = plato.ingredientes;
+    const tipoNombres = { 'desayuno': 'Desayuno', 'p1c': '1º Comida', 'p2c': '2º Comida', 'c1': '1º Cena', 'c2': '2º Cena' };
+    const tipoDisplay = tipoNombres[tipo] || tipo;
+    const modal = document.createElement('div');
+    modal.className = 'recipe-modal-overlay';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.innerHTML = `
+        <div class="recipe-modal">
+            <button class="recipe-modal-close" aria-label="Cerrar receta">&times;</button>
+            <div class="recipe-modal-type">${tipoDisplay}</div>
+            <div class="recipe-modal-title">${plato.nombre}${scale !== 1.0 ? `<span class="scale-indicator"> (x${scale.toFixed(2)})</span>` : ''}</div>
+            <div class="recipe-modal-macros">
+                <span><strong>${scaledKcal}</strong> kcal</span>
+                <span><strong>${scaledP}</strong>g proteína</span>
+                <span><strong>${scaledC}</strong>g carbos</span>
+                <span><strong>${scaledG}</strong>g grasa</span>
+            </div>
+            ${plato.descripcion ? `<div class="recipe-modal-section"><div class="recipe-modal-section-title">Descripción</div><div class="recipe-modal-description">${plato.descripcion}</div></div>` : ''}
+            ${ingredientesEscalados && ingredientesEscalados.length > 0 ? `
+                <div class="recipe-modal-section"><div class="recipe-modal-section-title">Ingredientes (ajustados)</div><ul class="recipe-modal-ingredients">${ingredientesEscalados.map(i => `<li>${i}</li>`).join('')}</ul></div>
+            ` : ''}
+            <div class="recipe-modal-footer">
+                ${plato.tiempo ? `<span>⏱ ${plato.tiempo} min</span>` : ''}
+                ${plato.dificultad ? `<span>Dificultad: ${plato.dificultad}</span>` : ''}
+            </div>
+        </div>
+    `;
+    container.appendChild(modal);
+    const close = modal.querySelector('.recipe-modal-close');
+    close.addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { modal.remove(); document.removeEventListener('keydown', arguments.callee); } });
+    setTimeout(() => close.focus(), 100);
+}
+
+// ============================================================
+// NAVEGACIÓN Y RENDERIZADO
+// ============================================================
+function mostrarPerfilSetup() {
+    document.getElementById('landingPage').classList.add('hidden');
+    document.getElementById('profileSetup').classList.add('visible');
+    document.getElementById('appContent').classList.remove('visible');
+}
+
+function entrarApp(perfil) {
+    document.getElementById('landingPage').classList.add('hidden');
+    document.getElementById('profileSetup').classList.remove('visible');
+    document.getElementById('appContent').classList.add('visible');
+    cargarUltimoMenu();
+    actualizarContador();
+    activarTab('menu');
+    renderPerfil(perfil);
+    renderAnalisis(perfil);
+    showToast('Toca cualquier plato para ver su receta', 'success');
+}
+
+function salirApp() {
+    document.getElementById('landingPage').classList.remove('hidden');
+    document.getElementById('profileSetup').classList.remove('visible');
+    document.getElementById('appContent').classList.remove('visible');
+}
+
+// ============================================================
+// PERFIL - GUARDAR Y RENDER
+// ============================================================
+function guardarPerfil(e) {
+    e.preventDefault();
+    const form = document.getElementById('profileForm');
+    const fd = new FormData(form);
+    const perfil = {
+        sexo: fd.get('sexo'),
+        edad: parseInt(fd.get('edad')),
+        peso: parseFloat(fd.get('peso')),
+        altura: parseInt(fd.get('altura')),
+        actividad: parseFloat(fd.get('actividad')),
+        objetivo: fd.get('objetivo')
+    };
+    if (!perfil.sexo || isNaN(perfil.edad) || isNaN(perfil.peso) || isNaN(perfil.altura) || isNaN(perfil.actividad) || !perfil.objetivo) {
+        showToast('Completa todos los campos correctamente.', 'error');
+        return;
+    }
+    localStorage.setItem(CONFIG.PROFILE_KEY, JSON.stringify(perfil));
+    showToast('Perfil guardado correctamente.', 'success');
+    entrarApp(perfil);
+}
+
+function actualizarPerfil(e) {
+    e.preventDefault();
+    const form = document.getElementById('editProfileForm');
+    if (!form) return;
+    const fd = new FormData(form);
+    const perfil = {
+        sexo: fd.get('sexo'),
+        edad: parseInt(fd.get('edad')),
+        peso: parseFloat(fd.get('peso')),
+        altura: parseInt(fd.get('altura')),
+        actividad: parseFloat(fd.get('actividad')),
+        objetivo: fd.get('objetivo')
+    };
+    if (!perfil.sexo || isNaN(perfil.edad) || isNaN(perfil.peso) || isNaN(perfil.altura) || isNaN(perfil.actividad) || !perfil.objetivo) {
+        showToast('Completa todos los campos correctamente.', 'error');
+        return;
+    }
+    localStorage.setItem(CONFIG.PROFILE_KEY, JSON.stringify(perfil));
+    showToast('Perfil actualizado. Regenera el menú para aplicar cambios.', 'success');
+    renderPerfil(perfil);
+    if (document.getElementById('tab-analisis').classList.contains('active')) renderAnalisis(perfil);
+}
+
+function renderPerfil(perfil) {
+    const container = document.getElementById('perfilContainer');
+    if (!perfil) perfil = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
+    if (!perfil) {
+        container.innerHTML = `<div class="empty-state"><div class="empty-state-title">No hay perfil configurado</div><div class="empty-state-text">Ve a la pantalla de inicio para configurarlo.</div></div>`;
+        return;
+    }
+    const objetivoTexto = { 'perder': 'Perder peso (déficit 20%)', 'mantener': 'Mantener peso', 'aumentar': 'Aumentar peso (superávit 15%)' };
+    const bmr = calcularBMR(perfil.sexo, perfil.peso, perfil.altura, perfil.edad);
+    const tdee = calcularTDEE(bmr, perfil.actividad);
+    const caloriasObj = ajustarCalorias(tdee, perfil.objetivo);
+    const macros = recomendarMacros(caloriasObj, perfil.peso);
+    container.innerHTML = `
+        <div class="profile-container">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+                <h3 style="font-size:1.1rem;">Datos personales</h3>
+                <button class="edit-profile-btn" id="editProfileBtn">Editar perfil</button>
+            </div>
+            <div class="summary-grid">
+                <div class="summary-item"><div class="value">${perfil.peso} kg</div><div class="label">Peso</div></div>
+                <div class="summary-item"><div class="value">${perfil.altura} cm</div><div class="label">Altura</div></div>
+                <div class="summary-item"><div class="value">${perfil.edad} años</div><div class="label">Edad</div></div>
+                <div class="summary-item"><div class="value">${objetivoTexto[perfil.objetivo]}</div><div class="label">Objetivo</div></div>
+            </div>
+            <div style="margin-top:1.5rem; border-top:1px solid var(--border); padding-top:1.5rem;">
+                <h4 style="font-size:0.9rem; margin-bottom:0.5rem;">Cálculo de necesidades</h4>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem;">
+                    <div style="background:var(--bg-card-alt); padding:0.5rem; border-radius:var(--radius-sm); text-align:center;"><div style="font-weight:700; font-size:1rem; color:var(--accent);">${Math.round(bmr)} kcal</div><div style="font-size:0.6rem; color:var(--text-tertiary);">BMR</div></div>
+                    <div style="background:var(--bg-card-alt); padding:0.5rem; border-radius:var(--radius-sm); text-align:center;"><div style="font-weight:700; font-size:1rem; color:var(--green);">${Math.round(tdee)} kcal</div><div style="font-size:0.6rem; color:var(--text-tertiary);">TDEE</div></div>
+                    <div style="background:var(--bg-card-alt); padding:0.5rem; border-radius:var(--radius-sm); text-align:center;"><div style="font-weight:700; font-size:1rem; color:var(--orange);">${macros.calorias} kcal</div><div style="font-size:0.6rem; color:var(--text-tertiary);">Objetivo diario</div></div>
+                </div>
+                <div class="macro-recommendation" style="margin-top:0.8rem;">
+                    <div class="macro-item"><div class="macro-value" style="color:var(--accent);">${macros.proteinG} g</div><div class="macro-label">Proteína</div></div>
+                    <div class="macro-item"><div class="macro-value" style="color:var(--orange);">${macros.carbG} g</div><div class="macro-label">Carbohidratos</div></div>
+                    <div class="macro-item"><div class="macro-value" style="color:var(--green);">${macros.fatG} g</div><div class="macro-label">Grasa</div></div>
+                </div>
+            </div>
+            <div id="editProfileContainer" style="margin-top:1.5rem;"></div>
+        </div>
+    `;
+    document.getElementById('editProfileBtn').addEventListener('click', () => mostrarFormularioEdicion(perfil));
+}
+
+function mostrarFormularioEdicion(perfil) {
+    const container = document.getElementById('editProfileContainer');
+    if (!container) return;
+    if (container.innerHTML !== '') { container.innerHTML = ''; return; }
+    container.innerHTML = `
+        <div class="profile-form-edit">
+            <h4 style="margin-bottom:0.8rem;">Editar perfil</h4>
+            <form id="editProfileForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sexo_edit">Sexo</label>
+                        <div class="select-container"><select id="sexo_edit" name="sexo" required>
+                            <option value="hombre" ${perfil.sexo==='hombre'?'selected':''}>Hombre</option>
+                            <option value="mujer" ${perfil.sexo==='mujer'?'selected':''}>Mujer</option>
+                        </select></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edad_edit">Edad (años)</label>
+                        <input type="number" id="edad_edit" name="edad" min="10" max="120" value="${perfil.edad}" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="peso_edit">Peso (kg)</label>
+                        <input type="number" id="peso_edit" name="peso" min="20" max="300" step="0.5" value="${perfil.peso}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="altura_edit">Altura (cm)</label>
+                        <input type="number" id="altura_edit" name="altura" min="100" max="250" value="${perfil.altura}" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="actividad_edit">Nivel de actividad</label>
+                        <div class="select-container"><select id="actividad_edit" name="actividad" required>
+                            <option value="1.2" ${perfil.actividad===1.2?'selected':''}>Sedentario</option>
+                            <option value="1.375" ${perfil.actividad===1.375?'selected':''}>Ligero</option>
+                            <option value="1.55" ${perfil.actividad===1.55?'selected':''}>Moderado</option>
+                            <option value="1.725" ${perfil.actividad===1.725?'selected':''}>Activo</option>
+                            <option value="1.9" ${perfil.actividad===1.9?'selected':''}>Muy activo</option>
+                        </select></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="objetivo_edit">Objetivo</label>
+                        <div class="select-container"><select id="objetivo_edit" name="objetivo" required>
+                            <option value="perder" ${perfil.objetivo==='perder'?'selected':''}>Perder peso</option>
+                            <option value="mantener" ${perfil.objetivo==='mantener'?'selected':''}>Mantener peso</option>
+                            <option value="aumentar" ${perfil.objetivo==='aumentar'?'selected':''}>Aumentar peso</option>
+                        </select></div>
+                    </div>
+                </div>
+                <button type="submit" class="btn-update-profile">Actualizar perfil</button>
+            </form>
+        </div>
+    `;
+    document.getElementById('editProfileForm').addEventListener('submit', actualizarPerfil);
+}
+
+// ============================================================
+// RENDER ANÁLISIS (con gráficos de macros)
+// ============================================================
+function renderAnalisis(perfil) {
+    const container = document.getElementById('analisisContainer');
+    if (!perfil) perfil = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
+    if (!perfil) {
+        container.innerHTML = `<div class="empty-state"><div class="empty-state-title">Configura tu perfil</div><div class="empty-state-text">Ve a la pestaña Perfil para configurar tus datos.</div></div>`;
+        return;
+    }
+    const bmr = calcularBMR(perfil.sexo, perfil.peso, perfil.altura, perfil.edad);
+    const tdee = calcularTDEE(bmr, perfil.actividad);
+    const caloriasObj = ajustarCalorias(tdee, perfil.objetivo);
+    const macros = recomendarMacros(caloriasObj, perfil.peso);
+    const proteinPercent = (macros.proteinG * 4) / macros.calorias * 100;
+    const carbPercent = (macros.carbG * 4) / macros.calorias * 100;
+    const fatPercent = (macros.fatG * 9) / macros.calorias * 100;
+    const semana = planner.getLastWeek();
+    const scale = planner.getScaleFactor();
+    let comparisonHtml = '';
+    if (semana && semana.length > 0) {
+        const menuStats = planner.analyzeWeek(semana);
+        const diffKcal = menuStats.avgK - macros.calorias;
+        const diffP = menuStats.avgP - macros.proteinG;
+        const diffC = menuStats.avgC - macros.carbG;
+        const diffF = menuStats.avgG - macros.fatG;
+        let statusClass = 'success', statusText = 'Tu menú se acerca perfectamente a tus necesidades.';
+        if (Math.abs(diffKcal) > 100) { statusClass = 'warning'; statusText = 'Tu menú tiene una ligera desviación.'; }
+        if (Math.abs(diffKcal) > 250) { statusClass = 'danger'; statusText = 'Tu menú está muy desviado.'; }
+        comparisonHtml = `
+            <div class="comparison-box ${statusClass}">
+                <strong>Comparativa con tu menú actual (x${scale.toFixed(2)}):</strong>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.3rem; margin-top:0.3rem; font-size:0.8rem;">
+                    <span>Calorías: <strong>${menuStats.avgK} kcal</strong> (${diffKcal > 0 ? '+' : ''}${Math.round(diffKcal)})</span>
+                    <span>Proteína: <strong>${menuStats.avgP}g</strong> (${diffP > 0 ? '+' : ''}${Math.round(diffP)})</span>
+                    <span>Carbos: <strong>${menuStats.avgC}g</strong> (${diffC > 0 ? '+' : ''}${Math.round(diffC)})</span>
+                    <span>Grasa: <strong>${menuStats.avgG}g</strong> (${diffF > 0 ? '+' : ''}${Math.round(diffF)})</span>
+                </div>
+                <p style="margin-top:0.3rem; font-size:0.85rem;">${statusText}</p>
+            </div>
+        `;
+    } else {
+        comparisonHtml = `<div class="comparison-box" style="border-left-color:var(--text-tertiary);">Genera un menú para ver cómo se ajusta a tus necesidades.</div>`;
+    }
+    let ratio = (macros.fatG * 9) / macros.calorias * 100;
+    let badgeClass = 'optimal', badgeText = 'Óptimo';
+    if (ratio < 65) { badgeClass = 'warning'; badgeText = 'Bajo'; } else if (ratio < 75) { badgeClass = 'good'; badgeText = 'Bueno'; } else if (ratio > 85) { badgeClass = 'bad'; badgeText = 'Alto'; }
+    container.innerHTML = `
+        <div class="ratio-card">
+            <div class="label">Ratio Keto (recomendado)</div>
+            <div class="value">${ratio.toFixed(1)}<span class="percent">%</span></div>
+            <div class="sub">Grasa / <strong>Calorías totales</strong></div>
+            <span class="badge ${badgeClass}">${badgeText}</span>
+        </div>
+        <div class="macro-chart">
+            <div class="macro-chart-title">Distribución de macronutrientes (% calorías)</div>
+            <div class="macro-bar"><span class="label">Grasa</span><div class="bar-track"><div class="bar-fill fat" style="width:${fatPercent}%;"></div></div><span class="percentage">${fatPercent.toFixed(1)}%</span></div>
+            <div class="macro-bar"><span class="label">Proteína</span><div class="bar-track"><div class="bar-fill protein" style="width:${proteinPercent}%;"></div></div><span class="percentage">${proteinPercent.toFixed(1)}%</span></div>
+            <div class="macro-bar"><span class="label">Carbos</span><div class="bar-track"><div class="bar-fill carbs" style="width:${carbPercent}%;"></div></div><span class="percentage">${carbPercent.toFixed(1)}%</span></div>
+        </div>
+        <div style="margin-bottom:1rem;">
+            <div style="font-size:0.9rem; font-weight:600; margin-bottom:0.3rem;">Tus macros recomendados</div>
+            <div class="macro-recommendation">
+                <div class="macro-item"><div class="macro-value" style="color:var(--accent);">${macros.proteinG} g</div><div class="macro-label">Proteína (${Math.round((macros.proteinG*4)/macros.calorias*100)}%)</div></div>
+                <div class="macro-item"><div class="macro-value" style="color:var(--orange);">${macros.carbG} g</div><div class="macro-label">Carbohidratos (${Math.round((macros.carbG*4)/macros.calorias*100)}%)</div></div>
+                <div class="macro-item"><div class="macro-value" style="color:var(--green);">${macros.fatG} g</div><div class="macro-label">Grasa (${Math.round((macros.fatG*9)/macros.calorias*100)}%)</div></div>
+            </div>
+        </div>
+        ${comparisonHtml}
+    `;
+}
+
+// ============================================================
+// RENDER MENÚ
+// ============================================================
+function renderMenu(semana) {
+    const grid = document.getElementById('weekGrid');
+    const scale = planner.getScaleFactor();
+    let html = '';
+    for (const d of semana) {
+        const divScore = d.diversity ? d.diversity.score : 0;
+        let badgeClass = 'bad', badgeText = 'Repetido ' + divScore + '%';
+        if (divScore > 70) { badgeClass = 'good'; badgeText = 'Diverso ' + divScore + '%'; } else if (divScore > 40) { badgeClass = 'warning'; badgeText = 'Mejorable ' + divScore + '%'; }
+        const platos = [
+            { tipo: 'desayuno', label: 'Desayuno', dot: 'dot-bfast', plato: d.desayuno },
+            { tipo: 'p1c', label: '1º Comida', dot: 'dot-lunch1', plato: d.p1c },
+            { tipo: 'p2c', label: '2º Comida', dot: 'dot-lunch2', plato: d.p2c },
+            { tipo: 'c1', label: '1º Cena', dot: 'dot-dinner1', plato: d.c1 },
+            { tipo: 'c2', label: '2º Cena', dot: 'dot-dinner2', plato: d.c2 }
+        ];
+        const sK = d.total.kcal;
+        const sP = d.total.p;
+        const sC = d.total.c;
+        const sG = d.total.g;
+        html += `<div class="day-card"><div class="day-card-header"><span class="day-name">${d.dia.nombre}</span>${scale !== 1.0 ? `<span class="scale-badge">x${scale.toFixed(2)}</span>` : ''}</div><div class="day-body">`;
+        for (const p of platos) {
+            const sk = p.plato.kcal;
+            const sp = p.plato.p;
+            const sc = p.plato.c;
+            const sg = p.plato.g;
+            html += `<div class="meal-group" onclick="mostrarReceta(${JSON.stringify(p.plato).replace(/"/g, '&quot;')}, '${p.tipo}')" role="button" tabindex="0" aria-label="Ver receta de ${p.plato.nombre}">
+                <div class="meal-label"><span class="dot ${p.dot}"></span>${p.label}</div>
+                <div class="meal-name">${p.plato.nombre}</div>
+                <div class="meal-macros">${sk} kcal · ${sg}g · ${sc}g · ${sp}g</div>
+            </div>`;
+        }
+        html += `<div class="day-summary"><span>Kcal <strong>${sK}</strong></span><span>G <strong>${sG}g</strong></span><span>C <strong>${sC}g</strong></span><span>P <strong>${sP}g</strong></span><span class="diversity-badge ${badgeClass}">${badgeText}</span></div></div></div>`;
+    }
+    grid.innerHTML = html;
+    document.querySelectorAll('.meal-group[role="button"]').forEach(el => {
+        el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } });
+    });
+    const total = semana.length;
+    actualizarDots(total);
+    currentSlide = 0;
+    setTimeout(() => {
+        initMobileNav();
+        const wrapper = document.getElementById('weekGridWrapper');
+        if (wrapper) { const first = wrapper.querySelector('.day-card'); if (first) first.scrollIntoView({ block: 'nearest', inline: 'center' }); }
+    }, 100);
+}
+
+// ============================================================
+// UTILIDADES (contador, dots, navegación móvil, tabs)
+// ============================================================
+function actualizarContador() {
+    const count = planner.semanaActual ? 1 : 0;
+    const el = document.querySelector('#weeksCountLanding');
+    if (el) el.textContent = count;
+}
+
+function cargarUltimoMenu() {
+    const semana = planner.getLastWeek();
+    if (semana) { renderMenu(semana); actualizarDots(semana.length); }
+}
+
+let currentSlide = 0, totalSlides = 7;
+
+function actualizarDots(total) {
+    totalSlides = total || 7;
+    const dots = document.getElementById('weekDots');
+    if (!dots) return;
+    dots.innerHTML = '';
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'dot' + (i === currentSlide ? ' active' : '');
+        dot.setAttribute('aria-label', `Día ${i+1}`);
+        dot.addEventListener('click', () => irASlide(i));
+        dots.appendChild(dot);
+    }
+}
+
+function irASlide(index) {
+    const wrapper = document.getElementById('weekGridWrapper');
+    if (!wrapper) return;
+    const cards = wrapper.querySelectorAll('.day-card');
+    if (!cards.length || index < 0 || index >= cards.length) return;
+    currentSlide = index;
+    cards[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    const dots = document.querySelectorAll('#weekDots .dot');
+    dots.forEach((d, i) => d.classList.toggle('active', i === index));
+}
+
+function initMobileNav() {
+    const wrapper = document.getElementById('weekGridWrapper');
+    if (!wrapper) return;
+    wrapper.addEventListener('scroll', () => {
+        const cards = wrapper.querySelectorAll('.day-card');
+        if (!cards.length) return;
+        let closest = 0, minDist = Infinity;
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const wrapperCenter = wrapperRect.left + wrapperRect.width / 2;
+        cards.forEach((card, i) => {
+            const rect = card.getBoundingClientRect();
+            const center = rect.left + rect.width / 2;
+            const dist = Math.abs(center - wrapperCenter);
+            if (dist < minDist) { minDist = dist; closest = i; }
+        });
+        if (closest !== currentSlide) {
+            currentSlide = closest;
+            document.querySelectorAll('#weekDots .dot').forEach((d, i) => d.classList.toggle('active', i === closest));
+        }
+    });
+}
+
+function activarTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+        const active = b.dataset.tab === tabId;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', active);
+    });
+    document.querySelectorAll('.tab-content').forEach(c => {
+        c.classList.toggle('active', c.id === 'tab-' + tabId);
+    });
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const tabId = this.dataset.tab;
+        activarTab(tabId);
+        if (tabId === 'analisis') renderAnalisis(JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY)));
+        else if (tabId === 'perfil') renderPerfil();
+    });
+});
+
+// ============================================================
+// ACCIONES PRINCIPALES
+// ============================================================
+async function generarMenu() {
+    try {
+        const perfil = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
+        if (!perfil) { showToast('Primero debes configurar tu perfil.', 'warning'); mostrarPerfilSetup(); return; }
+        const result = planner.generateWeek(perfil);
+        if (!result) { showToast('Error al generar el menú.', 'error'); return; }
+        renderMenu(result.semana);
+        renderAnalisis(perfil);
+        renderPerfil(perfil);
+        actualizarContador();
+        let totalDiv = 0;
+        for (const day of result.semana) totalDiv += day.diversity.score;
+        const avgDiv = Math.round(totalDiv / result.semana.length);
+        showToast(`Menú generado (factor ${result.scaleFactor.toFixed(2)}) con ${result.targetCal} kcal/día y diversidad ${avgDiv}%`, 'success');
+    } catch (e) { console.error(e); showToast('Error al generar el menú.', 'error'); }
+}
+
+async function limpiarTodo() {
+    const confirmed = await alertSystem.showConfirm({
+        title: 'Limpiar todo',
+        message: '¿Eliminar permanentemente el menú actual?',
+        confirmText: 'Sí',
+        cancelText: 'Cancelar',
+        type: 'danger'
+    });
+    if (confirmed) {
+        try {
+            planner.clearAll();
+            actualizarContador();
+            document.getElementById('weekGrid').innerHTML = `<div class="empty-state"><div class="empty-state-title">Genera tu menú</div><div class="empty-state-text">Pulsa "Generar" para comenzar</div></div>`;
+            document.getElementById('weekDots').innerHTML = '';
+            const perfil = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
+            if (perfil) { renderAnalisis(perfil); renderPerfil(perfil); }
+            showToast('Todo ha sido limpiado correctamente.', 'success');
+        } catch (e) { showToast('Error al limpiar.', 'error'); }
+    }
+}
+
+// ============================================================
+// EVENTOS INICIALES
+// ============================================================
+document.getElementById('entrarBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const perfil = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
+    if (perfil) entrarApp(perfil);
+    else mostrarPerfilSetup();
+});
+document.getElementById('salirBtn').addEventListener('click', salirApp);
+document.getElementById('btnGenerar').addEventListener('click', generarMenu);
+document.getElementById('clearAllBtn').addEventListener('click', limpiarTodo);
+document.getElementById('profileForm').addEventListener('submit', guardarPerfil);
+window.mostrarReceta = mostrarReceta;
+
+// ============================================================
+// INIT
+// ============================================================
+actualizarContador();
+console.log('Keto Planner con ajuste de grasas para alcanzar objetivo calórico sin aumentar carbos.');
+const perfilExistente = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
+if (perfilExistente) {
+    const semana = planner.getLastWeek();
+    if (semana) { renderMenu(semana); actualizarDots(semana.length); }
+    renderPerfil(perfilExistente);
+    renderAnalisis(perfilExistente);
+}
 </script>
 </body>
 </html>
