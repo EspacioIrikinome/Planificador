@@ -1828,6 +1828,20 @@
                 background: rgba(255, 255, 255, .05);
             }
         }
+	/* Centrar mensaje vacío en móviles */
+@media (max-width: 768px) {
+    .week-grid .empty-state {
+        flex: 0 0 100%;          /* Ocupa todo el ancho del flex */
+        width: 100%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+        margin: 0;
+    }
+}
     </style>
 </head>
 <body>
@@ -2159,7 +2173,7 @@ const NUTRIENTES = {
     'huevos': { kcal: 143, g: 10, c: 0.7, p: 13, porUnidad: 50 },
     'claras': { kcal: 52, g: 0.2, c: 0.7, p: 11, porUnidad: 33 },
     'yema': { kcal: 322, g: 27, c: 0.6, p: 16, porUnidad: 17 },
-    'aguacate': { kcal: 160, g: 15, c: 1.8, p: 2 }, // Corregido a neto
+    'aguacate': { kcal: 160, g: 15, c: 1.8, p: 2 },
     'bacon': { kcal: 541, g: 42, c: 1.2, p: 37 },
     'queso cheddar': { kcal: 404, g: 33, c: 1.3, p: 25 },
     'queso': { kcal: 404, g: 33, c: 1.3, p: 25 },
@@ -2191,102 +2205,101 @@ const NUTRIENTES = {
     'chorizo': { kcal: 455, g: 38, c: 3.3, p: 24 },
     'jamón': { kcal: 145, g: 6, c: 0, p: 21 },
     'jamón serrano': { kcal: 145, g: 6, c: 0, p: 21 },
-    'espinacas': { kcal: 23, g: 0.4, c: 1.4, p: 2.9 }, // Corregido a neto
-    'coliflor': { kcal: 25, g: 0.3, c: 3.0, p: 1.9 }, // Corregido a neto
-    'calabacín': { kcal: 17, g: 0.3, c: 2.1, p: 1.2 }, // Corregido a neto
-    'tomate': { kcal: 18, g: 0.2, c: 2.7, p: 0.9 }, // Corregido a neto
-    'tomates cherry': { kcal: 18, g: 0.2, c: 2.7, p: 0.9 }, // Corregido a neto
-    'lechuga': { kcal: 15, g: 0.2, c: 1.6, p: 1.4 }, // Corregido a neto
-    'rúcula': { kcal: 25, g: 0.7, c: 2.0, p: 2.6 }, // Corregido a neto
-    'setas': { kcal: 22, g: 0.3, c: 2.3, p: 3.1 }, // Corregido a neto
-    'champiñones': { kcal: 22, g: 0.3, c: 2.3, p: 3.1 }, // Corregido a neto
+    'espinacas': { kcal: 23, g: 0.4, c: 1.4, p: 2.9 },
+    'coliflor': { kcal: 25, g: 0.3, c: 3.0, p: 1.9 },
+    'calabacín': { kcal: 17, g: 0.3, c: 2.1, p: 1.2 },
+    'tomate': { kcal: 18, g: 0.2, c: 2.7, p: 0.9 },
+    'tomates cherry': { kcal: 18, g: 0.2, c: 2.7, p: 0.9 },
+    'lechuga': { kcal: 15, g: 0.2, c: 1.6, p: 1.4 },
+    'rúcula': { kcal: 25, g: 0.7, c: 2.0, p: 2.6 },
+    'setas': { kcal: 22, g: 0.3, c: 2.3, p: 3.1 },
+    'champiñones': { kcal: 22, g: 0.3, c: 2.3, p: 3.1 },
     'gambas': { kcal: 85, g: 0.6, c: 0, p: 20 },
-    'nueces': { kcal: 654, g: 65, c: 7.0, p: 15 }, // Corregido a neto
-    'almendras': { kcal: 579, g: 50, c: 10.0, p: 21 }, // Corregido a neto
-    'pimiento': { kcal: 20, g: 0.2, c: 2.9, p: 0.9 }, // Corregido a neto
-    'cebolla': { kcal: 40, g: 0.1, c: 7.9, p: 1.1 }, // Corregido a neto
-    'brócoli': { kcal: 34, g: 0.4, c: 4.0, p: 2.8 }, // Corregido a neto
-    'espárragos': { kcal: 20, g: 0.1, c: 1.8, p: 2.2 }, // Corregido a neto
+    'nueces': { kcal: 654, g: 65, c: 7.0, p: 15 },
+    'almendras': { kcal: 579, g: 50, c: 10.0, p: 21 },
+    'pimiento': { kcal: 20, g: 0.2, c: 2.9, p: 0.9 },
+    'cebolla': { kcal: 40, g: 0.1, c: 7.9, p: 1.1 },
+    'brócoli': { kcal: 34, g: 0.4, c: 4.0, p: 2.8 },
+    'espárragos': { kcal: 20, g: 0.1, c: 1.8, p: 2.2 },
     'caldo de verduras': { kcal: 4, g: 0, c: 0.5, p: 0.5 },
     'caldo': { kcal: 4, g: 0, c: 0.5, p: 0.5 },
-    'fresas': { kcal: 32, g: 0.3, c: 5.7, p: 0.7 }, // Corregido a neto
-    'kale': { kcal: 49, g: 0.9, c: 5.2, p: 4.3 }, // Corregido a neto
-    'remolacha': { kcal: 43, g: 0.2, c: 6.8, p: 1.6 }, // Corregido a neto
-    'pepino': { kcal: 15, g: 0.1, c: 3.1, p: 0.6 }, // Corregido a neto
-    'semillas chía': { kcal: 486, g: 31, c: 8.0, p: 17 }, // Corregido a neto
-    'coco rallado': { kcal: 660, g: 65, c: 7.0, p: 6.9 }, // Corregido a neto
-    'canela': { kcal: 247, g: 1.2, c: 27.0, p: 4 }, // Corregido a neto (alta en fibra)
-    'eneldo': { kcal: 43, g: 1.1, c: 4.9, p: 3.1 }, // Corregido a neto
-    'perejil': { kcal: 36, g: 0.8, c: 3.0, p: 3 }, // Corregido a neto
-    'albahaca': { kcal: 44, g: 0.6, c: 6.6, p: 3.2 }, // Corregido a neto
-    'orégano': { kcal: 265, g: 10, c: 26.0, p: 9 }, // Corregido a neto
-    'tomillo': { kcal: 101, g: 1.7, c: 10.0, p: 5.6 }, // Corregido a neto
-    'romero': { kcal: 131, g: 5.9, c: 6.0, p: 4.9 }, // Corregido a neto
-    'menta': { kcal: 44, g: 0.9, c: 1.6, p: 3.3 }, // Corregido a neto
-    'jengibre': { kcal: 80, g: 0.8, c: 16.0, p: 1.8 }, // Corregido a neto
-    'ajo': { kcal: 149, g: 0.5, c: 31.0, p: 6.4 }, // Corregido a neto
-    'limón': { kcal: 29, g: 0.3, c: 6.5, p: 1.1 }, // Corregido a neto
-    'vinagre balsámico': { kcal: 88, g: 0, c: 17, p: 0.5 }, // Sin fibra (los carbohidratos vienen del azúcar de la uva)
+    'fresas': { kcal: 32, g: 0.3, c: 5.7, p: 0.7 },
+    'kale': { kcal: 49, g: 0.9, c: 5.2, p: 4.3 },
+    'remolacha': { kcal: 43, g: 0.2, c: 6.8, p: 1.6 },
+    'pepino': { kcal: 15, g: 0.1, c: 3.1, p: 0.6 },
+    'semillas chía': { kcal: 486, g: 31, c: 8.0, p: 17 },
+    'coco rallado': { kcal: 660, g: 65, c: 7.0, p: 6.9 },
+    'canela': { kcal: 247, g: 1.2, c: 27.0, p: 4 },
+    'eneldo': { kcal: 43, g: 1.1, c: 4.9, p: 3.1 },
+    'perejil': { kcal: 36, g: 0.8, c: 3.0, p: 3 },
+    'albahaca': { kcal: 44, g: 0.6, c: 6.6, p: 3.2 },
+    'orégano': { kcal: 265, g: 10, c: 26.0, p: 9 },
+    'tomillo': { kcal: 101, g: 1.7, c: 10.0, p: 5.6 },
+    'romero': { kcal: 131, g: 5.9, c: 6.0, p: 4.9 },
+    'menta': { kcal: 44, g: 0.9, c: 1.6, p: 3.3 },
+    'jengibre': { kcal: 80, g: 0.8, c: 0.0, p: 1.8 },
+    'ajo': { kcal: 149, g: 0.5, c: 31.0, p: 6.4 },
+    'limón': { kcal: 29, g: 0.3, c: 6.5, p: 1.1 },
+    'vinagre balsámico': { kcal: 88, g: 0, c: 17, p: 0.5 },
     'vinagre': { kcal: 18, g: 0, c: 0.1, p: 0.1 },
     'salsa holandesa': { kcal: 526, g: 58, c: 0.2, p: 2.6 },
     'mayonesa': { kcal: 717, g: 79, c: 0.1, p: 1.1 },
-    'mostaza': { kcal: 66, g: 3.3, c: 4.0, p: 3.7 }, // Corregido a neto
-    'salsa BBQ keto': { kcal: 50, g: 0.2, c: 10, p: 0.5 }, // Depende de la marca, mantenido igual
-    'salsa soja': { kcal: 53, g: 0.6, c: 3.3, p: 5.5 }, // Corregido a neto
+    'mostaza': { kcal: 66, g: 3.3, c: 4.0, p: 3.7 },
+    'salsa BBQ keto': { kcal: 50, g: 0.2, c: 10, p: 0.5 },
+    'salsa soja': { kcal: 53, g: 0.6, c: 3.3, p: 5.5 },
     'vino blanco': { kcal: 82, g: 0, c: 1.5, p: 0.1 },
-    'pan rallado keto': { kcal: 300, g: 10, c: 5.0, p: 20 }, // Corregido estimado según ingredientes típicos altos en fibra (psyllium/linaza)
-    'harina almendra': { kcal: 633, g: 56, c: 6.0, p: 23 }, // Corregido a neto
-    'harina de coco': { kcal: 443, g: 8, c: 21.0, p: 19 }, // Corregido a neto
+    'pan rallado keto': { kcal: 300, g: 10, c: 5.0, p: 20 },
+    'harina almendra': { kcal: 633, g: 56, c: 6.0, p: 23 },
+    'harina de coco': { kcal: 443, g: 8, c: 21.0, p: 19 },
     'proteína en polvo': { kcal: 380, g: 8, c: 6, p: 75 },
-    'mantequilla cacahuete': { kcal: 588, g: 50, c: 14.0, p: 25 }, // Corregido a neto
+    'mantequilla cacahuete': { kcal: 588, g: 50, c: 14.0, p: 25 },
     'café': { kcal: 1, g: 0, c: 0, p: 0 },
     'té verde': { kcal: 1, g: 0, c: 0, p: 0 },
     'té matcha': { kcal: 1, g: 0, c: 0, p: 0 },
     'infusión jengibre': { kcal: 1, g: 0, c: 0, p: 0 },
-    'aceitunas': { kcal: 145, g: 15, c: 0.5, p: 1.2 }, // Corregido a neto
-    'alcaparras': { kcal: 23, g: 0.3, c: 1.8, p: 2.3 }, // Corregido a neto
+    'aceitunas': { kcal: 145, g: 15, c: 0.5, p: 1.2 },
+    'alcaparras': { kcal: 23, g: 0.3, c: 1.8, p: 2.3 },
     'anchoas': { kcal: 210, g: 10, c: 0, p: 29 },
-    'curry': { kcal: 325, g: 14, c: 22.0, p: 12 }, // Corregido a neto
-    'pimentón': { kcal: 282, g: 13, c: 19.0, p: 14 }, // Corregido a neto
-    'nuez moscada': { kcal: 525, g: 36, c: 28.0, p: 6 }, // Corregido a neto
-    'tahini': { kcal: 595, g: 53, c: 12.0, p: 17 }, // Corregido a neto
-    'tofu': { kcal: 76, g: 4.8, c: 0.7, p: 8 }, // Corregido a neto
-    'lentejas germinadas': { kcal: 106, g: 0.5, c: 19.0, p: 9 }, // Corregido a neto
+    'curry': { kcal: 325, g: 14, c: 22.0, p: 12 },
+    'pimentón': { kcal: 282, g: 13, c: 19.0, p: 14 },
+    'nuez moscada': { kcal: 525, g: 36, c: 28.0, p: 6 },
+    'tahini': { kcal: 595, g: 53, c: 12.0, p: 17 },
+    'tofu': { kcal: 76, g: 4.8, c: 0.7, p: 8 },
+    'lentejas germinadas': { kcal: 106, g: 0.5, c: 19.0, p: 9 },
     'quark': { kcal: 67, g: 0.2, c: 4, p: 12 },
-    'calabaza': { kcal: 26, g: 0.1, c: 5.5, p: 1 }, // Corregido a neto
-    'puerro': { kcal: 61, g: 0.3, c: 12.0, p: 1.5 }, // Corregido a neto
-    'apio': { kcal: 16, g: 0.2, c: 1.4, p: 0.7 }, // Corregido a neto
-    'endivias': { kcal: 17, g: 0.2, c: 0.3, p: 1.3 }, // Corregido a neto
+    'calabaza': { kcal: 26, g: 0.1, c: 5.5, p: 1 },
+    'puerro': { kcal: 61, g: 0.3, c: 12.0, p: 1.5 },
+    'apio': { kcal: 16, g: 0.2, c: 1.4, p: 0.7 },
+    'endivias': { kcal: 17, g: 0.2, c: 0.3, p: 1.3 },
     'pescado blanco': { kcal: 82, g: 1.2, c: 0, p: 17 },
     'sardinas en lata': { kcal: 208, g: 11, c: 0, p: 24 },
     'costillas': { kcal: 250, g: 15, c: 0, p: 26 },
     'entrecot': { kcal: 250, g: 15, c: 0, p: 26 },
     'pavo': { kcal: 135, g: 3, c: 0, p: 25 },
     'cordero': { kcal: 294, g: 21, c: 0, p: 25 },
-    'pisto keto': { kcal: 30, g: 0.5, c: 4.5, p: 1 }, // Corregido estimado neto
-    'salsa tomate sin azúcar': { kcal: 24, g: 0.2, c: 3.5, p: 1 }, // Corregido a neto
+    'pisto keto': { kcal: 30, g: 0.5, c: 4.5, p: 1 },
+    'salsa tomate sin azúcar': { kcal: 24, g: 0.2, c: 3.5, p: 1 },
     'hielo': { kcal: 0, g: 0, c: 0, p: 0 },
     'sal': { kcal: 0, g: 0, c: 0, p: 0 },
     'pimienta': { kcal: 0, g: 0, c: 0, p: 0 },
-    'naranja': { kcal: 47, g: 0.1, c: 9.6, p: 0.9 }, // Corregido a neto
-    'hierbas': { kcal: 50, g: 1, c: 6.0, p: 2 }, // Corregido estimado neto
+    'naranja': { kcal: 47, g: 0.1, c: 9.6, p: 0.9 },
+    'hierbas': { kcal: 50, g: 1, c: 6.0, p: 2 },
     'vainilla': { kcal: 288, g: 0.1, c: 12, p: 0.1 },
-    'cilantro fresco': { kcal: 23, g: 0.5, c: 0.9, p: 2.1 }, // Corregido a neto
-    'cebolla roja': { kcal: 40, g: 0.1, c: 7.9, p: 1.1 }, // Corregido a neto
+    'cilantro fresco': { kcal: 23, g: 0.5, c: 0.9, p: 2.1 },
+    'cebolla roja': { kcal: 40, g: 0.1, c: 7.9, p: 1.1 },
     'vinagreta': { kcal: 400, g: 40, c: 10, p: 0 },
     'vinagreta limón': { kcal: 400, g: 40, c: 10, p: 0 },
     'queso azul': { kcal: 353, g: 29, c: 2.3, p: 21 },
     'queso rallado': { kcal: 404, g: 33, c: 1.3, p: 25 },
     'caldo de pescado': { kcal: 4, g: 0, c: 0.5, p: 0.5 },
-    'pimiento morrón': { kcal: 20, g: 0.2, c: 2.9, p: 0.9 }, // Corregido a neto
-    'espárragos verdes': { kcal: 20, g: 0.1, c: 1.8, p: 2.2 }, // Corregido a neto
-    'lechuga romana': { kcal: 15, g: 0.2, c: 1.6, p: 1.4 }, // Corregido a neto
+    'pimiento morrón': { kcal: 20, g: 0.2, c: 2.9, p: 0.9 },
+    'espárragos verdes': { kcal: 20, g: 0.1, c: 1.8, p: 2.2 },
+    'lechuga romana': { kcal: 15, g: 0.2, c: 1.6, p: 1.4 },
     'mozzarella ligera': { kcal: 200, g: 14, c: 2, p: 18 },
     'carne picada': { kcal: 250, g: 15, c: 0, p: 26 },
     'muslos pollo': { kcal: 165, g: 3.6, c: 0, p: 31 },
     'pechuga pollo asada': { kcal: 165, g: 3.6, c: 0, p: 31 }
 };
-
 
 // ============================================================
 // FUNCIONES PARA CALCULAR MACROS DESDE INGREDIENTES
@@ -2313,8 +2326,6 @@ function parseIngrediente(texto) {
     if (!nutriente) return { cantidad, unidad, nombre, nutriente: null };
     if (unidad === 'unidad' && nutriente.porUnidad) {
         cantidad = cantidad * nutriente.porUnidad;
-    } else if (unidad === 'ml' && nutriente.porUnidad) {
-        // densidad 1
     }
     return { cantidad, unidad: 'g', nombre, nutriente };
 }
@@ -2334,7 +2345,7 @@ function calcularMacros(ingredientes) {
     return {
         kcal: Math.round(totalKcal),
         g: Math.round(totalG),
-        c: Math.round(totalC * 10) / 10,
+        c: Math.round(totalC),
         p: Math.round(totalP)
     };
 }
@@ -2427,9 +2438,20 @@ const PRIMEROS_COMIDA = [
     { nombre: "Ensalada de rúcula, nueces y queso de cabra", ingredientes: ["80g rúcula", "20g nueces", "80g queso cabra", "30ml vinagreta limón"], descripcion: "Lava rúcula, añade nueces y queso desmenuzado. Aliña.", tiempo: 10, dificultad: 'fácil' },
     { nombre: "Ensalada de espinacas con vinagreta y huevo", ingredientes: ["100g espinacas", "1 huevo duros", "50g tomates cherry", "10ml vinagre balsámico", "10ml aceite"], descripcion: "Lava espinacas y tomates. Añade huevo duro picado. Aliña con vinagreta.", tiempo: 10, dificultad: 'fácil' },
     { nombre: "Caldo de verduras con huevo escalfado", ingredientes: ["100g calabacín", "20g puerro", "20g apio", "1 huevo", "5g hierbas"], descripcion: "Cuece verduras en agua con hierbas. Sirve con un huevo escalfado en el centro.", tiempo: 30, dificultad: 'media' },
-    { nombre: "Gazpacho keto de aguacate y pepino", ingredientes: ["100g aguacate", "100g pepino", "5g ajo", "10ml vinagre", "10ml aceite"], descripcion: "Tritura todo con agua fría. Sirve bien frío.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Ensalada de espárragos y huevo", ingredientes: ["100g espárragos verdes", "1 huevo duros", "30ml vinagreta", "15g almendras"], descripcion: "Cocina espárragos, añade huevos picados y almendras. Aliña.", tiempo: 15, dificultad: 'fácil' },
     { nombre: "Ensalada César keto", ingredientes: ["30g lechuga romana", "150g pechuga pollo", "20g queso parmesano", "10g anchoas", "30ml vinagreta"], descripcion: "Lava lechuga, añade pollo desmenuzado, queso y anchoas. Aliña.", tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Ensalada de espárragos y huevo", ingredientes: ["100g espárragos verdes", "1 huevo duros", "30ml vinagreta", "15g almendras"], descripcion: "Cocina espárragos, añade huevos picados y almendras. Aliña.", tiempo: 15, dificultad: 'fácil' }
+    { nombre: "Tortilla de espinacas con queso feta", ingredientes: ["2 huevos", "100g espinacas", "80g queso feta", "10ml aceite de oliva", "5g sal", "5g pimienta"], descripcion: "Saltea las espinacas en aceite. Bate los huevos, desmenuza el queso y mezcla con las espinacas. Cocina como tortilla hasta que cuaje.", tiempo: 20, dificultad: 'fácil' },
+    // Nuevas recetas (11-20)
+    { nombre: "Ceviche de lubina con aguacate", ingredientes: ["200g lubina", "100g aguacate", "30ml limón", "20g cebolla roja", "5g cilantro"], descripcion: "Corta la lubina en cubos, marina en limón con cebolla y cilantro. Sirve con aguacate en rodajas.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Ensalada de kale y salmón ahumado", ingredientes: ["100g kale", "100g salmón ahumado", "50g tomates cherry", "30ml vinagreta de limón", "10g almendras"], descripcion: "Lava y masajea el kale. Añade el salmón en tiras, los tomates y las almendras. Aliña.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Crema de brócoli con queso azul", ingredientes: ["200g brócoli", "50g queso azul", "100ml nata", "200ml caldo", "5g nuez moscada"], descripcion: "Cocina el brócoli en caldo. Tritura con nata y queso azul. Calienta y sirve.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Tallarines de calabacín con aguacate y gambas", ingredientes: ["200g calabacín", "100g gambas", "100g aguacate", "10ml aceite", "5g ajo", "5g perejil"], descripcion: "Corta el calabacín en espirales. Saltea gambas con ajo, añade los tallarines y aguacate en dados. Saltea 2 min.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Ensalada de pollo, aguacate y fresa", ingredientes: ["150g pechuga pollo", "100g aguacate", "50g fresas", "30g lechuga", "30ml vinagreta de limón"], descripcion: "Cocina el pollo y corta en tiras. Mezcla con lechuga, aguacate y fresas en rodajas. Aliña.", tiempo: 20, dificultad: 'fácil' },
+    { nombre: "Crema de calabacín y jengibre", ingredientes: ["200g calabacín", "100ml nata", "5g jengibre", "200ml caldo", "15g mantequilla"], descripcion: "Cocina calabacín con jengibre en caldo. Tritura con nata y mantequilla.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Ensalada de remolacha, queso feta y nueces", ingredientes: ["80g remolacha cocida", "80g queso feta", "30g nueces", "50g lechuga", "30ml vinagreta"], descripcion: "Corta remolacha y queso. Mezcla con nueces y lechuga. Aliña.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Sopa de pescado con calabacín", ingredientes: ["200g pescado blanco", "100g calabacín", "200ml caldo de pescado", "10ml aceite", "5g eneldo"], descripcion: "Cuece el pescado y el calabacín en el caldo. Desmenuza el pescado y sirve caliente.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Ensalada de aguacate y naranja con huevo", ingredientes: ["100g aguacate", "50g naranja", "1 huevo duro", "30g lechuga", "30ml vinagreta de limón"], descripcion: "Corta aguacate, naranja y huevo. Mezcla con lechuga y aliña.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Crema de champiñones y trufa (aceite)", ingredientes: ["200g champiñones", "100ml nata", "20g cebolla", "200ml caldo", "5ml aceite de trufa"], descripcion: "Sofríe cebolla y champiñones. Añade caldo y nata. Tritura y termina con aceite de trufa.", tiempo: 25, dificultad: 'media' }
 ];
 
 const SEGUNDOS_COMIDA = [
@@ -2442,7 +2464,18 @@ const SEGUNDOS_COMIDA = [
     { nombre: "Hamburguesa keto con queso azul y bacon", ingredientes: ["200g carne picada", "50g queso azul", "60g bacon", "30g lechuga"], descripcion: "Forma hamburguesa y cocina. Añade bacon y queso. Sirve en lechuga.", tiempo: 20, dificultad: 'media' },
     { nombre: "Merluza al papillote con calabacín", ingredientes: ["200g merluza", "100g calabacín", "20g aceitunas", "50g tomates cherry"], descripcion: "Coloca pescado con verduras en papel. Hornea 15 min a 200°C.", tiempo: 25, dificultad: 'media' },
     { nombre: "Pechuga de pollo a la plancha con verduras", ingredientes: ["150g pechuga pollo", "100g calabacín", "50g pimiento", "20g cebolla", "10ml aceite"], descripcion: "Cocina pollo y verduras a la plancha. Sirve con un chorrito de aceite.", tiempo: 25, dificultad: 'media' },
-    { nombre: "Entrecot con champiñones y mantequilla", ingredientes: ["250g entrecot", "150g champiñones", "15g mantequilla", "5g ajo"], descripcion: "Sella el entrecot. Saltea champiñones con mantequilla, ajo y tomillo.", tiempo: 25, dificultad: 'media' }
+    { nombre: "Entrecot con champiñones y mantequilla", ingredientes: ["250g entrecot", "150g champiñones", "15g mantequilla", "5g ajo"], descripcion: "Sella el entrecot. Saltea champiñones con mantequilla, ajo y tomillo.", tiempo: 25, dificultad: 'media' },
+    // Nuevas recetas (11-20)
+    { nombre: "Lasaña de calabacín con carne y queso", ingredientes: ["200g carne picada", "200g calabacín", "100g salsa tomate sin azúcar", "50g queso rallado", "5g orégano"], descripcion: "Corta calabacín en láminas. Alterna capas de calabacín, carne y salsa. Termina con queso y hornea 25 min.", tiempo: 45, dificultad: 'media' },
+    { nombre: "Pollo relleno de espinacas y queso crema", ingredientes: ["200g pechuga pollo", "100g espinacas", "50g queso crema", "20g parmesano", "10ml aceite"], descripcion: "Abre la pechuga, rellena con espinacas salteadas y queso crema. Cierra, espolvorea parmesano y hornea 25 min.", tiempo: 35, dificultad: 'media' },
+    { nombre: "Estofado de cordero con calabaza", ingredientes: ["250g cordero", "100g calabaza", "20g cebolla", "200ml caldo", "5g romero"], descripcion: "Sella el cordero, añade cebolla y calabaza. Cubre con caldo y cocina 1,5 horas.", tiempo: 90, dificultad: 'difícil' },
+    { nombre: "Salteado de ternera con brócoli", ingredientes: ["200g ternera", "150g brócoli", "30ml salsa soja", "10ml aceite", "5g jengibre", "5g ajo"], descripcion: "Saltea ternera en tiras con ajo y jengibre. Añade brócoli y salsa soja. Cocina 5 min.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Bacalao con pisto y huevo poché", ingredientes: ["200g bacalao", "200g pisto keto", "1 huevo", "10ml aceite"], descripcion: "Hornea bacalao 10 min. Calienta pisto. Sirve con huevo poché encima.", tiempo: 30, dificultad: 'media' },
+    { nombre: "Hamburguesa de atún con aguacate", ingredientes: ["200g atún en lata", "1 huevo", "100g aguacate", "30g lechuga", "15g mayonesa"], descripcion: "Mezcla atún con huevo, forma hamburguesas y cocina. Sirve con aguacate y lechuga.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Pechuga de pollo al horno con mozzarella", ingredientes: ["200g pechuga pollo", "100g mozzarella", "50g salsa tomate sin azúcar", "5g orégano"], descripcion: "Cubre la pechuga con salsa, mozzarella y orégano. Hornea 25 min a 180°C.", tiempo: 30, dificultad: 'media' },
+    { nombre: "Revuelto de setas con jamón serrano", ingredientes: ["200g setas", "60g jamón serrano", "1 huevo", "10ml aceite", "5g ajo"], descripcion: "Saltea ajo y setas. Añade jamón en tiras. Bate el huevo y mezcla hasta cuajar.", tiempo: 20, dificultad: 'fácil' },
+    { nombre: "Salmonetes a la plancha con espárragos", ingredientes: ["200g salmonetes", "100g espárragos verdes", "15g mantequilla", "10ml limón"], descripcion: "Cocina los salmonetes y espárragos en mantequilla. Sirve con limón.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Ensalada templada de pollo y bacon", ingredientes: ["150g pechuga pollo", "60g bacon", "50g lechuga", "100g aguacate", "30ml vinagreta"], descripcion: "Cocina pollo y bacon. Mezcla con lechuga y aguacate. Aliña y sirve templado.", tiempo: 20, dificultad: 'fácil' }
 ];
 
 const PRIMEROS_CENA = [
@@ -2451,11 +2484,23 @@ const PRIMEROS_CENA = [
     { nombre: "Crema de calabacín con queso de cabra", ingredientes: ["100g calabacín", "50g queso cabra", "200ml caldo", "15g mantequilla"], descripcion: "Cocina calabacines en caldo, tritura con mantequilla. Sirve con queso.", tiempo: 25, dificultad: 'media' },
     { nombre: "Ensalada de tomate y mozzarella ligera", ingredientes: ["150g tomates", "100g mozzarella ligera", "5g albahaca", "10ml aceite"], descripcion: "Corta tomates y mozzarella. Alterna con albahaca y aliña.", tiempo: 10, dificultad: 'fácil' },
     { nombre: "Sopa de verduras keto", ingredientes: ["100g calabacín", "20g puerro", "20g apio", "200ml caldo"], descripcion: "Cuece verduras en caldo 20 min. Sirve caliente.", tiempo: 30, dificultad: 'fácil' },
-    { nombre: "Gazpacho andaluz keto", ingredientes: ["100g tomate", "50g pimiento", "100g pepino", "5g ajo", "10ml vinagre"], descripcion: "Tritura todo con agua y aceite. Sirve muy frío.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Ensalada de aguacate y gambas", ingredientes: ["100g aguacate", "100g gambas cocidas", "50g lechuga", "30ml vinagreta de limón", "5g cilantro"], descripcion: "Corta el aguacate en dados, mezcla con las gambas y la lechuga. Aliña con vinagreta y espolvorea cilantro picado.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Crema de calabacín con menta", ingredientes: ["200g calabacín", "100ml nata", "200ml caldo de verduras", "15g mantequilla", "5g menta fresca", "5g sal"], descripcion: "Cocina el calabacín en el caldo hasta que esté tierno. Tritura con la nata, la mantequilla y la menta. Calienta y sirve.", tiempo: 20, dificultad: 'media' },
     { nombre: "Crema de espárragos trigueros", ingredientes: ["100g espárragos", "100ml nata", "15g mantequilla", "200ml caldo"], descripcion: "Cocina espárragos, tritura con nata y mantequilla.", tiempo: 25, dificultad: 'media' },
     { nombre: "Ensalada de remolacha y queso feta", ingredientes: ["30g remolacha cocida", "80g queso feta", "20g nueces", "30ml vinagreta"], descripcion: "Corta remolacha y queso. Añade nueces y aliña.", tiempo: 10, dificultad: 'fácil' },
     { nombre: "Crema de champiñones", ingredientes: ["200g champiñones", "100ml nata", "20g cebolla", "200ml caldo"], descripcion: "Sofríe cebolla y champiñones. Añade caldo y nata. Tritura.", tiempo: 25, dificultad: 'media' },
-    { nombre: "Ensalada de pollo y aguacate", ingredientes: ["150g pechuga pollo", "100g aguacate", "30g lechuga", "30ml vinagreta"], descripcion: "Cocina pollo y corta en tiras. Mezcla con aguacate y lechuga.", tiempo: 20, dificultad: 'fácil' }
+    { nombre: "Ensalada de pollo y aguacate", ingredientes: ["150g pechuga pollo", "100g aguacate", "30g lechuga", "30ml vinagreta"], descripcion: "Cocina pollo y corta en tiras. Mezcla con aguacate y lechuga.", tiempo: 20, dificultad: 'fácil' },
+    // Nuevas recetas (11-20)
+    { nombre: "Crema de puerro y apio", ingredientes: ["200g puerro", "100g apio", "100ml nata", "200ml caldo", "15g mantequilla"], descripcion: "Sofríe puerro y apio en mantequilla. Añade caldo y nata. Tritura.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Ensalada de endivias con queso azul y nueces", ingredientes: ["100g endivias", "50g queso azul", "20g nueces", "30ml vinagreta de limón"], descripcion: "Separa las hojas de endivia, añade queso desmenuzado y nueces. Aliña.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Gazpacho de remolacha y pepino", ingredientes: ["100g remolacha", "100g pepino", "50g tomate", "10ml vinagre", "10ml aceite"], descripcion: "Tritura todos los ingredientes con agua fría. Sirve bien frío.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Crema de calabaza y jengibre", ingredientes: ["200g calabaza", "5g jengibre", "100ml nata", "200ml caldo", "15g mantequilla"], descripcion: "Cocina calabaza con jengibre en caldo. Tritura con nata y mantequilla.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Ensalada de espárragos y aguacate", ingredientes: ["100g espárragos verdes", "100g aguacate", "50g tomates cherry", "30ml vinagreta"], descripcion: "Cocina espárragos, mezcla con aguacate y tomates. Aliña.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Sopa de pescado con hinojo", ingredientes: ["200g pescado blanco", "100g hinojo", "200ml caldo de pescado", "10ml aceite"], descripcion: "Cuece el pescado con hinojo en caldo. Desmenuza y sirve.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Ensalada de kale y aguacate con semillas", ingredientes: ["100g kale", "100g aguacate", "20g semillas chía", "30ml vinagreta de limón"], descripcion: "Masajea el kale, añade aguacate en dados y semillas. Aliña.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Crema de coliflor y curry", ingredientes: ["200g coliflor", "10g curry", "100ml nata", "200ml caldo", "15g mantequilla"], descripcion: "Cocina coliflor con curry en caldo. Tritura con nata y mantequilla.", tiempo: 25, dificultad: 'media' },
+    { nombre: "Ensalada de pollo, aguacate y mango (poco)", ingredientes: ["150g pechuga pollo", "80g aguacate", "30g mango", "30g lechuga", "30ml vinagreta"], descripcion: "Cocina pollo, corta en tiras. Mezcla con aguacate, mango y lechuga. Aliña.", tiempo: 20, dificultad: 'fácil' },
+    { nombre: "Crema de champiñones y bacon", ingredientes: ["200g champiñones", "60g bacon", "100ml nata", "200ml caldo", "15g mantequilla"], descripcion: "Sofríe bacon y champiñones. Añade caldo y nata. Tritura.", tiempo: 25, dificultad: 'media' }
 ];
 
 const SEGUNDOS_CENA = [
@@ -2465,10 +2510,21 @@ const SEGUNDOS_CENA = [
     { nombre: "Ensalada templada de pollo asado", ingredientes: ["150g pechuga pollo asada", "30g lechuga", "100g aguacate", "30ml vinagreta"], descripcion: "Mezcla lechuga con pollo y aguacate. Aliña.", tiempo: 15, dificultad: 'fácil' },
     { nombre: "Huevos al plato con chorizo", ingredientes: ["1 huevo", "50g chorizo", "50g pimiento morrón", "15g mantequilla"], descripcion: "Sofríe chorizo y pimiento. Añade huevos y hornea 5 min.", tiempo: 20, dificultad: 'media' },
     { nombre: "Bacalao al horno con pisto", ingredientes: ["200g bacalao", "200g pisto keto", "10ml aceite"], descripcion: "Coloca bacalao sobre pisto y hornea 15 min a 180°C.", tiempo: 30, dificultad: 'media' },
-    { nombre: "Queso halloumi a la plancha", ingredientes: ["100g halloumi", "100g tomate", "5g orégano", "10ml aceite"], descripcion: "Corta halloumi y cocina a la plancha. Acompaña con tomate.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Tortilla de espinacas con queso feta", ingredientes: ["2 huevos", "100g espinacas", "80g queso feta", "10ml aceite de oliva", "5g sal", "5g pimienta"], descripcion: "Saltea las espinacas en aceite. Bate los huevos, desmenuza el queso y mezcla con las espinacas. Cocina como tortilla hasta que cuaje.", tiempo: 20, dificultad: 'fácil' },
     { nombre: "Huevos nube con aguacate", ingredientes: ["1 huevo", "100g aguacate", "5g sal", "5g pimienta"], descripcion: "Monta claras a punto de nieve. Hornea con yema encima. Sirve con aguacate.", tiempo: 25, dificultad: 'media' },
     { nombre: "Sardinas con aguacate", ingredientes: ["100g sardinas en lata", "100g aguacate", "10ml limón", "5g perejil"], descripcion: "Sirve sardinas con aguacate y aliña con limón.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Tortilla de calabacín con feta", ingredientes: ["1 huevo", "100g calabacín rallado", "80g queso feta", "5g menta"], descripcion: "Ralla calabacines, mezcla con huevo y queso. Cocina.", tiempo: 25, dificultad: 'media' }
+    { nombre: "Tortilla de calabacín con feta", ingredientes: ["1 huevo", "100g calabacín rallado", "80g queso feta", "5g menta"], descripcion: "Ralla calabacines, mezcla con huevo y queso. Cocina.", tiempo: 25, dificultad: 'media' },
+    // Nuevas recetas (11-20)
+    { nombre: "Merluza a la plancha con espárragos", ingredientes: ["200g merluza", "100g espárragos verdes", "15g mantequilla", "10ml limón"], descripcion: "Cocina la merluza y espárragos en mantequilla. Sirve con limón.", tiempo: 20, dificultad: 'fácil' },
+    { nombre: "Hamburguesas de atún con aguacate", ingredientes: ["200g atún en lata", "1 huevo", "100g aguacate", "30g lechuga", "15g mayonesa"], descripcion: "Mezcla atún con huevo, forma hamburguesas y cocina. Sirve con aguacate.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Revuelto de espárragos con huevo", ingredientes: ["200g espárragos verdes", "1 huevo", "10ml aceite", "5g sal", "5g pimienta"], descripcion: "Saltea espárragos, añade huevo batido y cocina hasta cuajar.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Tortilla de coliflor y queso", ingredientes: ["200g coliflor", "1 huevo", "50g queso rallado", "10ml aceite"], descripcion: "Ralla la coliflor, mezcla con huevo y queso. Cocina como tortilla.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Pollo al horno con champiñones y nata", ingredientes: ["200g muslos pollo", "150g champiñones", "100ml nata", "5g tomillo", "10ml aceite"], descripcion: "Dora el pollo, añade champiñones, nata y tomillo. Hornea 30 min.", tiempo: 40, dificultad: 'media' },
+    { nombre: "Salteado de gambas con calabacín", ingredientes: ["200g gambas", "200g calabacín", "5g ajo", "10ml aceite", "5g perejil"], descripcion: "Saltea ajo, añade calabacín en dados y gambas. Cocina 5 min.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Huevos revueltos con salmón ahumado", ingredientes: ["1 huevo", "100g salmón ahumado", "50g queso crema", "10ml aceite"], descripcion: "Bate los huevos, cocina con aceite. Añade salmón en tiras y queso crema al final.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Tortilla de champiñones y jamón", ingredientes: ["1 huevo", "100g champiñones", "60g jamón", "10ml aceite"], descripcion: "Saltea champiñones y jamón. Añade huevo batido y cocina.", tiempo: 20, dificultad: 'fácil' },
+    { nombre: "Bacalao desmigado con pimiento rojo", ingredientes: ["200g bacalao", "50g pimiento rojo", "20g cebolla", "10ml aceite"], descripcion: "Sofríe cebolla y pimiento. Añade bacalao desmigado y cocina 5 min.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Ensalada de atún, aguacate y huevo", ingredientes: ["100g atún en lata", "100g aguacate", "1 huevo duro", "50g lechuga", "30ml vinagreta"], descripcion: "Mezcla atún, aguacate en dados, huevo picado y lechuga. Aliña.", tiempo: 10, dificultad: 'fácil' }
 ];
 
 const DIAS = [
@@ -2482,7 +2538,7 @@ const DIAS = [
 ];
 
 // ============================================================
-// ALGORITMO AVANZADO DE SELECCIÓN (sin cambios)
+// ALGORITMO DE SELECCIÓN DE PLATOS (con diversidad y sin repetición)
 // ============================================================
 class AdvancedSelector {
     static extractCategories(plato) {
@@ -2550,22 +2606,6 @@ class AdvancedSelector {
         const elegido = topCandidates[Math.floor(Math.random() * topCandidates.length)];
         return elegido ? elegido.plato : pool[Math.floor(Math.random() * pool.length)];
     }
-    static seleccionarDiaCompleto(poolDesayunos, poolP1, poolP2, poolC1, poolC2) {
-        const ingredientesUsados = new Set();
-        const extraer = (plato) => this.extractCategories(plato);
-        const dPool = [...poolDesayunos], p1Pool = [...poolP1], p2Pool = [...poolP2], c1Pool = [...poolC1], c2Pool = [...poolC2];
-        const desayuno = this.seleccionarPlato(dPool, ingredientesUsados);
-        extraer(desayuno).forEach(ing => ingredientesUsados.add(ing));
-        const p1 = this.seleccionarPlato(p1Pool, ingredientesUsados);
-        extraer(p1).forEach(ing => ingredientesUsados.add(ing));
-        const p2 = this.seleccionarPlato(p2Pool, ingredientesUsados);
-        extraer(p2).forEach(ing => ingredientesUsados.add(ing));
-        const c1 = this.seleccionarPlato(c1Pool, ingredientesUsados);
-        extraer(c1).forEach(ing => ingredientesUsados.add(ing));
-        const c2 = this.seleccionarPlato(c2Pool, ingredientesUsados);
-        extraer(c2).forEach(ing => ingredientesUsados.add(ing));
-        return { desayuno, p1, p2, c1, c2, ingredientesUsados: Array.from(ingredientesUsados) };
-    }
     static seleccionarDiaCompletoConMemoriaSemanal(poolDesayunos, poolP1, poolP2, poolC1, poolC2, platosUsadosSemana) {
         const nombresUsados = new Set(platosUsadosSemana);
         const filtrar = (pool) => {
@@ -2577,7 +2617,19 @@ class AdvancedSelector {
         const p2Pool = filtrar(poolP2);
         const c1Pool = filtrar(poolC1);
         const c2Pool = filtrar(poolC2);
-        return this.seleccionarDiaCompleto(dPool, p1Pool, p2Pool, c1Pool, c2Pool);
+        const ingredientesUsados = new Set();
+        const extraer = (plato) => this.extractCategories(plato);
+        const desayuno = this.seleccionarPlato(dPool, ingredientesUsados);
+        extraer(desayuno).forEach(ing => ingredientesUsados.add(ing));
+        const p1 = this.seleccionarPlato(p1Pool, ingredientesUsados);
+        extraer(p1).forEach(ing => ingredientesUsados.add(ing));
+        const p2 = this.seleccionarPlato(p2Pool, ingredientesUsados);
+        extraer(p2).forEach(ing => ingredientesUsados.add(ing));
+        const c1 = this.seleccionarPlato(c1Pool, ingredientesUsados);
+        extraer(c1).forEach(ing => ingredientesUsados.add(ing));
+        const c2 = this.seleccionarPlato(c2Pool, ingredientesUsados);
+        extraer(c2).forEach(ing => ingredientesUsados.add(ing));
+        return { desayuno, p1, p2, c1, c2, ingredientesUsados: Array.from(ingredientesUsados) };
     }
     static analyzeDayDiversity(dayMeals) {
         return this.calculateDayScore(dayMeals);
@@ -2606,19 +2658,20 @@ function recomendarMacros(calorias, peso, carbsFijos = 25) {
 }
 
 // ============================================================
-// ESCALADO DE INGREDIENTES (factor global, sin tocar carbos)
+// ESCALADO DE INGREDIENTES (factor individual por plato)
 // ============================================================
-function escalarIngredientes(ingredientes, factor, keepCarbs = true) {
+function escalarIngredientes(ingredientes, factor) {
     if (!ingredientes || factor === 1.0) return ingredientes;
-    // Si keepCarbs es true, no escalamos los ingredientes que aportan carbohidratos
-    // Para simplificar, escalamos todo pero luego ajustaremos grasas separadamente
     return ingredientes.map(item => {
-        const regex = /(\d+\.?\d*)/g;
-        const parts = item.split(regex);
+        // Reemplaza todos los números (incluyendo decimales) por el valor escalado
+        const parts = item.split(/(\d+\.?\d*)/);
         const newParts = parts.map((part, index) => {
-            if (index % 2 === 1) {
+            if (index % 2 === 1) { // es un número
                 const num = parseFloat(part);
-                if (!isNaN(num)) return Math.round(num * factor).toString();
+                if (!isNaN(num)) {
+                    const scaled = Math.round(num * factor);
+                    return scaled.toString();
+                }
             }
             return part;
         });
@@ -2627,7 +2680,7 @@ function escalarIngredientes(ingredientes, factor, keepCarbs = true) {
 }
 
 // ============================================================
-// CLASE KETO PLANNER (con ajuste de grasas para alcanzar calorías)
+// CLASE KETO PLANNER (NUEVO ALGORITMO HOMOGÉNEO)
 // ============================================================
 class KetoPlanner {
     constructor() {
@@ -2665,28 +2718,17 @@ class KetoPlanner {
         const tdee = calcularTDEE(bmr, perfil.actividad);
         const targetCal = ajustarCalorias(tdee, perfil.objetivo);
 
-        // Factor global según tabla (objetivo + actividad)
-        const factorMap = {
-            'perder': { '1.2': 0.8, '1.375': 0.9, '1.55': 1.0, '1.725': 1.1, '1.9': 1.2 },
-            'mantener': { '1.2': 0.9, '1.375': 1.0, '1.55': 1.1, '1.725': 1.2, '1.9': 1.3 },
-            'aumentar': { '1.2': 1.0, '1.375': 1.1, '1.55': 1.2, '1.725': 1.3, '1.9': 1.4 }
-        };
-        const actividadKey = perfil.actividad.toString();
-        let globalFactor = 1.0;
-        if (factorMap[perfil.objetivo] && factorMap[perfil.objetivo][actividadKey] !== undefined) {
-            globalFactor = factorMap[perfil.objetivo][actividadKey];
+        // --- Selección de desayunos ligeros si targetCal < 1400 o objetivo perder ---
+        let poolDesayunos = DESAYUNOS;
+        if (perfil.objetivo === 'perder' || targetCal < 1400) {
+            poolDesayunos = DESAYUNOS_LIGEROS;
         }
-        this.scaleFactor = globalFactor;
 
         let semana = [];
         let diversityScores = [];
         const platosUsadosSemana = [];
 
-        let poolDesayunos = DESAYUNOS;
-        if (perfil.objetivo === 'perder') poolDesayunos = DESAYUNOS_LIGEROS;
-
-        // Primero seleccionamos los platos sin escalar
-        const diasSeleccionados = [];
+        // Para cada día, seleccionar platos y escalar individualmente
         for (let i = 0; i < 7; i++) {
             const dia = AdvancedSelector.seleccionarDiaCompletoConMemoriaSemanal(
                 poolDesayunos,
@@ -2697,61 +2739,58 @@ class KetoPlanner {
                 platosUsadosSemana
             );
             platosUsadosSemana.push(dia.desayuno.nombre, dia.p1.nombre, dia.p2.nombre, dia.c1.nombre, dia.c2.nombre);
-            diasSeleccionados.push(dia);
-        }
 
-        // Ahora procesamos cada día con factor global + ajuste de grasa
-        for (let i = 0; i < 7; i++) {
-            const dia = diasSeleccionados[i];
-            const calcularPlato = (plato) => {
-                const macros = calcularMacros(plato.ingredientes);
-                return { ...plato, kcal: macros.kcal, g: macros.g, c: macros.c, p: macros.p };
-            };
             // Calcular macros base (sin escalar)
-            const d = calcularPlato(dia.desayuno);
-            const p1 = calcularPlato(dia.p1);
-            const p2 = calcularPlato(dia.p2);
-            const c1 = calcularPlato(dia.c1);
-            const c2 = calcularPlato(dia.c2);
+            const calcularBase = (plato) => calcularMacros(plato.ingredientes);
+            const dBase = calcularBase(dia.desayuno);
+            const p1Base = calcularBase(dia.p1);
+            const p2Base = calcularBase(dia.p2);
+            const c1Base = calcularBase(dia.c1);
+            const c2Base = calcularBase(dia.c2);
 
-            // Aplicar factor global a las cantidades (escalamos ingredientes)
-            const escalarPlatoGlobal = (plato) => {
-                const ingEscalados = escalarIngredientes(plato.ingredientes, globalFactor);
-                const macrosEsc = calcularMacros(ingEscalados);
-                return { ...plato, ingredientes: ingEscalados, kcal: macrosEsc.kcal, g: macrosEsc.g, c: macrosEsc.c, p: macrosEsc.p };
+            const totalBase = dBase.kcal + p1Base.kcal + p2Base.kcal + c1Base.kcal + c2Base.kcal;
+            if (totalBase === 0) continue; // evitar división por cero
+
+            // Calcular factor específico para este día (limitado entre 0.6 y 1.8)
+            let factor = targetCal / totalBase;
+            factor = Math.min(1.8, Math.max(0.6, factor));
+
+            // Escalar todos los ingredientes de cada plato con este factor
+            const escalarPlato = (plato) => {
+                const ingredientesEscalados = escalarIngredientes(plato.ingredientes, factor);
+                const macros = calcularMacros(ingredientesEscalados);
+                return { ...plato, ingredientes: ingredientesEscalados, kcal: macros.kcal, g: macros.g, c: macros.c, p: macros.p };
             };
-            let dEsc = escalarPlatoGlobal(d);
-            let p1Esc = escalarPlatoGlobal(p1);
-            let p2Esc = escalarPlatoGlobal(p2);
-            let c1Esc = escalarPlatoGlobal(c1);
-            let c2Esc = escalarPlatoGlobal(c2);
+            let dEsc = escalarPlato(dia.desayuno);
+            let p1Esc = escalarPlato(dia.p1);
+            let p2Esc = escalarPlato(dia.p2);
+            let c1Esc = escalarPlato(dia.c1);
+            let c2Esc = escalarPlato(dia.c2);
 
-            // Calcular total del día después del factor global
+            // Recalcular totales después del escalado
             let diaK = dEsc.kcal + p1Esc.kcal + p2Esc.kcal + c1Esc.kcal + c2Esc.kcal;
             let diaP = dEsc.p + p1Esc.p + p2Esc.p + c1Esc.p + c2Esc.p;
             let diaC = dEsc.c + p1Esc.c + p2Esc.c + c1Esc.c + c2Esc.c;
             let diaG = dEsc.g + p1Esc.g + p2Esc.g + c1Esc.g + c2Esc.g;
 
             // ============================================================
-            // AJUSTE DE GRASAS PARA ALCANZAR EL OBJETIVO CALÓRICO
+            // AJUSTE FINO CON GRASA PARA ALCANZAR targetCal
             // ============================================================
-            let deltaCal = targetCal - diaK;
-            // Si falta grasa, añadir aceite de oliva (100% grasa)
-            // Si sobra, reducir grasa (quitando aceite o mantequilla)
             const platosDelDia = [dEsc, p1Esc, p2Esc, c1Esc, c2Esc];
-            let fatAdjustment = 0;
-            if (Math.abs(deltaCal) > 50) {
-                // Añadir o quitar grasa de forma distribuida
-                const fatCalPerGram = 9;
-                const fatGramsToAdjust = deltaCal / fatCalPerGram;
-                // Redondear a múltiplos de 5g para no ser demasiado preciso
-                const adjustedFatG = Math.round(fatGramsToAdjust / 5) * 5;
-                if (adjustedFatG !== 0) {
-                    // Buscar un plato que tenga aceite o mantequilla para modificar
+            let iter = 0;
+            const maxIter = 15;
+            while (iter < maxIter) {
+                diaK = platosDelDia.reduce((sum, p) => sum + p.kcal, 0);
+                const delta = targetCal - diaK;
+                if (Math.abs(delta) < 15) break;
+                if (delta > 0) {
+                    // Añadir aceite de oliva (grasa pura)
+                    const fatG = Math.round(delta / 9);
+                    if (fatG === 0) break;
+                    // Buscar un plato que ya tenga aceite/mantequilla para modificar
                     let modified = false;
                     for (let plato of platosDelDia) {
-                        // Buscar ingredientes de grasa pura
-                        const idx = plato.ingredientes.findIndex(ing => 
+                        const idx = plato.ingredientes.findIndex(ing =>
                             ing.includes('aceite') || ing.includes('mantequilla') || ing.includes('nata')
                         );
                         if (idx !== -1) {
@@ -2759,12 +2798,10 @@ class KetoPlanner {
                             const regex = /(\d+\.?\d*)/;
                             const match = ing.match(regex);
                             if (match) {
-                                const currentAmount = parseFloat(match[1]);
-                                let newAmount = currentAmount + adjustedFatG;
-                                if (newAmount < 0) newAmount = 0;
+                                let current = parseFloat(match[1]);
+                                let newAmount = Math.max(0, current + fatG);
                                 const newIng = ing.replace(regex, Math.round(newAmount).toString());
                                 plato.ingredientes[idx] = newIng;
-                                // Recalcular macros del plato
                                 const newMacros = calcularMacros(plato.ingredientes);
                                 plato.kcal = newMacros.kcal;
                                 plato.g = newMacros.g;
@@ -2775,10 +2812,10 @@ class KetoPlanner {
                             }
                         }
                     }
-                    // Si no hay ingrediente de grasa pura, añadir aceite al primer plato (desayuno)
-                    if (!modified && platosDelDia.length > 0) {
+                    if (!modified) {
+                        // Si ningún plato tiene grasa, añadir aceite al desayuno
                         const plato = platosDelDia[0];
-                        const newIng = `${Math.round(Math.max(0, adjustedFatG))}ml aceite de oliva`;
+                        const newIng = `${fatG}ml aceite de oliva`;
                         plato.ingredientes.push(newIng);
                         const newMacros = calcularMacros(plato.ingredientes);
                         plato.kcal = newMacros.kcal;
@@ -2786,20 +2823,52 @@ class KetoPlanner {
                         plato.c = newMacros.c;
                         plato.p = newMacros.p;
                     }
-                    // Recalcular totales del día
-                    diaK = platosDelDia.reduce((sum, p) => sum + p.kcal, 0);
-                    diaP = platosDelDia.reduce((sum, p) => sum + p.p, 0);
-                    diaC = platosDelDia.reduce((sum, p) => sum + p.c, 0);
-                    diaG = platosDelDia.reduce((sum, p) => sum + p.g, 0);
+                } else {
+                    // Si sobran calorías, quitar aceite/mantequilla del plato que más tenga
+                    let removed = false;
+                    for (let plato of platosDelDia) {
+                        const idx = plato.ingredientes.findIndex(ing =>
+                            ing.includes('aceite') || ing.includes('mantequilla') || ing.includes('nata')
+                        );
+                        if (idx !== -1) {
+                            const ing = plato.ingredientes[idx];
+                            const regex = /(\d+\.?\d*)/;
+                            const match = ing.match(regex);
+                            if (match) {
+                                let current = parseFloat(match[1]);
+                                let newAmount = Math.max(0, current + Math.round(delta / 9));
+                                if (newAmount === 0) {
+                                    plato.ingredientes.splice(idx, 1);
+                                } else {
+                                    const newIng = ing.replace(regex, Math.round(newAmount).toString());
+                                    plato.ingredientes[idx] = newIng;
+                                }
+                                const newMacros = calcularMacros(plato.ingredientes);
+                                plato.kcal = newMacros.kcal;
+                                plato.g = newMacros.g;
+                                plato.c = newMacros.c;
+                                plato.p = newMacros.p;
+                                removed = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!removed) break;
                 }
+                iter++;
             }
 
-            // Reasignar platos escalados
-            dEsc = platosDelDia[0];
-            p1Esc = platosDelDia[1];
-            p2Esc = platosDelDia[2];
-            c1Esc = platosDelDia[3];
-            c2Esc = platosDelDia[4];
+            // Recalcular totales finales
+            diaK = platosDelDia.reduce((sum, p) => sum + p.kcal, 0);
+            diaP = platosDelDia.reduce((sum, p) => sum + p.p, 0);
+            diaC = platosDelDia.reduce((sum, p) => sum + p.c, 0);
+            diaG = platosDelDia.reduce((sum, p) => sum + p.g, 0);
+
+            // Redondear totales
+            diaK = Math.round(diaK);
+            diaP = Math.round(diaP);
+            diaC = Math.round(diaC);
+            diaG = Math.round(diaG);
 
             // Calcular diversidad
             const dayMeals = [dEsc, p1Esc, p2Esc, c1Esc, c2Esc];
@@ -2815,12 +2884,13 @@ class KetoPlanner {
                 c2: c2Esc,
                 total: { kcal: diaK, p: diaP, c: diaC, g: diaG },
                 diversity: diversity,
-                factor: globalFactor,
+                factor: factor,
                 ingredientesUsados: dia.ingredientesUsados || []
             });
         }
 
         this.semanaActual = semana;
+        this.scaleFactor = 1.0; // ya no usamos un factor global, pero lo guardamos por compatibilidad
         this.saveToStorage();
 
         const avgDiversity = Math.round(diversityScores.reduce((a, b) => a + b, 0) / diversityScores.length);
@@ -2832,7 +2902,7 @@ class KetoPlanner {
         return {
             semana: semana,
             stats: { kcal: avgK, p: avgP, c: avgC, g: avgG, diversity: avgDiversity },
-            scaleFactor: globalFactor,
+            scaleFactor: 1.0,
             targetCal: Math.round(targetCal)
         };
     }
@@ -2898,7 +2968,7 @@ function mostrarReceta(plato, tipo) {
         <div class="recipe-modal">
             <button class="recipe-modal-close" aria-label="Cerrar receta">&times;</button>
             <div class="recipe-modal-type">${tipoDisplay}</div>
-            <div class="recipe-modal-title">${plato.nombre}${scale !== 1.0 ? `<span class="scale-indicator"> (x${scale.toFixed(2)})</span>` : ''}</div>
+            <div class="recipe-modal-title">${plato.nombre}</div>
             <div class="recipe-modal-macros">
                 <span><strong>${scaledKcal}</strong> kcal</span>
                 <span><strong>${scaledP}</strong>g proteína</span>
@@ -2907,7 +2977,7 @@ function mostrarReceta(plato, tipo) {
             </div>
             ${plato.descripcion ? `<div class="recipe-modal-section"><div class="recipe-modal-section-title">Descripción</div><div class="recipe-modal-description">${plato.descripcion}</div></div>` : ''}
             ${ingredientesEscalados && ingredientesEscalados.length > 0 ? `
-                <div class="recipe-modal-section"><div class="recipe-modal-section-title">Ingredientes (ajustados)</div><ul class="recipe-modal-ingredients">${ingredientesEscalados.map(i => `<li>${i}</li>`).join('')}</ul></div>
+                <div class="recipe-modal-section"><div class="recipe-modal-section-title">Ingredientes</div><ul class="recipe-modal-ingredients">${ingredientesEscalados.map(i => `<li>${i}</li>`).join('')}</ul></div>
             ` : ''}
             <div class="recipe-modal-footer">
                 ${plato.tiempo ? `<span>⏱ ${plato.tiempo} min</span>` : ''}
@@ -3129,7 +3199,7 @@ function renderAnalisis(perfil) {
         if (Math.abs(diffKcal) > 250) { statusClass = 'danger'; statusText = 'Tu menú está muy desviado.'; }
         comparisonHtml = `
             <div class="comparison-box ${statusClass}">
-                <strong>Comparativa con tu menú actual (x${scale.toFixed(2)}):</strong>
+                <strong>Comparativa con tu menú actual:</strong>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.3rem; margin-top:0.3rem; font-size:0.8rem;">
                     <span>Calorías: <strong>${menuStats.avgK} kcal</strong> (${diffKcal > 0 ? '+' : ''}${Math.round(diffKcal)})</span>
                     <span>Proteína: <strong>${menuStats.avgP}g</strong> (${diffP > 0 ? '+' : ''}${Math.round(diffP)})</span>
@@ -3175,7 +3245,6 @@ function renderAnalisis(perfil) {
 // ============================================================
 function renderMenu(semana) {
     const grid = document.getElementById('weekGrid');
-    const scale = planner.getScaleFactor();
     let html = '';
     for (const d of semana) {
         const divScore = d.diversity ? d.diversity.score : 0;
@@ -3192,7 +3261,7 @@ function renderMenu(semana) {
         const sP = d.total.p;
         const sC = d.total.c;
         const sG = d.total.g;
-        html += `<div class="day-card"><div class="day-card-header"><span class="day-name">${d.dia.nombre}</span>${scale !== 1.0 ? `<span class="scale-badge">x${scale.toFixed(2)}</span>` : ''}</div><div class="day-body">`;
+        html += `<div class="day-card"><div class="day-card-header"><span class="day-name">${d.dia.nombre}</span></div><div class="day-body">`;
         for (const p of platos) {
             const sk = p.plato.kcal;
             const sp = p.plato.p;
@@ -3318,7 +3387,7 @@ async function generarMenu() {
         let totalDiv = 0;
         for (const day of result.semana) totalDiv += day.diversity.score;
         const avgDiv = Math.round(totalDiv / result.semana.length);
-        showToast(`Menú generado (factor ${result.scaleFactor.toFixed(2)}) con ${result.targetCal} kcal/día y diversidad ${avgDiv}%`, 'success');
+        showToast(`Menú generado con ${result.targetCal} kcal/día y diversidad ${avgDiv}%`, 'success');
     } catch (e) { console.error(e); showToast('Error al generar el menú.', 'error'); }
 }
 
@@ -3362,7 +3431,7 @@ window.mostrarReceta = mostrarReceta;
 // INIT
 // ============================================================
 actualizarContador();
-console.log('Keto Planner con ajuste de grasas para alcanzar objetivo calórico sin aumentar carbos.');
+console.log('Keto Planner con nuevo algoritmo homogéneo (factor individual por día).');
 const perfilExistente = JSON.parse(localStorage.getItem(CONFIG.PROFILE_KEY));
 if (perfilExistente) {
     const semana = planner.getLastWeek();
