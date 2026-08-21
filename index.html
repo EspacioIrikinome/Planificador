@@ -2305,12 +2305,13 @@ const NUTRIENTES = {
 // FUNCIONES PARA CALCULAR MACROS DESDE INGREDIENTES
 // ============================================================
 function parseIngrediente(texto) {
-    const regex = /^([\d.]+)\s*(g|ml|unidad|huevo)?\s*(.*)$/;
+    const regex = /^([\d.]+)\s*(g|ml|unidad)?\s*(.*)$/;  // quitar 'huevo'
     const match = texto.match(regex);
     if (!match) return null;
     let cantidad = parseFloat(match[1]);
     let unidad = match[2] || 'g';
     let nombre = match[3] || match[1];
+    // Si no hay unidad explícita y el nombre parece un huevo
     if (!match[2] && (nombre.toLowerCase().includes('huevo') || nombre.toLowerCase() === 'huevos')) {
         unidad = 'unidad';
         nombre = 'huevo';
@@ -2423,7 +2424,7 @@ const DESAYUNOS = [
 ];
 
 const DESAYUNOS_LIGEROS = [
-    { nombre: "Café con aceite de coco y huevo duro", ingredientes: ["200ml café", "15ml aceite coco", "1 huevo duro"], descripcion: "Toma el café con aceite de coco y acompaña con un huevo duro.", tiempo: 5, dificultad: 'fácil' },
+    { nombre: "Café con aceite de coco y huevo", ingredientes: ["200ml café", "15ml aceite coco", "1 huevo"], descripcion: "Toma el café con aceite de coco y acompaña con un huevo duro.", tiempo: 5, dificultad: 'fácil' },
     { nombre: "Té verde con nueces y queso fresco", ingredientes: ["200ml té verde", "20g nueces", "30g queso fresco"], descripcion: "Infusión de té verde con nueces y queso fresco.", tiempo: 5, dificultad: 'fácil' },
     { nombre: "Infusión de jengibre con jamón serrano", ingredientes: ["200ml infusión jengibre", "60g jamón serrano"], descripcion: "Toma la infusión y acompaña con jamón serrano.", tiempo: 5, dificultad: 'fácil' },
     { nombre: "Café con mantequilla y aguacate (pequeño)", ingredientes: ["200ml café", "15g mantequilla", "50g aguacate"], descripcion: "Café con mantequilla y medio aguacate pequeño.", tiempo: 5, dificultad: 'fácil' },
@@ -2431,14 +2432,14 @@ const DESAYUNOS_LIGEROS = [
 ];
 
 const PRIMEROS_COMIDA = [
-    { nombre: "Ensalada de aguacate, tomate y huevo duro", ingredientes: ["100g aguacate", "100g tomate", "1 huevo duros", "20g cebolla roja", "30ml vinagreta"], descripcion: "Corta el aguacate, tomates y huevos en dados. Mezcla con cebolla picada y aliña con vinagreta.", tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Aguacate relleno de atún con huevo duro", ingredientes: ["100g aguacate", "100g atún en lata", "1 huevo duro", "15g mayonesa", "5g perejil"], descripcion: "Abre el aguacate por la mitad. Mezcla el atún con huevo picado y mayonesa. Rellena las mitades de aguacate.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Ensalada de aguacate, tomate y huevo duro", ingredientes: ["100g aguacate", "100g tomate", "1 huevo", "20g cebolla roja", "30ml vinagreta"], descripcion: "Corta el aguacate, tomates y huevos en dados. Mezcla con cebolla picada y aliña con vinagreta.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Aguacate relleno de atún con huevo duro", ingredientes: ["100g aguacate", "100g atún en lata", "1 huevo", "15g mayonesa", "5g perejil"], descripcion: "Abre el aguacate por la mitad. Mezcla el atún con huevo picado y mayonesa. Rellena las mitades de aguacate.", tiempo: 15, dificultad: 'fácil' },
     { nombre: "Crema de aguacate y pepino con huevo poché", ingredientes: ["100g aguacate", "100g pepino", "1 huevo", "200ml caldo de verduras", "10ml aceite de oliva"], descripcion: "Tritura el aguacate con pepino y caldo. Sirve caliente con un huevo poché encima.", tiempo: 20, dificultad: 'media' },
     { nombre: "Crema de coliflor y parmesano", ingredientes: ["100g coliflor", "50g parmesano", "100ml nata", "200ml caldo", "5g nuez moscada"], descripcion: "Cocina coliflor en caldo. Tritura con nata, queso y nuez moscada.", tiempo: 25, dificultad: 'media' },
     { nombre: "Ensalada de rúcula, nueces y queso de cabra", ingredientes: ["80g rúcula", "20g nueces", "80g queso cabra", "30ml vinagreta limón"], descripcion: "Lava rúcula, añade nueces y queso desmenuzado. Aliña.", tiempo: 10, dificultad: 'fácil' },
-    { nombre: "Ensalada de espinacas con vinagreta y huevo", ingredientes: ["100g espinacas", "1 huevo duros", "50g tomates cherry", "10ml vinagre balsámico", "10ml aceite"], descripcion: "Lava espinacas y tomates. Añade huevo duro picado. Aliña con vinagreta.", tiempo: 10, dificultad: 'fácil' },
+    { nombre: "Ensalada de espinacas con vinagreta y huevo", ingredientes: ["100g espinacas", "1 huevo", "50g tomates cherry", "10ml vinagre balsámico", "10ml aceite"], descripcion: "Lava espinacas y tomates. Añade huevo duro picado. Aliña con vinagreta.", tiempo: 10, dificultad: 'fácil' },
     { nombre: "Caldo de verduras con huevo escalfado", ingredientes: ["100g calabacín", "20g puerro", "20g apio", "1 huevo", "5g hierbas"], descripcion: "Cuece verduras en agua con hierbas. Sirve con un huevo escalfado en el centro.", tiempo: 30, dificultad: 'media' },
-    { nombre: "Ensalada de espárragos y huevo", ingredientes: ["100g espárragos verdes", "1 huevo duros", "30ml vinagreta", "15g almendras"], descripcion: "Cocina espárragos, añade huevos picados y almendras. Aliña.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Ensalada de espárragos y huevo", ingredientes: ["100g espárragos verdes", "1 huevo", "30ml vinagreta", "15g almendras"], descripcion: "Cocina espárragos, añade huevos picados y almendras. Aliña.", tiempo: 15, dificultad: 'fácil' },
     { nombre: "Ensalada César keto", ingredientes: ["30g lechuga romana", "150g pechuga pollo", "20g queso parmesano", "10g anchoas", "30ml vinagreta"], descripcion: "Lava lechuga, añade pollo desmenuzado, queso y anchoas. Aliña.", tiempo: 15, dificultad: 'fácil' },
     { nombre: "Tortilla de espinacas con queso feta", ingredientes: ["2 huevos", "100g espinacas", "80g queso feta", "10ml aceite de oliva", "5g sal", "5g pimienta"], descripcion: "Saltea las espinacas en aceite. Bate los huevos, desmenuza el queso y mezcla con las espinacas. Cocina como tortilla hasta que cuaje.", tiempo: 20, dificultad: 'fácil' },
     // Nuevas recetas (11-20)
@@ -2450,7 +2451,7 @@ const PRIMEROS_COMIDA = [
     { nombre: "Crema de calabacín y jengibre", ingredientes: ["200g calabacín", "100ml nata", "5g jengibre", "200ml caldo", "15g mantequilla"], descripcion: "Cocina calabacín con jengibre en caldo. Tritura con nata y mantequilla.", tiempo: 25, dificultad: 'media' },
     { nombre: "Ensalada de remolacha, queso feta y nueces", ingredientes: ["80g remolacha cocida", "80g queso feta", "30g nueces", "50g lechuga", "30ml vinagreta"], descripcion: "Corta remolacha y queso. Mezcla con nueces y lechuga. Aliña.", tiempo: 10, dificultad: 'fácil' },
     { nombre: "Sopa de pescado con calabacín", ingredientes: ["200g pescado blanco", "100g calabacín", "200ml caldo de pescado", "10ml aceite", "5g eneldo"], descripcion: "Cuece el pescado y el calabacín en el caldo. Desmenuza el pescado y sirve caliente.", tiempo: 25, dificultad: 'media' },
-    { nombre: "Ensalada de aguacate y naranja con huevo", ingredientes: ["100g aguacate", "50g naranja", "1 huevo duro", "30g lechuga", "30ml vinagreta de limón"], descripcion: "Corta aguacate, naranja y huevo. Mezcla con lechuga y aliña.", tiempo: 15, dificultad: 'fácil' },
+    { nombre: "Ensalada de aguacate y naranja con huevo", ingredientes: ["100g aguacate", "50g naranja", "1 huevo", "30g lechuga", "30ml vinagreta de limón"], descripcion: "Corta aguacate, naranja y huevo. Mezcla con lechuga y aliña.", tiempo: 15, dificultad: 'fácil' },
     { nombre: "Crema de champiñones y trufa (aceite)", ingredientes: ["200g champiñones", "100ml nata", "20g cebolla", "200ml caldo", "5ml aceite de trufa"], descripcion: "Sofríe cebolla y champiñones. Añade caldo y nata. Tritura y termina con aceite de trufa.", tiempo: 25, dificultad: 'media' }
 ];
 
@@ -2524,7 +2525,7 @@ const SEGUNDOS_CENA = [
     { nombre: "Huevos revueltos con salmón ahumado", ingredientes: ["1 huevo", "100g salmón ahumado", "50g queso crema", "10ml aceite"], descripcion: "Bate los huevos, cocina con aceite. Añade salmón en tiras y queso crema al final.", tiempo: 10, dificultad: 'fácil' },
     { nombre: "Tortilla de champiñones y jamón", ingredientes: ["1 huevo", "100g champiñones", "60g jamón", "10ml aceite"], descripcion: "Saltea champiñones y jamón. Añade huevo batido y cocina.", tiempo: 20, dificultad: 'fácil' },
     { nombre: "Bacalao desmigado con pimiento rojo", ingredientes: ["200g bacalao", "50g pimiento rojo", "20g cebolla", "10ml aceite"], descripcion: "Sofríe cebolla y pimiento. Añade bacalao desmigado y cocina 5 min.", tiempo: 20, dificultad: 'media' },
-    { nombre: "Ensalada de atún, aguacate y huevo", ingredientes: ["100g atún en lata", "100g aguacate", "1 huevo duro", "50g lechuga", "30ml vinagreta"], descripcion: "Mezcla atún, aguacate en dados, huevo picado y lechuga. Aliña.", tiempo: 10, dificultad: 'fácil' }
+    { nombre: "Ensalada de atún, aguacate y huevo", ingredientes: ["100g atún en lata", "100g aguacate", "1 huevo", "50g lechuga", "30ml vinagreta"], descripcion: "Mezcla atún, aguacate en dados, huevo picado y lechuga. Aliña.", tiempo: 10, dificultad: 'fácil' }
 ];
 
 const DIAS = [
