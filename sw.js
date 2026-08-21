@@ -36,9 +36,9 @@ self.addEventListener('fetch', function(e) {
 self.addEventListener('activate', function(e) {
   e.waitUntil(
     caches.keys().then(function(keyList) {
-      var cacheWhitelist = keyList.filter(function(key) {
-        return key.indexOf(APP_PREFIX);
-      })
+     var cacheWhitelist = keyList.filter(function(key) {
+    return key.indexOf(APP_PREFIX) !== -1;
+})
       cacheWhitelist.push(APP_PREFIX + VERSION);
       return Promise.all(keyList.map(function(key, i) {
         if (cacheWhitelist.indexOf(key) === -1) {
