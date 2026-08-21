@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#0066cc">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<link rel="manifest" href="/KetoPlanner/manifest.json">
     <title>Keto Meal Planner</title>
     <style>
        * {
@@ -3499,6 +3500,14 @@ if (perfilExistente) {
     renderPerfil(perfilExistente);
     renderAnalisis(perfilExistente);
 }
+</script>
+<script>
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker.register(
+      '/KetoPlanner/sw.js',
+      {scope: '/KetoPlanner/'}
+    );
+  }
 </script>
 </body>
 </html>
