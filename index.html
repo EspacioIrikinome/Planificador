@@ -1880,6 +1880,27 @@ body {
         margin: 0;
     }
 }
+
+.pwa-install-btn {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  background: var(--accent, #0066cc);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 0.5rem 0;
+}
+.pwa-install-btn:hover {
+  background: var(--accent-hover, #0052a3);
+}
+.pwa-install-btn:active {
+  transform: scale(0.98);
+}
     </style>
 </head>
 <body>
@@ -1901,6 +1922,21 @@ body {
                 <button class="landing-btn-entrar" id="entrarBtn">Entrar</button>
             </div>
         </div>
+
+<!-- Botón de instalación (visible solo en Android/Chrome) -->
+<button id="installBtn" class="pwa-install-btn" style="display: none;">
+  📲 Instalar KetoPlanner
+</button>
+
+<!-- Guía para iOS (visible solo en iPhone/iPad) -->
+<div id="iosInstallGuide" style="display: none; background: var(--bg-card); padding: 1rem; border-radius: 12px; margin: 0.5rem 0; border-left: 4px solid var(--accent);">
+  <p style="font-weight: 600; margin-bottom: 0.3rem;">Para instalar en tu iPhone:</p>
+  <ol style="padding-left: 1.2rem; margin: 0.2rem 0; font-size: 0.85rem;">
+    <li>Toca el icono <strong>Compartir</strong> 📤 en Safari.</li>
+    <li>Desplázate y selecciona <strong>"Agregar a la pantalla de inicio"</strong>.</li>
+    <li>Toca <strong>"Agregar"</strong> en la esquina superior derecha.</li>
+  </ol>
+</div>
 
         <div id="profileSetup" class="profile-setup">
             <div class="profile-form">
@@ -2230,7 +2266,7 @@ const NUTRIENTES = {
     'pechuga pollo': { kcal: 165, g: 3.6, c: 0, p: 31 },
     'ternera': { kcal: 250, g: 15, c: 0, p: 26 },
     'cerdo': { kcal: 242, g: 14, c: 0, p: 27 },
-    'chuletón': { kcal: 242, g: 14, c: 0, p: 27 },
+    'chuletas': { kcal: 242, g: 14, c: 0, p: 27 },
     'lubina': { kcal: 97, g: 2.3, c: 0, p: 18 },
     'merluza': { kcal: 82, g: 1.2, c: 0, p: 17 },
     'bacalao': { kcal: 82, g: 1.2, c: 0, p: 17 },
@@ -2515,12 +2551,12 @@ const PRIMEROS_COMIDA = [
 ];
 
 const SEGUNDOS_COMIDA = [
-    { nombre: "Chuletón de cerdo con espárragos", ingredientes: ["250g chuletón", "100g espárragos", "10ml aceite", "5g sal", "5g pimienta"], descripcion: "Sazona y cocina a la plancha 5-7 min por lado. Acompaña con espárragos.", tiempo: 20, dificultad: 'media' },
+    { nombre: "Chuletas de cerdo con espárragos", ingredientes: ["250g chuletas", "100g espárragos", "10ml aceite", "5g sal", "5g pimienta"], descripcion: "Sazona y cocina a la plancha 5-7 min por lado. Acompaña con espárragos.", tiempo: 20, dificultad: 'media' },
     { nombre: "Salmón al horno con costra de mostaza", ingredientes: ["200g salmón", "30ml mostaza", "20g pan rallado keto", "5g eneldo"], descripcion: "Unta con mostaza, espolvorea pan rallado. Hornea 15 min a 180°C.", tiempo: 25, dificultad: 'media' },
     { nombre: "Muslos de pollo al curry de coco", ingredientes: ["200g muslos pollo", "150ml leche coco", "10g curry", "5g jengibre", "5g ajo"], descripcion: "Dora pollo, añade ajo y jengibre. Añade leche de coco y curry. Cocina 25 min.", tiempo: 35, dificultad: 'media' },
     { nombre: "Albóndigas en salsa de tomate keto", ingredientes: ["150g carne picada", "1 huevo", "50g salsa tomate sin azúcar", "5g orégano"], descripcion: "Forma albóndigas con carne y huevo. Cocina en salsa 20 min.", tiempo: 30, dificultad: 'media' },
     { nombre: "Filete de lubina a la mantequilla", ingredientes: ["200g lubina", "15g mantequilla", "10ml limón", "10g alcaparras"], descripcion: "Cocina pescado en mantequilla 4 min por lado. Añade limón y alcaparras.", tiempo: 15, dificultad: 'fácil' },
-    { nombre: "Costillas de ternera estofadas", ingredientes: ["300g costillas", "20g cebolla", "200ml caldo", "5g tomillo"], descripcion: "Sella costillas. Añade verdura y caldo. Cocina 2 horas.", tiempo: 120, dificultad: 'difícil' },
+    { nombre: "Costillas de cerdo estofadas", ingredientes: ["300g costillas", "20g cebolla", "200ml caldo", "5g tomillo"], descripcion: "Sella costillas. Añade verdura y caldo. Cocina 2 horas.", tiempo: 120, dificultad: 'difícil' },
     { nombre: "Hamburguesa keto con queso azul y bacon", ingredientes: ["200g carne picada", "50g queso azul", "60g bacon", "30g lechuga"], descripcion: "Forma hamburguesa y cocina. Añade bacon y queso. Sirve en lechuga.", tiempo: 20, dificultad: 'media' },
     { nombre: "Merluza al papillote con calabacín", ingredientes: ["200g merluza", "100g calabacín", "20g aceitunas", "50g tomates cherry"], descripcion: "Coloca pescado con verduras en papel. Hornea 15 min a 200°C.", tiempo: 25, dificultad: 'media' },
     { nombre: "Pechuga de pollo a la plancha con verduras", ingredientes: ["150g pechuga pollo", "100g calabacín", "50g pimiento", "20g cebolla", "10ml aceite"], descripcion: "Cocina pollo y verduras a la plancha. Sirve con un chorrito de aceite.", tiempo: 25, dificultad: 'media' },
