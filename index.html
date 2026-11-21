@@ -8,6 +8,10 @@
     <meta name="apple-mobile-web-app-title" content="Planificador">
     <meta name="theme-color" content="#0a0707">
     <title>Planificador · Mediterráneo</title>
+
+    <!-- Librería de añadir a calendario (Apple, Google, Outlook, iCal) -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/add-to-calendar-button@2" async defer></script>
+
     <style>
     :root {
         --bg: #0a0707;
@@ -37,7 +41,6 @@
         --warning: #fbbf24;
         --warning-soft: rgba(251, 191, 36, 0.15);
 
-        /* Alias para el JS heredado */
         --green: var(--success);
         --green-bg: var(--success-soft);
         --orange: var(--warning);
@@ -67,9 +70,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
     html { min-height: 100%; background: var(--bg); }
-
     body {
         min-height: 100%;
         color: var(--text);
@@ -77,11 +78,10 @@
             radial-gradient(circle at 50% -10%, rgba(255, 138, 122, 0.26), transparent 38%),
             radial-gradient(circle at 100% 45%, rgba(255, 180, 160, 0.08), transparent 28%),
             var(--bg);
-        font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
     }
-
     body::before {
         content: "";
         position: fixed;
@@ -95,18 +95,16 @@
         background-size: 28px 28px;
         mask-image: linear-gradient(to bottom, black, transparent 80%);
     }
-
     button, input, select { font: inherit; outline: none; }
     button {
         border: 0;
         cursor: pointer;
-        -webkit-user-select: none;
         user-select: none;
         transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
     }
     button:active { transform: scale(0.96); }
 
-    /* ===== LANDING ===== */
+    /* LANDING */
     #landing {
         position: fixed;
         inset: 0;
@@ -118,9 +116,7 @@
         padding: calc(30px + var(--safe-top)) 24px calc(30px + var(--safe-bottom));
         overflow: hidden;
         text-align: center;
-        background:
-            radial-gradient(circle at 50% 22%, rgba(255, 138, 122, 0.28), transparent 32%),
-            var(--bg);
+        background: radial-gradient(circle at 50% 22%, rgba(255, 138, 122, 0.28), transparent 32%), var(--bg);
         transition: opacity 0.4s ease, visibility 0.4s ease;
     }
     #landing::before {
@@ -133,13 +129,10 @@
         border: 1px solid rgba(255, 200, 190, 0.16);
         border-radius: 50%;
         transform: translateX(-50%);
-        box-shadow:
-            0 0 0 22px rgba(255, 138, 122, 0.03),
-            0 0 0 44px rgba(255, 138, 122, 0.02);
+        box-shadow: 0 0 0 22px rgba(255, 138, 122, 0.03), 0 0 0 44px rgba(255, 138, 122, 0.02);
         pointer-events: none;
     }
     #landing.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-
     .landing-logo {
         position: relative;
         z-index: 1;
@@ -151,25 +144,14 @@
         border: 1px solid rgba(255, 200, 190, 0.28);
         border-radius: 38px;
         background: rgba(255, 255, 255, 0.06);
-        box-shadow:
-            0 25px 60px rgba(0, 0, 0, 0.5),
-            inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
         backdrop-filter: blur(18px);
-        -webkit-backdrop-filter: blur(18px);
         color: #fff;
         font-size: 54px;
         font-weight: 900;
         letter-spacing: -0.06em;
     }
-
-    #landing h1 {
-        position: relative;
-        z-index: 1;
-        color: #fff;
-        font-size: 45px;
-        font-weight: 900;
-        letter-spacing: -0.065em;
-    }
+    #landing h1 { position: relative; z-index: 1; color: #fff; font-size: 45px; font-weight: 900; letter-spacing: -0.065em; }
     #landing p {
         position: relative;
         z-index: 1;
@@ -189,22 +171,13 @@
         border-radius: 18px;
         color: #fff;
         background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        box-shadow:
-            0 15px 32px var(--primary-glow),
-            inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        box-shadow: 0 15px 32px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
         font-size: 16px;
         font-weight: 850;
     }
-    .landing-footer {
-        position: relative;
-        z-index: 1;
-        margin-top: 22px;
-        color: var(--muted-dark);
-        font-size: 12px;
-        font-weight: 650;
-    }
+    .landing-footer { position: relative; z-index: 1; margin-top: 22px; color: var(--muted-dark); font-size: 12px; font-weight: 650; }
 
-    /* ===== APP ===== */
+    /* APP */
     .app {
         width: 100%;
         max-width: 560px;
@@ -212,7 +185,6 @@
         margin: 0 auto;
         padding-bottom: calc(120px + var(--safe-bottom));
     }
-
     .app-header {
         position: relative;
         padding: calc(20px + var(--safe-top)) 18px 18px;
@@ -225,18 +197,10 @@
     .app-header::after {
         content: "";
         position: absolute;
-        left: 18px;
-        right: 18px;
-        bottom: 0;
-        height: 1px;
+        left: 18px; right: 18px; bottom: 0; height: 1px;
         background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
     }
-
-    .app-brand {
-        display: flex;
-        align-items: center;
-        gap: 13px;
-    }
+    .app-brand { display: flex; align-items: center; gap: 13px; }
     .app-logo-mark {
         display: grid;
         place-items: center;
@@ -251,21 +215,8 @@
         box-shadow: 0 7px 16px var(--primary-glow);
         flex-shrink: 0;
     }
-    .app-brand h1 {
-        color: #fff;
-        font-size: 22px;
-        font-weight: 850;
-        line-height: 1;
-        letter-spacing: -0.045em;
-    }
-    .app-brand p {
-        margin-top: 4px;
-        color: var(--muted);
-        font-size: 12px;
-        font-weight: 650;
-        letter-spacing: 0.01em;
-    }
-
+    .app-brand h1 { color: #fff; font-size: 22px; font-weight: 850; line-height: 1; letter-spacing: -0.045em; }
+    .app-brand p { margin-top: 4px; color: var(--muted); font-size: 12px; font-weight: 650; letter-spacing: 0.01em; }
     .header-btn {
         background: var(--surface-light);
         border: 1px solid var(--line);
@@ -278,21 +229,12 @@
     }
     .header-btn:hover { background: var(--surface-hover); }
 
-    /* ===== TAB CONTENT ===== */
-    .tab-content {
-        display: none;
-        padding: 20px 16px 0;
-    }
-    .tab-content.active {
-        display: block;
-        animation: panelIn 0.3s ease both;
-    }
-    @keyframes panelIn {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+    /* TABS CONTENT */
+    .tab-content { display: none; padding: 20px 16px 0; }
+    .tab-content.active { display: block; animation: panelIn 0.3s ease both; }
+    @keyframes panelIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ===== TABS (fixed bottom) ===== */
+    /* TABS */
     .tabs {
         position: fixed;
         right: 16px;
@@ -308,11 +250,8 @@
         border: 1px solid rgba(255, 200, 190, 0.22);
         border-radius: 25px;
         background: rgba(20, 12, 14, 0.92);
-        box-shadow:
-            0 22px 50px rgba(0, 0, 0, 0.56),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        box-shadow: 0 22px 50px rgba(0, 0, 0, 0.56), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
     }
     .tab-btn {
         display: flex;
@@ -334,12 +273,10 @@
         color: #fff;
         background: linear-gradient(135deg, rgba(255, 138, 122, 0.34), rgba(229, 107, 92, 0.2));
         border-color: rgba(255, 200, 190, 0.24);
-        box-shadow:
-            0 6px 18px rgba(229, 107, 92, 0.22),
-            inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        box-shadow: 0 6px 18px rgba(229, 107, 92, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     }
 
-    /* ===== BOTONES PRINCIPALES ===== */
+    /* BOTONES */
     .btn-primary {
         width: 100%;
         min-height: 54px;
@@ -347,9 +284,7 @@
         color: #fff;
         background: linear-gradient(135deg, var(--primary), var(--primary-dark));
         border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow:
-            0 12px 28px var(--primary-glow),
-            inset 0 1px 0 rgba(255, 255, 255, 0.24);
+        box-shadow: 0 12px 28px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.24);
         font-size: 15px;
         font-weight: 850;
         display: flex;
@@ -358,10 +293,7 @@
         gap: 10px;
         margin-bottom: 16px;
     }
-    .btn-primary:hover {
-        box-shadow: 0 15px 34px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        filter: brightness(1.06);
-    }
+    .btn-primary:hover { box-shadow: 0 15px 34px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.3); filter: brightness(1.06); }
     .btn-primary .counter {
         display: inline-flex;
         align-items: center;
@@ -386,7 +318,7 @@
     }
     .btn-secondary:hover { background: var(--surface-hover); }
 
-    /* ===== SUMMARY CARD (stats) ===== */
+    /* SUMMARY */
     .summary-card {
         position: relative;
         overflow: hidden;
@@ -400,49 +332,18 @@
     .summary-card::before {
         content: "";
         position: absolute;
-        top: -60px;
-        right: -50px;
-        width: 190px;
-        height: 190px;
+        top: -60px; right: -50px;
+        width: 190px; height: 190px;
         border-radius: 50%;
         background: radial-gradient(circle, var(--primary-glow), transparent 68%);
         pointer-events: none;
     }
-    .stat-row {
-        position: relative;
-        z-index: 1;
-        padding: 14px 0;
-        border-bottom: 1px solid var(--line);
-    }
+    .stat-row { position: relative; z-index: 1; padding: 14px 0; border-bottom: 1px solid var(--line); }
     .stat-row:last-child { border-bottom: 0; }
-    .stat-row-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        gap: 12px;
-        margin-bottom: 8px;
-    }
-    .stat-label {
-        color: var(--muted);
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-    }
-    .stat-value {
-        color: #fff;
-        font-size: 22px;
-        font-weight: 850;
-        letter-spacing: -0.035em;
-        white-space: nowrap;
-    }
-    .stat-bar {
-        width: 100%;
-        height: 5px;
-        background: rgba(255, 255, 255, 0.06);
-        border-radius: 99px;
-        overflow: hidden;
-    }
+    .stat-row-header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+    .stat-label { color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+    .stat-value { color: #fff; font-size: 22px; font-weight: 850; letter-spacing: -0.035em; white-space: nowrap; }
+    .stat-bar { width: 100%; height: 5px; background: rgba(255, 255, 255, 0.06); border-radius: 99px; overflow: hidden; }
     .stat-bar-fill {
         height: 100%;
         border-radius: 99px;
@@ -451,7 +352,7 @@
         width: 0%;
     }
 
-    /* ===== LIST HEADER ===== */
+    /* LIST HEADER */
     .list-header {
         display: flex;
         align-items: center;
@@ -460,34 +361,10 @@
         margin: 8px 3px 12px;
         flex-wrap: wrap;
     }
-    .list-header h2 {
-        color: #fff;
-        font-size: 19px;
-        font-weight: 850;
-        letter-spacing: -0.035em;
-    }
-    .list-header .count {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 34px;
-        min-height: 28px;
-        padding: 4px 10px;
-        border: 1px solid var(--line);
-        border-radius: 99px;
-        color: var(--text-soft);
-        background: var(--surface-light);
-        font-size: 12px;
-        font-weight: 850;
-        flex-shrink: 0;
-    }
+    .list-header h2 { color: #fff; font-size: 19px; font-weight: 850; letter-spacing: -0.035em; }
 
-    /* ===== WEEK GRID / DAY CARDS ===== */
-    .week-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
+    /* WEEK GRID */
+    .week-grid { display: flex; flex-direction: column; gap: 12px; }
     .day-card {
         background: rgba(30, 22, 24, 0.82);
         border: 1px solid var(--line);
@@ -495,33 +372,29 @@
         padding: 16px;
         box-shadow: var(--shadow-sm);
         backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
         transition: border-color 0.2s ease, background 0.2s ease;
     }
     .day-card:hover { border-color: var(--line-strong); }
-
     .day-card-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 12px;
         padding-bottom: 10px;
-        margin-bottom: 4px;
+        margin-bottom: 12px;
         border-bottom: 1px solid var(--line);
         flex-wrap: wrap;
     }
-    .day-name {
-        color: #fff;
-        font-size: 15px;
-        font-weight: 850;
-        letter-spacing: -0.02em;
-    }
+    .day-name { color: #fff; font-size: 15px; font-weight: 850; letter-spacing: -0.02em; }
 
     .meal-group {
-        padding: 10px 0;
-        border-bottom: 1px dashed rgba(255, 200, 190, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 200, 190, 0.08);
+        border-radius: 14px;
+        padding: 12px 14px;
+        margin-bottom: 8px;
     }
-    .meal-group:last-of-type { border-bottom: 0; }
+    .meal-group:last-of-type { margin-bottom: 0; }
     .meal-label {
         color: var(--muted);
         font-size: 10px;
@@ -531,25 +404,19 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        margin-bottom: 5px;
+        margin-bottom: 6px;
     }
-    .meal-label .dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        flex-shrink: 0;
-    }
-    .dot-lunch1 { background: var(--primary); }
-    .dot-lunch2 { background: var(--warning); }
-    .dot-dinner1 { background: var(--success); }
-    .dot-dinner2 { background: #a78bfa; }
+    .meal-label .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .dot-comida { background: var(--primary); box-shadow: 0 0 8px var(--primary-glow); }
+    .dot-cena { background: var(--success); box-shadow: 0 0 8px var(--success-soft); }
 
     .meal-name {
-        color: var(--text-soft);
+        color: #fff;
         font-size: 14px;
-        font-weight: 650;
+        font-weight: 700;
         line-height: 1.35;
-        margin-bottom: 5px;
+        margin-bottom: 6px;
+        letter-spacing: -0.01em;
     }
     .meal-macros {
         color: var(--muted);
@@ -560,8 +427,6 @@
         gap: 8px;
         flex-wrap: wrap;
     }
-    .pair-ok { color: var(--success); font-weight: 900; margin-left: 2px; }
-    .pair-bad { color: var(--danger); font-weight: 900; margin-left: 2px; }
 
     .day-summary {
         margin-top: 12px;
@@ -570,13 +435,13 @@
         display: flex;
         gap: 14px;
         flex-wrap: wrap;
+        align-items: center;
         color: var(--muted);
         font-size: 11px;
         font-weight: 600;
     }
     .day-summary strong { color: var(--text); font-weight: 850; }
 
-    /* ===== TAGS ===== */
     .protein-tag {
         display: inline-flex;
         align-items: center;
@@ -591,7 +456,6 @@
     .protein-tag.carne { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(251, 113, 133, 0.2); }
     .protein-tag.pescado { background: var(--primary-soft); color: var(--primary); border: 1px solid rgba(255, 138, 122, 0.22); }
     .protein-tag.vegetariano { background: var(--success-soft); color: var(--success); border: 1px solid rgba(110, 231, 183, 0.2); }
-    .protein-tag.mixto { background: var(--warning-soft); color: var(--warning); border: 1px solid rgba(251, 191, 36, 0.2); }
 
     .diversity-badge {
         display: inline-flex;
@@ -606,12 +470,24 @@
     .diversity-badge.warning { background: var(--warning-soft); color: var(--warning); border: 1px solid rgba(251, 191, 36, 0.2); }
     .diversity-badge.bad { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(251, 113, 133, 0.2); }
 
-    /* ===== RECETAS ===== */
-    .recipes-container {
+    /* Contenedor del botón de calendario */
+    .calendar-btn-wrapper {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
         display: flex;
-        flex-direction: column;
-        gap: 14px;
+        justify-content: flex-end;
     }
+    /* Personalización del web component add-to-calendar-button */
+    add-to-calendar-button {
+        --btn-background: rgba(255, 138, 122, 0.16);
+        --btn-text: var(--primary);
+        --btn-border: rgba(255, 138, 122, 0.3);
+        --btn-hover: rgba(255, 138, 122, 0.28);
+    }
+
+    /* RECETAS */
+    .recipes-container { display: flex; flex-direction: column; gap: 14px; }
     .recipes-day-section {
         background: rgba(30, 22, 24, 0.82);
         border: 1px solid var(--line);
@@ -629,12 +505,8 @@
         gap: 12px;
         flex-wrap: wrap;
     }
-    .recipes-day-header .day-name {
-        font-size: 14px;
-        font-weight: 850;
-        color: #fff;
-    }
-    .recipes-day-grid { display: flex; flex-direction: column; gap: 0; }
+    .recipes-day-header .day-name { font-size: 14px; font-weight: 850; color: #fff; }
+    .recipes-day-grid { display: flex; flex-direction: column; }
     .recipe-mini {
         padding: 14px 16px;
         border-bottom: 1px solid var(--line);
@@ -643,7 +515,6 @@
     }
     .recipe-mini:last-child { border-bottom: 0; }
     .recipe-mini:hover { background: rgba(255, 255, 255, 0.03); }
-
     .recipe-mini-type {
         color: var(--muted);
         font-size: 10px;
@@ -656,28 +527,9 @@
         gap: 8px;
         flex-wrap: wrap;
     }
-    .recipe-mini-title {
-        color: #fff;
-        font-size: 14px;
-        font-weight: 750;
-        line-height: 1.35;
-        margin-bottom: 4px;
-    }
-    .recipe-mini-macros {
-        color: var(--muted);
-        font-size: 11px;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
-    .recipe-toggle {
-        background: none;
-        border: 0;
-        color: var(--primary);
-        font-size: 12px;
-        font-weight: 850;
-        padding: 4px 0;
-        cursor: pointer;
-    }
+    .recipe-mini-title { color: #fff; font-size: 14px; font-weight: 750; line-height: 1.35; margin-bottom: 4px; }
+    .recipe-mini-macros { color: var(--muted); font-size: 11px; font-weight: 600; margin-bottom: 8px; }
+    .recipe-toggle { background: none; border: 0; color: var(--primary); font-size: 12px; font-weight: 850; padding: 4px 0; cursor: pointer; }
     .recipe-mini-expand {
         display: none;
         margin-top: 12px;
@@ -691,12 +543,28 @@
     .recipe-mini-expand .ingredients { margin-top: 8px; }
     .recipe-mini-expand strong { color: var(--text-soft); font-weight: 850; }
 
-    /* ===== CALENDARIO ===== */
-    .calendar-grid {
+    .balanced-info {
         display: flex;
-        flex-direction: column;
-        gap: 0;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+        padding: 10px;
+        background: rgba(255, 138, 122, 0.06);
+        border: 1px solid rgba(255, 138, 122, 0.14);
+        border-radius: 12px;
     }
+    .balanced-info .item { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 70px; }
+    .balanced-info .item-label {
+        color: var(--muted);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+    .balanced-info .item-value { color: var(--text-soft); font-size: 11px; font-weight: 700; }
+
+    /* CALENDARIO */
+    .calendar-grid { display: flex; flex-direction: column; gap: 0; }
     .calendar-week-label {
         display: flex;
         justify-content: space-between;
@@ -740,39 +608,13 @@
         margin-bottom: 8px;
         border-bottom: 1px solid var(--line);
     }
-    .calendar-day-number {
-        color: var(--primary);
-        font-size: 16px;
-        font-weight: 900;
-    }
-    .calendar-day-name {
-        color: var(--muted);
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-    }
-    .calendar-meal {
-        padding: 6px 0;
-        border-bottom: 1px dashed rgba(255, 200, 190, 0.06);
-    }
+    .calendar-day-number { color: var(--primary); font-size: 16px; font-weight: 900; }
+    .calendar-day-name { color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .calendar-meal { padding: 8px 0; border-bottom: 1px dashed rgba(255, 200, 190, 0.06); }
     .calendar-meal:last-child { border-bottom: 0; }
-    .calendar-meal .type {
-        color: var(--muted);
-        font-size: 9px;
-        font-weight: 850;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-    }
-    .calendar-meal .name {
-        display: block;
-        color: var(--text-soft);
-        font-size: 12px;
-        font-weight: 600;
-        margin-top: 2px;
-    }
+    .calendar-meal .type { color: var(--muted); font-size: 9px; font-weight: 850; letter-spacing: 0.06em; text-transform: uppercase; }
+    .calendar-meal .name { display: block; color: var(--text-soft); font-size: 12px; font-weight: 600; margin-top: 2px; }
 
-    /* ===== EMPTY STATE ===== */
     .empty-state {
         padding: 42px 20px;
         border: 1px dashed var(--line-strong);
@@ -782,15 +624,9 @@
         font-size: 14px;
         line-height: 1.5;
         text-align: center;
-        grid-column: 1 / -1;
     }
 
-    /* ===== ANÁLISIS (retocado por ser inline en JS) ===== */
-    #analisisContainer > div[style*="grid-template-columns:1fr 1fr"] {
-        gap: 12px !important;
-    }
-
-    /* ===== TOASTS ===== */
+    /* TOASTS */
     .toast-container {
         position: fixed;
         top: calc(16px + var(--safe-top));
@@ -811,7 +647,6 @@
         background: rgba(20, 15, 16, 0.94);
         box-shadow: var(--shadow-md);
         backdrop-filter: blur(18px);
-        -webkit-backdrop-filter: blur(18px);
         font-size: 13px;
         font-weight: 750;
         text-align: center;
@@ -826,47 +661,28 @@
     .toast.info { border-color: rgba(255, 138, 122, 0.35); background: rgba(80, 40, 35, 0.94); }
     .toast.warning { border-color: rgba(251, 191, 36, 0.35); background: rgba(70, 55, 15, 0.94); }
 
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 480px) {
         .app { padding-bottom: calc(100px + var(--safe-bottom)); }
         .app-header { padding: calc(16px + var(--safe-top)) 14px 16px; }
         .app-brand h1 { font-size: 19px; }
-        .app-brand p { font-size: 11px; }
         .app-logo-mark { width: 38px; height: 38px; font-size: 17px; border-radius: 12px; }
-
         .summary-card { padding: 6px 16px; }
         .stat-value { font-size: 18px; }
         .stat-row { padding: 12px 0; }
-
         .tab-content { padding: 16px 12px 0; }
         .list-header h2 { font-size: 17px; }
-
-        .tabs {
-            padding: 4px;
-            border-radius: 20px;
-            right: 10px;
-            left: 10px;
-            bottom: max(10px, var(--safe-bottom));
-        }
+        .tabs { padding: 4px; border-radius: 20px; right: 10px; left: 10px; bottom: max(10px, var(--safe-bottom)); }
         .tab-btn { min-height: 44px; font-size: 11px; border-radius: 16px; padding: 0 4px; }
-
         .day-card { padding: 14px; }
         .meal-name { font-size: 13px; }
-        .day-summary { font-size: 10px; gap: 10px; }
-
         #landing h1 { font-size: 36px; }
         #landing p { font-size: 13px; max-width: 280px; }
         .landing-logo { width: 110px; height: 110px; font-size: 42px; border-radius: 32px; }
         #landing .btn-entrar { min-height: 50px; font-size: 15px; max-width: 280px; }
-
-        #analisisContainer > div[style*="grid-template-columns:1fr 1fr"] {
-            grid-template-columns: 1fr !important;
-        }
     }
 
     @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after {
-            scroll-behavior: auto !important;
             animation-duration: 0.01ms !important;
             transition-duration: 0.01ms !important;
         }
@@ -875,22 +691,16 @@
 </head>
 <body>
 
-<!-- LANDING -->
 <div id="landing">
     <div class="landing-logo">P</div>
     <h1>Planificador</h1>
-    <p>
-        Combina recetas mediterráneas auténticas.
-        Sin repeticiones y sin mezclar carne y pescado en la misma comida.
-    </p>
+    <p>Platos mediterráneos completos y equilibrados. Un solo plato con proteína, hidratos, verdura y grasa.</p>
     <button class="btn-entrar" id="entrarBtn">Empezar</button>
     <div class="landing-footer"><span id="semanasGuardadas"></span></div>
 </div>
 
-<!-- NOTIFICACIONES -->
 <div id="toastContainer" class="toast-container"></div>
 
-<!-- APP -->
 <div class="app" id="appContainer" style="display:none;">
 
     <header class="app-header">
@@ -898,13 +708,12 @@
             <div class="app-logo-mark">P</div>
             <div>
                 <h1>Planificador</h1>
-                <p>Recetas Mediterráneas</p>
+                <p>Platos Mediterráneos</p>
             </div>
         </div>
         <button class="header-btn" id="salirBtn">Inicio</button>
     </header>
 
-    <!-- TABS (fixed bottom) -->
     <div class="tabs" role="tablist">
         <button class="tab-btn active" data-tab="menu" role="tab" aria-selected="true">Menú</button>
         <button class="tab-btn" data-tab="recetas" role="tab" aria-selected="false">Recetas</button>
@@ -996,12 +805,13 @@
     'use strict';
 
     const CONFIG = {
-        STORAGE_KEY: 'planificador_mediterraneo_v3',
+        STORAGE_KEY: 'planificador_mediterraneo_v4_single',
         MAX_WEEKS: 52,
         TARGET_CALORIES: 2000,
         TARGET_PROTEIN: 100,
         TARGET_CARBS: 250,
         TARGET_FAT: 70,
+        EXCLUDE_FROM_DIVERSITY: ['aceite', 'sal', 'agua', 'hierba', 'vino', 'pan'],
         KEY_INGREDIENTS: {
             'tomate': ['tomate', 'tomates', 'cherry'],
             'pimiento': ['pimiento', 'pimientos', 'piquillo', 'morrón'],
@@ -1016,23 +826,27 @@
             'gambas': ['gambas', 'langostinos'],
             'calamar': ['calamar', 'calamares', 'sepia'],
             'pollo': ['pollo', 'pechuga', 'muslo'],
-            'ternera': ['ternera', 'carne picada'],
-            'cerdo': ['cerdo', 'jamón', 'jamon'],
+            'pavo': ['pavo'],
+            'ternera': ['ternera', 'carne picada', 'buey'],
+            'cerdo': ['cerdo', 'jamón', 'jamon', 'chorizo'],
             'huevo': ['huevo', 'huevos', 'yema', 'claras'],
             'queso': ['queso', 'feta', 'parmesano', 'mozzarella', 'halloumi', 'griego', 'ricotta'],
-            'yogur': ['yogur', 'griego'],
             'legumbre': ['garbanzo', 'garbanzos', 'lenteja', 'lentejas', 'alubia', 'alubias'],
             'pasta': ['pasta', 'espagueti', 'linguine', 'macarrón'],
             'arroz': ['arroz'],
             'cuscús': ['cuscús', 'cuscu'],
             'quinoa': ['quinoa'],
             'patata': ['patata', 'patatas'],
+            'boniato': ['boniato', 'batata'],
             'calabacín': ['calabacín', 'calabacin'],
             'berenjena': ['berenjena'],
             'alcachofa': ['alcachofa', 'alcachofas'],
             'espinaca': ['espinaca', 'espinacas'],
             'lechuga': ['lechuga', 'rúcula', 'rucula'],
             'pepino': ['pepino'],
+            'brócoli': ['brócoli', 'brocoli'],
+            'seta': ['seta', 'setas', 'champiñón', 'champiñones'],
+            'guisante': ['guisante', 'guisantes'],
             'limón': ['limón', 'limon'],
             'pan': ['pan ', 'pan,', 'tosta', 'tostas', 'pita'],
             'aceite': ['aceite de oliva', 'aceite'],
@@ -1054,64 +868,44 @@
         return found;
     }
 
-    const PRIMEROS_COMIDA = [
-        { nombre: "Sopa de pescado malagueña (estilo crema)", kcal: 320, g: 18, c: 12, p: 28, ingredientes: ["500 g de rape", "1 cebolla", "2 dientes de ajo", "2 tomates maduros", "50 g de almendras", "1 rebanada de pan del día anterior", "Hebras de azafrán", "1 cucharadita de pimentón", "Aceite de oliva virgen extra", "Sal"], descripcion: "Sofríe la cebolla y el ajo. Añade el tomate rallado y rehoga. Incorpora el rape en trozos, cubre con agua o fumet y cuece 15 min. Aparte, fríe el pan y las almendras, tritúralos con azafrán y pimentón, y añade la picada al guiso.", tiempo: 40, dificultad: 'media' },
-        { nombre: "Gazpachuelo malagueño", kcal: 280, g: 16, c: 15, p: 20, ingredientes: ["300 g de merluza o rosada", "2 patatas medianas", "1 huevo", "200 ml de aceite de girasol", "1 diente de ajo", "Zumo de limón", "Sal", "Agua"], descripcion: "Cuece las patatas y el pescado en agua con sal. Prepara una mayonesa con el huevo, el aceite, el ajo y limón. Retira del fuego y emulsiona con la mayonesa.", tiempo: 45, dificultad: 'media' },
-        { nombre: "Salmorejo cordobés con bonito", kcal: 350, g: 15, c: 30, p: 18, ingredientes: ["1 kg de tomates pera maduros", "150 g de pan del día anterior", "100 ml de aceite de oliva virgen extra", "1/2 diente de ajo", "1 yema de huevo cocida", "1 cucharada de vinagre de Jerez", "Sal", "1 lata de bonito en aceite", "Pimientos del piquillo"], descripcion: "Tritura los tomates con el pan, ajo, aceite, vinagre y sal. Añade la yema y tritura. Pasa por un chino y enfría 1 hora. Sirve con bonito y pimientos.", tiempo: 20, dificultad: 'fácil' },
-        { nombre: "Fasolada (sopa griega de alubias)", kcal: 380, g: 10, c: 50, p: 20, ingredientes: ["400 g de alubias blancas cocidas", "1 zanahoria", "2 dientes de ajo", "1 cucharada de pasta de tomate", "2 hojas de laurel", "1 cucharadita de pimentón", "1 cucharadita de orégano seco", "Caldo de verduras", "Aceitunas negras", "Queso feta", "Perejil fresco", "Aceite de oliva"], descripcion: "Sofríe la zanahoria y el ajo. Añade pasta de tomate, pimentón y orégano. Vierte caldo y laurel, cocina 20 min. Incorpora las alubias y cuece 10 min más. Sirve con aceitunas, feta y perejil.", tiempo: 40, dificultad: 'fácil' },
-        { nombre: "Alcachofas al estilo de la abuela", kcal: 220, g: 12, c: 15, p: 8, ingredientes: ["4 alcachofas", "1 limón", "2 dientes de ajo", "1 vaso de vino blanco", "Perejil fresco", "Pan rallado", "Aceite de oliva virgen extra", "Sal"], descripcion: "Limpia las alcachofas. Sofríe el ajo, añade las alcachofas y rehoga. Vierte vino blanco. Añade agua, limón y perejil. Cuece 20 min. Espolvorea pan rallado y gratina.", tiempo: 30, dificultad: 'fácil' },
-        { nombre: "Cuscús mediterráneo rápido", kcal: 420, g: 18, c: 45, p: 16, ingredientes: ["200 g de cuscús", "240 ml de agua", "250 g de tomates cherry", "80 g de aceitunas negras", "30 g de alcaparras", "20 g de piñones", "200 g de bocconcini", "Albahaca fresca", "Aceite de oliva virgen extra", "Sal"], descripcion: "Hidrata el cuscús. Mezcla con tomates cherry, aceitunas, alcaparras, piñones, mozzarella y albahaca. Aliña con aceite y sal.", tiempo: 10, dificultad: 'fácil' },
-        { nombre: "Ensalada de garbanzos mediterránea", kcal: 340, g: 16, c: 35, p: 14, ingredientes: ["400 g de garbanzos cocidos", "1 pepino", "2 tomates", "1/2 cebolla morada", "100 g de queso feta", "Aceitunas negras", "Perejil fresco", "Comino", "Aceite de oliva virgen extra", "Zumo de limón", "Sal"], descripcion: "Escurre los garbanzos. Mezcla con pepino, tomate, cebolla, feta y aceitunas. Aliña con aceite, limón, comino y sal. Espolvorea perejil.", tiempo: 15, dificultad: 'fácil' },
-        { nombre: "Pisto manchego", kcal: 260, g: 14, c: 20, p: 6, ingredientes: ["2 calabacines", "1 berenjena", "1 pimiento rojo", "1 pimiento verde", "1 cebolla", "2 dientes de ajo", "400 g de tomate triturado", "1 cucharadita de azúcar", "Aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Corta verduras en dados. Sofríe cebolla y ajo. Añade pimiento, berenjena y calabacín, rehoga 10 min. Incorpora tomate y azúcar, cocina 20 min.", tiempo: 40, dificultad: 'fácil' },
-        { nombre: "Sopa de lentejas con verduras", kcal: 310, g: 8, c: 42, p: 18, ingredientes: ["300 g de lentejas", "1 zanahoria", "1 puerro", "1 patata", "1 cebolla", "2 dientes de ajo", "1 hoja de laurel", "1 cucharadita de pimentón", "Caldo de verduras", "Aceite de oliva virgen extra", "Sal"], descripcion: "Sofríe cebolla, ajo, puerro y zanahoria. Añade pimentón, lentejas, patata y laurel. Cubre con caldo y cuece 30 min.", tiempo: 45, dificultad: 'fácil' },
-        { nombre: "Ensalada de pasta con atún y aceitunas", kcal: 380, g: 14, c: 45, p: 22, ingredientes: ["250 g de pasta corta", "2 latas de atún", "100 g de aceitunas negras", "200 g de tomates cherry", "1/2 cebolla roja", "Albahaca fresca", "Aceite de oliva virgen extra", "Vinagre", "Sal"], descripcion: "Cuece la pasta al dente. Enfría. Mezcla con atún, aceitunas, tomates, cebolla y albahaca. Aliña con aceite y vinagre.", tiempo: 20, dificultad: 'fácil' },
-        { nombre: "Ensalada de arroz mediterránea", kcal: 350, g: 14, c: 42, p: 12, ingredientes: ["200 g de arroz", "1 tomate", "1 pepino", "1/2 pimiento rojo", "100 g de aceitunas negras", "100 g de atún en aceite", "2 huevos cocidos", "Aceite de oliva virgen extra", "Vinagre", "Sal", "Perejil fresco"], descripcion: "Cuece el arroz y enfría. Mezcla con tomate, pepino, pimiento, aceitunas, atún y huevos cocidos. Aliña con aceite, vinagre, sal y perejil.", tiempo: 20, dificultad: 'fácil' },
-        { nombre: "Sopa de marisco", kcal: 290, g: 12, c: 22, p: 22, ingredientes: ["200 g de gambas", "200 g de mejillones", "150 g de almejas", "1 cebolla", "2 dientes de ajo", "2 tomates maduros", "1/2 vaso de vino blanco", "Caldo de pescado", "Perejil fresco", "Aceite de oliva virgen extra", "Sal"], descripcion: "Sofríe cebolla y ajo. Añade tomate y cocina 5 min. Vierte vino blanco. Incorpora caldo. Añade almejas y mejillones, cocina hasta que se abran. Agrega gambas 2 min. Espolvorea perejil.", tiempo: 30, dificultad: 'media' }
+    // ============================================================
+    //  PLATOS COMPLETOS PARA COMIDA (14 recetas equilibradas)
+    // ============================================================
+    const LUNCH_DISHES = [
+        { nombre: "Alcachofas de la abuela con pavo a la plancha", kcal: 640, g: 24, c: 48, p: 42, ingredientes: ["200 g de pavo en filetes", "4 alcachofas", "150 g de patatas", "1 limón", "2 dientes de ajo", "Perejil fresco", "3 cdas de aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Limpia las alcachofas y córtalas en cuartos. Sofríe el ajo, añade las alcachofas y las patatas en trozos, rehoga con vino y limón. Cuece 20 min. Mientras, marca el pavo a la plancha 4 min por lado. Sirve el pavo con las alcachofas y espolvorea perejil.", balanced: { proteina: "Pavo", carbohidrato: "Patata", verdura: "Alcachofas", grasa: "Aceite de oliva" }, tiempo: 35, dificultad: 'media' },
+        { nombre: "Salmón al horno con quinoa y brócoli", kcal: 680, g: 28, c: 42, p: 38, ingredientes: ["2 lomos de salmón", "60 g de quinoa", "150 g de brócoli", "1 limón", "2 cdas de aceite de oliva", "Eneldo", "Sal", "Pimienta"], descripcion: "Cuece la quinoa 15 min. Cuece el brócoli al vapor 5 min. Hornea el salmón 12 min a 200°C con limón, eneldo, sal y pimienta. Sirve con la quinoa y el brócoli, aliñado con aceite de oliva.", balanced: { proteina: "Salmón", carbohidrato: "Quinoa", verdura: "Brócoli", grasa: "Aceite de oliva" }, tiempo: 25, dificultad: 'fácil' },
+        { nombre: "Pollo asado con patatas panadera y cebolla", kcal: 720, g: 26, c: 52, p: 45, ingredientes: ["2 muslos de pollo", "250 g de patatas", "1 cebolla", "2 dientes de ajo", "Tomillo", "Romero", "1/2 vaso de vino blanco", "3 cdas de aceite de oliva", "Sal", "Pimienta"], descripcion: "Horno a 200°C. Coloca el pollo con patatas en rodajas y cebolla en juliana. Añade ajo, tomillo, romero, vino y aceite. Hornea 45 min regando con el jugo.", balanced: { proteina: "Pollo", carbohidrato: "Patata", verdura: "Cebolla", grasa: "Aceite de oliva" }, tiempo: 55, dificultad: 'media' },
+        { nombre: "Paella de marisco", kcal: 660, g: 20, c: 75, p: 32, ingredientes: ["80 g de arroz bomba", "150 g de gambas", "150 g de mejillones", "1 pimiento rojo", "2 tomates maduros", "2 dientes de ajo", "Hebras de azafrán", "500 ml de caldo de pescado", "2 cdas de aceite de oliva", "Perejil fresco", "Sal"], descripcion: "Sofríe ajo, pimiento y tomate. Añade el arroz y el azafrán. Vierte el caldo caliente. A los 10 min añade gambas y mejillones. Cocina 8 min más. Reposa 5 min. Espolvorea perejil.", balanced: { proteina: "Gambas y mejillones", carbohidrato: "Arroz", verdura: "Pimiento y tomate", grasa: "Aceite de oliva" }, tiempo: 40, dificultad: 'media' },
+        { nombre: "Lentejas estofadas con chorizo y verduras", kcal: 660, g: 22, c: 68, p: 32, ingredientes: ["80 g de lentejas", "50 g de chorizo", "1 zanahoria", "1 patata", "1 cebolla", "2 dientes de ajo", "1 hoja de laurel", "1 cucharadita de pimentón", "3 cdas de aceite de oliva", "Sal"], descripcion: "Sofríe cebolla, ajo, chorizo y zanahoria. Añade pimentón, lentejas, patata, laurel y cubre con agua. Cuece 30 min hasta que las lentejas estén tiernas. Rectifica de sal y sirve caliente.", balanced: { proteina: "Lentejas y chorizo", carbohidrato: "Patata y lentejas", verdura: "Zanahoria y cebolla", grasa: "Aceite de oliva" }, tiempo: 45, dificultad: 'fácil' },
+        { nombre: "Bacalao a la mediterránea con patatas", kcal: 600, g: 24, c: 38, p: 42, ingredientes: ["250 g de bacalao", "200 g de patatas", "200 g de tomates cherry", "80 g de aceitunas negras", "1 cebolla", "2 dientes de ajo", "2 cdas de aceite de oliva", "Perejil fresco", "Sal", "Pimienta"], descripcion: "Sofríe cebolla y ajo. Añade tomates cherry y aceitunas. Incorpora las patatas en rodajas y un poco de agua. Cocina 15 min. Coloca el bacalao encima y cuece 5 min por lado. Espolvorea perejil.", balanced: { proteina: "Bacalao", carbohidrato: "Patata", verdura: "Tomate y cebolla", grasa: "Aceite de oliva y aceitunas" }, tiempo: 35, dificultad: 'media' },
+        { nombre: "Pollo al limón con arroz y pimiento", kcal: 690, g: 20, c: 62, p: 40, ingredientes: ["200 g de pollo troceado", "80 g de arroz", "1 pimiento rojo", "1 cebolla", "2 limones", "4 dientes de ajo", "Tomillo", "1/2 vaso de vino blanco", "2 cdas de aceite de oliva", "Sal", "Pimienta"], descripcion: "Dora el pollo con ajo. Añade cebolla y pimiento. Vierte vino y limón. Cocina 20 min. Cuece el arroz aparte. Sirve el pollo con el arroz y la salsa.", balanced: { proteina: "Pollo", carbohidrato: "Arroz", verdura: "Pimiento y cebolla", grasa: "Aceite de oliva" }, tiempo: 40, dificultad: 'fácil' },
+        { nombre: "Merluza en salsa verde con patatas y guisantes", kcal: 620, g: 22, c: 48, p: 38, ingredientes: ["250 g de merluza", "200 g de patatas", "150 g de guisantes", "1 cebolla", "2 dientes de ajo", "1/2 vaso de vino blanco", "1 cda de harina", "Perejil fresco", "2 cdas de aceite de oliva", "Sal"], descripcion: "Sofríe cebolla y ajo. Añade harina y cocina 1 min. Vierte vino y un poco de agua. Incorpora patatas y guisantes, cocina 15 min. Coloca la merluza encima y cuece 5 min por lado. Espolvorea perejil.", balanced: { proteina: "Merluza", carbohidrato: "Patata", verdura: "Guisantes", grasa: "Aceite de oliva" }, tiempo: 35, dificultad: 'media' },
+        { nombre: "Albóndigas con puré de patata y tomate", kcal: 700, g: 28, c: 55, p: 38, ingredientes: ["200 g de carne picada", "250 g de patatas", "200 g de tomate triturado", "1 huevo", "30 g de parmesano", "1 cebolla", "1 diente de ajo", "Harina", "2 cdas de aceite de oliva", "Sal", "Pimienta"], descripcion: "Mezcla carne, huevo, parmesano, ajo y perejil. Forma albóndigas, pásalas por harina y dóralas. Sofríe cebolla, añade tomate y cocina 15 min con las albóndigas. Cuece y tritura las patatas. Sirve con el puré.", balanced: { proteina: "Carne picada", carbohidrato: "Patata", verdura: "Tomate y cebolla", grasa: "Aceite de oliva y parmesano" }, tiempo: 45, dificultad: 'media' },
+        { nombre: "Cuscús con pollo y verduras", kcal: 640, g: 18, c: 65, p: 38, ingredientes: ["70 g de cuscús", "200 g de pollo", "1 calabacín", "1 zanahoria", "1 pimiento rojo", "1 limón", "1 cebolla", "2 cdas de aceite de oliva", "Perejil fresco", "Sal"], descripcion: "Hidrata el cuscús con agua caliente. Saltea el pollo en tiras con aceite. Añade calabacín, zanahoria, pimiento y cebolla. Cocina 10 min. Mezcla con el cuscús, aliña con limón y perejil.", balanced: { proteina: "Pollo", carbohidrato: "Cuscús", verdura: "Calabacín, zanahoria y pimiento", grasa: "Aceite de oliva" }, tiempo: 30, dificultad: 'fácil' },
+        { nombre: "Dorada a la sal con patatas asadas", kcal: 590, g: 22, c: 42, p: 42, ingredientes: ["1 dorada entera limpia", "1 kg de sal gruesa", "250 g de patatas", "1 cebolla", "1 limón", "Perejil fresco", "2 cdas de aceite de oliva"], descripcion: "Horno a 200°C. Cubre la dorada con sal gruesa y hornea 20-25 min. Asa las patatas con cebolla y aceite. Rompe la costra, sirve la dorada con limón y las patatas asadas.", balanced: { proteina: "Dorada", carbohidrato: "Patata", verdura: "Cebolla", grasa: "Aceite de oliva" }, tiempo: 35, dificultad: 'media' },
+        { nombre: "Pollo al curry con arroz basmati", kcal: 700, g: 26, c: 65, p: 38, ingredientes: ["200 g de pollo", "80 g de arroz basmati", "100 ml de leche de coco", "1 cebolla", "2 dientes de ajo", "1 cucharadita de curry", "Jengibre fresco", "2 cdas de aceite de oliva", "Cilantro fresco", "Sal"], descripcion: "Dora el pollo con ajo, jengibre y cebolla. Añade curry y leche de coco. Cocina 15 min. Cuece el arroz basmati. Sirve el pollo con el arroz y espolvorea cilantro.", balanced: { proteina: "Pollo", carbohidrato: "Arroz", verdura: "Cebolla", grasa: "Leche de coco y aceite" }, tiempo: 30, dificultad: 'fácil' },
+        { nombre: "Sepia a la plancha con arroz y alioli", kcal: 650, g: 22, c: 55, p: 38, ingredientes: ["300 g de sepia limpia", "80 g de arroz", "3 dientes de ajo", "1 huevo", "100 ml de aceite de oliva", "Limón", "Perejil fresco", "Sal"], descripcion: "Cuece el arroz. Prepara alioli con ajo, huevo y aceite. Marca la sepia a la plancha 3 min por lado. Sirve con arroz, alioli y unas gotas de limón.", balanced: { proteina: "Sepia", carbohidrato: "Arroz", verdura: "Ajo y perejil", grasa: "Aceite de oliva" }, tiempo: 30, dificultad: 'media' },
+        { nombre: "Pavo al horno con boniato y verduras", kcal: 630, g: 18, c: 55, p: 42, ingredientes: ["200 g de pavo", "200 g de boniato", "1 zanahoria", "150 g de brócoli", "2 dientes de ajo", "Romero", "2 cdas de aceite de oliva", "Sal", "Pimienta"], descripcion: "Horno a 200°C. Coloca el pavo con boniato en rodajas, zanahoria y brócoli. Añade ajo, romero y aceite. Hornea 30 min hasta que todo esté tierno.", balanced: { proteina: "Pavo", carbohidrato: "Boniato", verdura: "Zanahoria y brócoli", grasa: "Aceite de oliva" }, tiempo: 40, dificultad: 'fácil' }
     ];
 
-    const SEGUNDOS_COMIDA = [
-        { nombre: "Bacalao a la mediterránea", kcal: 410, g: 25, c: 12, p: 35, ingredientes: ["4 filetes de bacalao", "120 g de aceitunas", "1 cucharada de alcaparras", "400 g de tomates cherry", "70 ml de puré de tomate", "1 cebolla", "1 diente de ajo", "Aceite de oliva virgen extra", "Perejil fresco"], descripcion: "Sofríe cebolla y ajo. Añade aceitunas, alcaparras y tomates. Incorpora puré de tomate y agua. Coloca bacalao encima, cuece 5 min por lado. Espolvorea perejil.", tiempo: 25, dificultad: 'fácil' },
-        { nombre: "Calamares con guisantes en salsa", kcal: 360, g: 14, c: 20, p: 30, ingredientes: ["300 g de calamares limpios", "300 g de guisantes", "200 g de tomates cherry", "1/2 cebolla", "1 diente de ajo", "1/2 vaso de vino blanco", "Perejil fresco", "Aceite de oliva virgen extra", "Sal"], descripcion: "Sofríe ajo y cebolla. Añade tomates. Incorpora guisantes y vino blanco. Agrega calamares y cocina 10 min. Espolvorea perejil.", tiempo: 30, dificultad: 'fácil' },
-        { nombre: "Albóndigas mediterráneas con alcachofas", kcal: 480, g: 28, c: 25, p: 32, ingredientes: ["500 g de carne picada", "2 rebanadas de pan remojado", "1 huevo", "50 g de parmesano", "1 diente de ajo", "Perejil", "4 alcachofas", "3 patatas", "10 tomates cherry", "Aceitunas negras", "1 cebolla", "1/2 vaso de vino blanco", "Harina", "Aceite de oliva"], descripcion: "Mezcla carne, pan, huevo, parmesano, ajo y perejil. Forma albóndigas y dóralas. Sofríe cebolla, añade alcachofas, patatas, tomates y vino. Incorpora albóndigas y aceitunas, cubre con agua y cuece 20 min.", tiempo: 45, dificultad: 'media' },
-        { nombre: "Suquet de raya", kcal: 390, g: 16, c: 22, p: 32, ingredientes: ["800 g de raya", "300 g de patatas", "500 ml de caldo de pescado", "2 dientes de ajo", "1 tomate maduro", "30 g de nueces", "1 rebanada de pan frito", "Hebras de azafrán", "1 cucharadita de pimentón", "Perejil", "Aceite de oliva"], descripcion: "Fríe pan y tuesta azafrán. Tritura con ajo, tomate, nueces, pimentón y perejil. Cuece patatas en caldo 20 min. Añade picada y raya, cocina 5 min.", tiempo: 50, dificultad: 'media' },
-        { nombre: "Sepia con mayonesa", kcal: 330, g: 22, c: 4, p: 26, ingredientes: ["500 g de sepia limpia", "2 hojas de laurel", "1 huevo", "200 ml de aceite de girasol", "Zumo de limón", "Perejil fresco", "Sal"], descripcion: "Cuece la sepia con laurel 20 min. Prepara mayonesa. Mezcla la sepia con mayonesa y perejil.", tiempo: 30, dificultad: 'fácil' },
-        { nombre: "Pasta con alcachofas, atún y limón", kcal: 450, g: 15, c: 55, p: 25, ingredientes: ["320 g de linguine", "720 g de alcachofas", "200 g de atún en aceite", "2 dientes de ajo", "Perejil fresco", "Ralladura de limón", "Aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Sofríe alcachofas con ajo. Cuece pasta. Mezcla con alcachofas, atún, limón y perejil.", tiempo: 40, dificultad: 'fácil' },
-        { nombre: "Pollo al limón con hierbas", kcal: 420, g: 22, c: 8, p: 38, ingredientes: ["1 pollo troceado", "2 limones", "4 dientes de ajo", "Tomillo", "Romero", "1/2 vaso de vino blanco", "Aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Dora el pollo. Añade ajo, tomillo y romero. Vierte vino y limón. Tapa y cocina 30 min.", tiempo: 45, dificultad: 'fácil' },
-        { nombre: "Dorada a la sal", kcal: 350, g: 18, c: 2, p: 32, ingredientes: ["2 doradas enteras", "2 kg de sal gruesa", "1 limón", "Perejil fresco", "Aceite de oliva virgen extra"], descripcion: "Horno a 200°C. Cubre las doradas con sal. Hornea 20-25 min. Rompe costra y sirve.", tiempo: 30, dificultad: 'media' },
-        { nombre: "Merluza en salsa verde", kcal: 380, g: 22, c: 6, p: 34, ingredientes: ["4 lomos de merluza", "200 g de guisantes", "1 cebolla", "2 dientes de ajo", "1/2 vaso de vino blanco", "Perejil fresco", "1 cucharada de harina", "Caldo de pescado", "Aceite de oliva virgen extra", "Sal"], descripcion: "Sofríe cebolla y ajo. Añade harina. Vierte vino y caldo. Incorpora guisantes. Coloca merluza y cuece 5 min por lado. Espolvorea perejil.", tiempo: 30, dificultad: 'media' },
-        { nombre: "Pollo al ajillo", kcal: 400, g: 24, c: 6, p: 36, ingredientes: ["1 pollo troceado", "6 dientes de ajo", "1/2 vaso de vino blanco", "1 hoja de laurel", "Perejil fresco", "Aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Dora el pollo. Añade ajos y laurel. Vierte vino. Cocina 25 min. Espolvorea perejil.", tiempo: 40, dificultad: 'fácil' },
-        { nombre: "Pollo asado con patatas y limón", kcal: 460, g: 24, c: 22, p: 38, ingredientes: ["1 pollo entero (1,5 kg)", "4 patatas medianas", "2 limones", "4 dientes de ajo", "Tomillo", "Romero", "1/2 vaso de vino blanco", "Aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Horno a 200°C. Coloca pollo con patatas, ajo, tomillo y romero. Vierte vino y limón. Hornea 1 hora.", tiempo: 75, dificultad: 'media' },
-        { nombre: "Lubina al horno con patatas panadera", kcal: 390, g: 20, c: 18, p: 32, ingredientes: ["2 lubinas enteras", "3 patatas medianas", "1 cebolla", "2 dientes de ajo", "1 limón", "Perejil fresco", "1/2 vaso de vino blanco", "Aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Horno a 200°C. Base de patata y cebolla. Lubinas con limón y perejil. Vierte vino y aceite. Hornea 30 min.", tiempo: 45, dificultad: 'media' }
-    ];
-
-    const PRIMEROS_CENA = [
-        { nombre: "Ensalada griega con quinoa", kcal: 380, g: 14, c: 40, p: 18, ingredientes: ["1 taza de quinoa", "2 tazas de agua", "1 pepino", "1 taza de tomates cherry", "1/2 pimiento rojo", "1/4 de cebolla morada", "1/4 taza de aceitunas negras", "50 g de queso feta", "2 cucharadas de aceite de oliva", "1 cucharada de zumo de limón", "1 cucharadita de orégano", "Sal y pimienta"], descripcion: "Cuece la quinoa. Mezcla con pepino, tomates, pimiento, cebolla, aceitunas y feta. Aliña con aceite, limón, orégano, sal y pimienta.", tiempo: 25, dificultad: 'fácil' },
-        { nombre: "Crema de calabacín", kcal: 180, g: 12, c: 12, p: 6, ingredientes: ["2 calabacines", "1 patata", "1 puerro", "1 cebolla", "Caldo de verduras", "2 cucharadas de nata", "Aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Sofríe puerro y cebolla. Añade calabacín y patata. Cubre con caldo y cuece 20 min. Tritura con nata.", tiempo: 30, dificultad: 'fácil' },
-        { nombre: "Ensalada caprese", kcal: 260, g: 18, c: 6, p: 14, ingredientes: ["3 tomates grandes", "250 g de mozzarella fresca", "Albahaca fresca", "Aceite de oliva virgen extra", "Vinagre balsámico", "Sal", "Pimienta"], descripcion: "Corta tomates y mozzarella. Alterna con albahaca. Aliña con aceite, vinagre, sal y pimienta.", tiempo: 10, dificultad: 'fácil' },
-        { nombre: "Hummus con crudités", kcal: 290, g: 12, c: 24, p: 12, ingredientes: ["400 g de garbanzos cocidos", "2 cucharadas de tahini", "1 diente de ajo", "Zumo de 1 limón", "3 cucharadas de aceite de oliva", "Comino", "Sal", "Pimentón", "Zanahoria", "Pepino", "Pimiento"], descripcion: "Tritura garbanzos con tahini, ajo, limón, aceite y comino. Sirve con bastones de verdura.", tiempo: 15, dificultad: 'fácil' },
-        { nombre: "Gazpacho andaluz", kcal: 160, g: 10, c: 12, p: 4, ingredientes: ["1 kg de tomates maduros", "1 pimiento verde", "1 pepino", "1 diente de ajo", "2 cucharadas de vinagre", "4 cucharadas de aceite de oliva", "Sal", "Agua fría"], descripcion: "Tritura todo con agua fría. Pasa por chino. Enfría 2 horas.", tiempo: 15, dificultad: 'fácil' },
-        { nombre: "Sopa de verduras", kcal: 190, g: 8, c: 20, p: 6, ingredientes: ["2 zanahorias", "1 calabacín", "1 puerro", "1 patata", "1 cebolla", "Caldo de verduras", "Perejil fresco", "Aceite de oliva virgen extra", "Sal"], descripcion: "Sofríe cebolla y puerro. Añade verduras. Cubre con caldo y cuece 20 min.", tiempo: 30, dificultad: 'fácil' },
-        { nombre: "Ensalada de tomate y atún", kcal: 240, g: 16, c: 8, p: 20, ingredientes: ["3 tomates grandes", "2 latas de atún", "1/2 cebolla morada", "Aceitunas negras", "Albahaca fresca", "Aceite de oliva virgen extra", "Vinagre", "Sal"], descripcion: "Corta tomates. Añade atún, cebolla, aceitunas y albahaca. Aliña con aceite y vinagre.", tiempo: 10, dificultad: 'fácil' },
-        { nombre: "Tostas de boquerones en vinagre y crema de verduras", kcal: 290, g: 12, c: 28, p: 16, ingredientes: ["4 rebanadas de pan integral", "200 g de boquerones en vinagre", "1 calabacín", "1 patata", "1 puerro", "Caldo de verduras", "Aceite de oliva", "Sal"], descripcion: "Cocina las verduras en caldo. Tritura. Tuesta el pan y coloca boquerones encima.", tiempo: 30, dificultad: 'fácil' },
-        { nombre: "Ensalada de lentejas con verduras", kcal: 320, g: 12, c: 38, p: 16, ingredientes: ["400 g de lentejas cocidas", "2 tomates", "1 pepino", "1/2 pimiento rojo", "1/2 cebolla morada", "Perejil fresco", "Aceite de oliva virgen extra", "Vinagre de vino", "Sal", "Pimienta"], descripcion: "Mezcla lentejas con tomate, pepino, pimiento y cebolla. Aliña con aceite y vinagre. Espolvorea perejil.", tiempo: 15, dificultad: 'fácil' },
-        { nombre: "Crema de zanahoria y jengibre", kcal: 170, g: 10, c: 15, p: 4, ingredientes: ["500 g de zanahorias", "1 trozo de jengibre fresco", "1 cebolla", "1 patata pequeña", "Caldo de verduras", "2 cucharadas de nata", "Aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Sofríe cebolla y jengibre. Añade zanahoria y patata. Cubre con caldo y cuece 20 min. Tritura con nata.", tiempo: 30, dificultad: 'fácil' },
-        { nombre: "Sopa de ajo castellana", kcal: 210, g: 12, c: 18, p: 6, ingredientes: ["4 dientes de ajo", "100 g de pan del día anterior", "1 cucharadita de pimentón dulce", "Caldo de verduras", "Aceite de oliva virgen extra", "Sal"], descripcion: "Sofríe ajos. Añade pan y pimentón. Cubre con caldo y cuece 10 min.", tiempo: 20, dificultad: 'fácil' },
-        { nombre: "Salpicón de marisco", kcal: 280, g: 16, c: 8, p: 22, ingredientes: ["200 g de gambas cocidas", "150 g de mejillones cocidos", "1 tomate", "1/2 cebolla morada", "1/2 pimiento verde", "Perejil fresco", "Aceite de oliva virgen extra", "Vinagre", "Zumo de limón", "Sal", "Pimienta"], descripcion: "Pela gambas y mejillones. Pica tomate, cebolla y pimiento. Mezcla con marisco. Aliña con aceite, vinagre y limón. Espolvorea perejil.", tiempo: 15, dificultad: 'fácil' }
-    ];
-
-    const SEGUNDOS_CENA = [
-        { nombre: "Calabacines rellenos de atún gratinados", kcal: 310, g: 16, c: 12, p: 28, ingredientes: ["2 calabacines", "2 latas de atún", "1 tomate", "1/2 cebolla", "Queso rallado", "Aceite de oliva", "Sal", "Pimienta"], descripcion: "Parte calabacines y vacía. Sofríe cebolla y tomate. Mezcla con atún. Rellena. Cubre con queso. Hornea 15 min a 200°C.", tiempo: 35, dificultad: 'fácil' },
-        { nombre: "Strapatsada (huevos con tomate y feta)", kcal: 340, g: 24, c: 10, p: 22, ingredientes: ["4 huevos", "2 tomates maduros", "1/2 cebolla", "1 diente de ajo", "100 g de queso feta", "Albahaca fresca", "Aceite de oliva", "Sal", "Pimienta"], descripcion: "Sofríe cebolla y ajo. Añade tomate. Bate huevos y añade a la sartén. Incorpora feta y albahaca.", tiempo: 25, dificultad: 'fácil' },
-        { nombre: "Tortilla de patatas y cebolla", kcal: 380, g: 22, c: 25, p: 18, ingredientes: ["4 patatas medianas", "1 cebolla", "6 huevos", "Aceite de oliva virgen extra", "Sal"], descripcion: "Fríe patata y cebolla. Escurre y mezcla con huevo. Cuaja en sartén.", tiempo: 40, dificultad: 'media' },
-        { nombre: "Tortilla de espinacas y queso", kcal: 300, g: 20, c: 6, p: 22, ingredientes: ["200 g de espinacas frescas", "6 huevos", "100 g de queso rallado", "1 diente de ajo", "Aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Saltea espinacas con ajo. Bate huevos. Mezcla con espinacas y queso. Cuaja.", tiempo: 20, dificultad: 'fácil' },
-        { nombre: "Sardinas a la plancha", kcal: 320, g: 22, c: 2, p: 28, ingredientes: ["12 sardinas frescas", "2 dientes de ajo", "Perejil fresco", "Aceite de oliva virgen extra", "Sal", "Limón"], descripcion: "Calienta plancha. Cocina sardinas 2-3 min por lado. Sirve con ajo, perejil y limón.", tiempo: 15, dificultad: 'fácil' },
-        { nombre: "Revuelto de ajetes y gambas", kcal: 310, g: 20, c: 8, p: 22, ingredientes: ["1 manojo de ajos tiernos", "200 g de gambas peladas", "4 huevos", "Aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Saltea ajos. Añade gambas 2 min. Bate huevos y añade. Remueve hasta cuajar.", tiempo: 20, dificultad: 'fácil' },
-        { nombre: "Pollo a la plancha con ensalada", kcal: 350, g: 18, c: 8, p: 32, ingredientes: ["2 pechugas de pollo", "Lechuga", "Tomates cherry", "1/2 pepino", "Aceite de oliva virgen extra", "Limón", "Sal", "Pimienta"], descripcion: "Cocina pechugas a la plancha. Corta en tiras. Sirve con ensalada aliñada.", tiempo: 20, dificultad: 'fácil' },
-        { nombre: "Merluza a la plancha con verduras", kcal: 320, g: 16, c: 12, p: 30, ingredientes: ["4 lomos de merluza", "1 calabacín", "1 pimiento rojo", "1 cebolla", "Aceite de oliva virgen extra", "Limón", "Sal", "Pimienta"], descripcion: "Cocina verduras a la plancha. Cocina merluza 3-4 min por lado. Sirve con limón.", tiempo: 25, dificultad: 'fácil' },
-        { nombre: "Berenjenas rellenas de carne picada", kcal: 400, g: 24, c: 18, p: 28, ingredientes: ["2 berenjenas", "300 g de carne picada", "1 cebolla", "2 dientes de ajo", "300 g de tomate triturado", "50 g de queso rallado", "Aceite de oliva virgen extra", "Sal", "Pimienta", "Orégano"], descripcion: "Parte berenjenas y hornea pulpa 15 min. Sofríe cebolla, ajo y carne. Añade tomate y pulpa. Rellena, cubre con queso y gratina.", tiempo: 45, dificultad: 'media' },
-        { nombre: "Salmón a la plancha con espárragos", kcal: 380, g: 24, c: 4, p: 34, ingredientes: ["2 lomos de salmón", "1 manojo de espárragos verdes", "1 diente de ajo", "Aceite de oliva virgen extra", "Limón", "Sal", "Pimienta"], descripcion: "Cocina salmón a la plancha 3-4 min por lado. Saltea espárragos con ajo. Sirve con limón.", tiempo: 20, dificultad: 'fácil' },
-        { nombre: "Tortilla de champiñones", kcal: 290, g: 20, c: 4, p: 18, ingredientes: ["250 g de champiñones", "5 huevos", "1 diente de ajo", "Perejil fresco", "Aceite de oliva virgen extra", "Sal", "Pimienta"], descripcion: "Lamina champiñones. Saltea con ajo. Bate huevos. Mezcla y cuaja. Espolvorea perejil.", tiempo: 20, dificultad: 'fácil' },
-        { nombre: "Gambas al ajillo", kcal: 260, g: 16, c: 4, p: 22, ingredientes: ["400 g de gambas peladas", "5 dientes de ajo", "1 guindilla (opcional)", "Perejil fresco", "Aceite de oliva virgen extra", "Sal", "Limón"], descripcion: "Calienta aceite con ajos y guindilla. Añade gambas y saltea 2-3 min. Espolvorea perejil.", tiempo: 15, dificultad: 'fácil' }
+    // ============================================================
+    //  PLATOS COMPLETOS PARA CENA (14 recetas equilibradas)
+    // ============================================================
+    const DINNER_DISHES = [
+        { nombre: "Tortilla de patatas con ensalada", kcal: 480, g: 22, c: 32, p: 24, ingredientes: ["4 patatas medianas", "1 cebolla", "4 huevos", "2 cdas de aceite de oliva", "Lechuga", "Tomate", "Vinagre", "Sal"], descripcion: "Pela y lamina las patatas y la cebolla. Fríe a fuego medio. Escurre y mezcla con huevos batidos. Cuaja la tortilla. Sirve con ensalada aliñada.", balanced: { proteina: "Huevos", carbohidrato: "Patata", verdura: "Lechuga y tomate", grasa: "Aceite de oliva" }, tiempo: 40, dificultad: 'media' },
+        { nombre: "Ensalada griega con quinoa", kcal: 520, g: 22, c: 45, p: 24, ingredientes: ["70 g de quinoa", "150 g de tomates cherry", "1 pepino", "1/2 pimiento rojo", "100 g de queso feta", "Aceitunas negras", "Cebolla morada", "2 cdas de aceite de oliva", "Limón", "Orégano", "Sal"], descripcion: "Cuece la quinoa 15 min y enfría. Mezcla con tomate, pepino, pimiento, cebolla, aceitunas y feta. Aliña con aceite, limón, orégano y sal.", balanced: { proteina: "Queso feta y quinoa", carbohidrato: "Quinoa", verdura: "Tomate, pepino y pimiento", grasa: "Aceite de oliva y feta" }, tiempo: 25, dificultad: 'fácil' },
+        { nombre: "Salmón a la plancha con espárragos y patata", kcal: 540, g: 24, c: 28, p: 38, ingredientes: ["2 lomos de salmón", "1 manojo de espárragos", "200 g de patatas", "2 dientes de ajo", "2 cdas de aceite de oliva", "Limón", "Sal", "Pimienta"], descripcion: "Cuece las patatas. Cocina el salmón 3-4 min por lado. Saltea los espárragos con ajo. Sirve con limón.", balanced: { proteina: "Salmón", carbohidrato: "Patata", verdura: "Espárragos", grasa: "Aceite de oliva" }, tiempo: 25, dificultad: 'fácil' },
+        { nombre: "Pollo con aguacate y quinoa", kcal: 560, g: 24, c: 35, p: 38, ingredientes: ["2 pechugas de pollo", "70 g de quinoa", "1 aguacate", "Lechuga", "Tomate cherry", "2 cdas de aceite de oliva", "Limón", "Sal", "Pimienta"], descripcion: "Cuece la quinoa. Cocina el pollo a la plancha. Monta un bol con lechuga, quinoa, pollo, aguacate y tomates. Aliña con aceite y limón.", balanced: { proteina: "Pollo", carbohidrato: "Quinoa", verdura: "Lechuga y tomate", grasa: "Aguacate y aceite" }, tiempo: 25, dificultad: 'fácil' },
+        { nombre: "Berenjenas rellenas de carne con arroz", kcal: 520, g: 22, c: 42, p: 32, ingredientes: ["2 berenjenas", "200 g de carne picada", "60 g de arroz", "1 cebolla", "2 dientes de ajo", "200 g de tomate triturado", "30 g de queso rallado", "2 cdas de aceite de oliva", "Orégano", "Sal"], descripcion: "Parte las berenjenas, vacía la pulpa y hornea 15 min. Cuece el arroz. Sofríe cebolla, ajo y carne. Añade tomate y pulpa. Rellena las berenjenas, cubre con queso y gratina. Sirve con el arroz.", balanced: { proteina: "Carne picada", carbohidrato: "Arroz", verdura: "Berenjena y tomate", grasa: "Aceite de oliva y queso" }, tiempo: 45, dificultad: 'media' },
+        { nombre: "Revuelto de setas y gambas con patata panadera", kcal: 480, g: 22, c: 32, p: 32, ingredientes: ["200 g de setas", "200 g de gambas peladas", "4 huevos", "200 g de patatas", "2 dientes de ajo", "Perejil fresco", "2 cdas de aceite de oliva", "Sal", "Pimienta"], descripcion: "Asa las patatas en rodajas. Saltea ajo, setas y gambas. Añade los huevos batidos y cuaja. Sirve con las patatas panadera y perejil.", balanced: { proteina: "Gambas y huevos", carbohidrato: "Patata", verdura: "Setas", grasa: "Aceite de oliva" }, tiempo: 30, dificultad: 'fácil' },
+        { nombre: "Ensalada de atún, patata y huevo", kcal: 480, g: 20, c: 32, p: 30, ingredientes: ["2 latas de atún", "250 g de patatas", "2 huevos", "Lechuga", "Tomate", "Cebolla morada", "Aceitunas", "2 cdas de aceite de oliva", "Vinagre", "Sal"], descripcion: "Cuece las patatas y los huevos. Mezcla con atún, lechuga, tomate, cebolla y aceitunas. Aliña con aceite y vinagre.", balanced: { proteina: "Atún y huevo", carbohidrato: "Patata", verdura: "Lechuga y tomate", grasa: "Aceite de oliva" }, tiempo: 25, dificultad: 'fácil' },
+        { nombre: "Merluza al papillote con calabacín y patata", kcal: 460, g: 16, c: 28, p: 35, ingredientes: ["2 lomos de merluza", "1 calabacín", "150 g de patatas", "1 limón", "2 cdas de aceite de oliva", "Perejil fresco", "Sal", "Pimienta"], descripcion: "Horno a 200°C. Coloca la merluza con calabacín en rodajas y patata fina en papel de horno. Añade limón, aceite, sal y pimienta. Hornea 15 min.", balanced: { proteina: "Merluza", carbohidrato: "Patata", verdura: "Calabacín", grasa: "Aceite de oliva" }, tiempo: 30, dificultad: 'fácil' },
+        { nombre: "Pollo con verduras asadas y boniato", kcal: 540, g: 18, c: 38, p: 38, ingredientes: ["2 pechugas de pollo", "200 g de boniato", "1 pimiento rojo", "1 calabacín", "1 cebolla", "2 cdas de aceite de oliva", "Tomillo", "Romero", "Sal", "Pimienta"], descripcion: "Horno a 200°C. Coloca todo en una bandeja con aceite, sal, tomillo y romero. Hornea 25 min hasta que el pollo y las verduras estén tiernos.", balanced: { proteina: "Pollo", carbohidrato: "Boniato", verdura: "Pimiento, calabacín y cebolla", grasa: "Aceite de oliva" }, tiempo: 35, dificultad: 'fácil' },
+        { nombre: "Tortilla de espinacas y queso con patata al horno", kcal: 500, g: 24, c: 30, p: 28, ingredientes: ["200 g de espinacas frescas", "5 huevos", "100 g de queso rallado", "200 g de patatas", "1 diente de ajo", "2 cdas de aceite de oliva", "Sal", "Pimienta"], descripcion: "Asa las patatas en rodajas 20 min a 200°C. Saltea las espinacas con ajo. Bate los huevos con queso. Cuaja la tortilla. Sirve con las patatas asadas.", balanced: { proteina: "Huevos y queso", carbohidrato: "Patata", verdura: "Espinacas", grasa: "Aceite de oliva y queso" }, tiempo: 30, dificultad: 'fácil' },
+        { nombre: "Garbanzos con espinacas y huevo", kcal: 500, g: 20, c: 42, p: 28, ingredientes: ["300 g de garbanzos cocidos", "200 g de espinacas", "2 huevos", "2 dientes de ajo", "1 cucharadita de pimentón", "1 cda de aceite de oliva", "Sal", "Pimienta"], descripcion: "Sofríe ajo con pimentón. Añade espinacas y garbanzos. Cocina 5 min. Sirve con un huevo poché o frito por encima.", balanced: { proteina: "Garbanzos y huevo", carbohidrato: "Garbanzos", verdura: "Espinacas", grasa: "Aceite de oliva" }, tiempo: 20, dificultad: 'fácil' },
+        { nombre: "Sardinas asadas con pisto y pan integral", kcal: 480, g: 24, c: 28, p: 32, ingredientes: ["8 sardinas frescas", "2 calabacines", "1 berenjena", "1 pimiento", "1 cebolla", "2 tomates", "2 rebanadas de pan integral", "2 cdas de aceite de oliva", "Sal", "Pimienta"], descripcion: "Horno a 200°C. Asa las sardinas 8 min. Mientras, sofríe cebolla, pimiento, berenjena, calabacín y tomate 15 min. Sirve con el pan tostado.", balanced: { proteina: "Sardinas", carbohidrato: "Pan integral", verdura: "Pisto de verduras", grasa: "Aceite de oliva" }, tiempo: 30, dificultad: 'fácil' },
+        { nombre: "Crema de calabacín con huevo poché y pan", kcal: 400, g: 18, c: 25, p: 22, ingredientes: ["2 calabacines", "1 patata", "1 puerro", "1 cebolla", "2 huevos", "2 rebanadas de pan integral", "1 cda de aceite de oliva", "Sal", "Pimienta"], descripcion: "Sofríe puerro y cebolla. Añade calabacín, patata y cubre con caldo. Cuece 20 min. Tritura. Sirve con un huevo poché y pan tostado.", balanced: { proteina: "Huevo", carbohidrato: "Patata y pan", verdura: "Calabacín y puerro", grasa: "Aceite de oliva" }, tiempo: 30, dificultad: 'fácil' },
+        { nombre: "Gambas al ajillo con arroz integral", kcal: 500, g: 18, c: 42, p: 30, ingredientes: ["300 g de gambas peladas", "70 g de arroz integral", "5 dientes de ajo", "1 guindilla", "Perejil fresco", "2 cdas de aceite de oliva", "Limón", "Sal"], descripcion: "Cuece el arroz integral. Calienta aceite con ajo y guindilla. Añade gambas y saltea 3 min. Sirve con el arroz integral, perejil y limón.", balanced: { proteina: "Gambas", carbohidrato: "Arroz integral", verdura: "Ajo y perejil", grasa: "Aceite de oliva" }, tiempo: 25, dificultad: 'fácil' }
     ];
 
     const DIAS = [
@@ -1125,56 +919,38 @@
         static getProteinType(plato) {
             if (!plato || !plato.ingredientes) return 'vegetariano';
             const text = (plato.nombre + ' ' + plato.ingredientes.join(' ')).toLowerCase();
-            const carneKws = ['pollo', 'pechuga', 'muslo', 'ternera', 'carne picada', 'cerdo', 'jamón', 'jamon', 'chorizo', 'bacon', 'entrecot', 'chuletón', 'albóndiga', 'costilla', 'pavo', 'cordero'];
+            const carneKws = ['pollo', 'pavo', 'pechuga', 'muslo', 'ternera', 'carne picada', 'cerdo', 'jamón', 'jamon', 'chorizo', 'bacon', 'entrecot', 'chuletón', 'albóndiga', 'costilla', 'cordero', 'buey'];
             const pescadoKws = ['salmón', 'salmon', 'atún', 'atun', 'bonito', 'bacalao', 'merluza', 'rape', 'sardina', 'boquerón', 'boqueron', 'dorada', 'lubina', 'raya', 'rosada', 'gamba', 'langostino', 'calamar', 'sepia', 'almeja', 'mejillón', 'mejillon', 'anchoa', 'pulpo'];
             const hasCarne = carneKws.some(k => text.includes(k));
             const hasPescado = pescadoKws.some(k => text.includes(k));
-            if (hasCarne && hasPescado) return 'mixto';
-            if (hasCarne) return 'carne';
-            if (hasPescado) return 'pescado';
+            if (hasCarne && !hasPescado) return 'carne';
+            if (hasPescado && !hasCarne) return 'pescado';
             return 'vegetariano';
         }
 
-        static areCompatible(first, second) {
-            const t1 = this.getProteinType(first);
-            const t2 = this.getProteinType(second);
-            const isMeat = (t) => t === 'carne';
-            const isFish = (t) => t === 'pescado';
-            if (isMeat(t1) && isFish(t2)) return false;
-            if (isFish(t1) && isMeat(t2)) return false;
-            if (t1 === 'mixto' && (isMeat(t2) || isFish(t2))) return false;
-            if (t2 === 'mixto' && (isMeat(t1) || isFish(t1))) return false;
-            return true;
+        static dayIsBalanced(lunch, dinner) {
+            return this.getProteinType(lunch) !== this.getProteinType(dinner);
         }
 
         static calculateDayScore(dayMeals) {
-            const allCategories = new Set();
-            const categoryCount = {};
-            let totalCategories = 0;
-            for (const meal of dayMeals) {
-                const cats = this.extractCategories(meal);
-                for (const cat of cats) {
-                    allCategories.add(cat);
-                    categoryCount[cat] = (categoryCount[cat] || 0) + 1;
-                    totalCategories++;
-                }
+            const mealCats = dayMeals.map(meal =>
+                this.extractCategories(meal).filter(c => !CONFIG.EXCLUDE_FROM_DIVERSITY.includes(c))
+            );
+            let sharedCount = 0;
+            if (mealCats.length >= 2) {
+                const [first, ...rest] = mealCats;
+                const counts = {};
+                first.forEach(c => counts[c] = (counts[c] || 0) + 1);
+                rest.flat().forEach(c => { if (counts[c]) sharedCount++; });
             }
-            const uniqueCount = allCategories.size;
-            const totalMeals = dayMeals.length;
-            let repetitionPenalty = 0;
-            for (const [cat, count] of Object.entries(categoryCount)) {
-                if (count > 1) repetitionPenalty += (count - 1) * 20;
-            }
-            const varietyBonus = uniqueCount * 15;
-            const emptyMeals = dayMeals.filter(m => this.extractCategories(m).length === 0).length;
-            const emptyPenalty = emptyMeals * 5;
-            let score = varietyBonus - repetitionPenalty - emptyPenalty;
-            const maxScore = totalMeals * 15;
-            score = Math.max(0, Math.min(100, (score / maxScore) * 100));
-            return { score: Math.round(score), uniqueCount, totalCategories, repetitionPenalty, categoryCount };
+            const uniqueCount = new Set(mealCats.flat()).size;
+            let score = 100 - sharedCount * 15;
+            if (uniqueCount >= 8) score = Math.min(100, score + 5);
+            score = Math.max(0, Math.min(100, score));
+            return { score: Math.round(score), sharedCount, uniqueCount };
         }
 
-        static selectDiverse(pool, count, existingDayMeals = []) {
+        static selectDiverse(pool, count) {
             if (pool.length === 0) return [];
             let available = [...pool];
             let selected = [];
@@ -1182,9 +958,9 @@
             for (let i = 0; i < count; i++) {
                 if (available.length === 0) break;
                 const scored = available.map((plato, index) => {
-                    const simulatedDay = [...existingDayMeals, ...selected, plato];
-                    const analysis = this.calculateDayScore(simulatedDay);
-                    return { plato, index, score: analysis.score, analysis };
+                    const simulated = [...selected, plato];
+                    const analysis = this.calculateDayScore(simulated);
+                    return { plato, index, score: analysis.score };
                 });
                 scored.sort((a, b) => b.score - a.score);
                 const topScore = scored[0].score;
@@ -1193,60 +969,36 @@
                 selected.push(chosen.plato);
                 available = available.filter((_, idx) => idx !== chosen.index);
             }
-            while (selected.length < count && pool.length > 0) {
-                const remaining = pool.filter(p => !selected.some(s => s.nombre === p.nombre));
-                if (remaining.length === 0) selected.push(pool[Math.floor(Math.random() * pool.length)]);
-                else selected.push(remaining[Math.floor(Math.random() * remaining.length)]);
-            }
             return selected;
         }
 
-        static resolveMealPairing(firsts, seconds, pool) {
-            const sec = [...seconds];
-            const usedNames = new Set(sec.map(s => s.nombre));
-            for (let i = 0; i < firsts.length; i++) {
-                if (this.areCompatible(firsts[i], sec[i])) continue;
-                const candidates = pool.filter(p => !usedNames.has(p.nombre) && this.areCompatible(firsts[i], p));
-                if (candidates.length > 0) {
-                    const scored = candidates.map(plato => ({ plato, score: this.calculateDayScore([firsts[i], plato]).score }));
-                    scored.sort((a, b) => b.score - a.score);
-                    const topScore = scored[0].score;
-                    const top = scored.filter(s => s.score >= topScore - 10);
-                    const chosen = top[Math.floor(Math.random() * top.length)].plato;
-                    usedNames.delete(sec[i].nombre);
-                    usedNames.add(chosen.nombre);
-                    sec[i] = chosen;
-                    continue;
-                }
+        static resolveDayPairing(lunches, dinners, dinnerPool) {
+            const din = [...dinners];
+            const usedNames = new Set(din.map(d => d.nombre));
+            for (let i = 0; i < lunches.length; i++) {
+                if (this.dayIsBalanced(lunches[i], din[i])) continue;
+                const lunchType = this.getProteinType(lunches[i]);
                 let swapped = false;
-                for (let j = 0; j < sec.length; j++) {
+                for (let j = 0; j < din.length; j++) {
                     if (i === j) continue;
-                    if (this.areCompatible(firsts[i], sec[j]) && this.areCompatible(firsts[j], sec[i])) {
-                        [sec[i], sec[j]] = [sec[j], sec[i]];
+                    const otherLunchType = this.getProteinType(lunches[j]);
+                    const otherDinnerType = this.getProteinType(din[j]);
+                    if (lunchType !== otherDinnerType && otherLunchType !== this.getProteinType(din[i])) {
+                        [din[i], din[j]] = [din[j], din[i]];
                         swapped = true;
                         break;
                     }
                 }
                 if (swapped) continue;
-                const fallback = pool.filter(p => this.areCompatible(firsts[i], p) && p.nombre !== sec[i].nombre);
-                if (fallback.length > 0) {
-                    const scored = fallback.map(plato => ({ plato, score: this.calculateDayScore([firsts[i], plato]).score }));
-                    scored.sort((a, b) => b.score - a.score);
-                    const topScore = scored[0].score;
-                    const top = scored.filter(s => s.score >= topScore - 10);
-                    sec[i] = top[Math.floor(Math.random() * top.length)].plato;
+                const candidates = dinnerPool.filter(p => !usedNames.has(p.nombre) && this.getProteinType(p) !== lunchType);
+                if (candidates.length > 0) {
+                    const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+                    usedNames.delete(din[i].nombre);
+                    usedNames.add(chosen.nombre);
+                    din[i] = chosen;
                 }
             }
-            return sec;
-        }
-
-        static analyzeDayDiversity(dayMeals) { return this.calculateDayScore(dayMeals); }
-
-        static countCompatibleMeals(day) {
-            let count = 0;
-            if (this.areCompatible(day.p1c, day.p2c)) count++;
-            if (this.areCompatible(day.c1, day.c2)) count++;
-            return count;
+            return din;
         }
     }
 
@@ -1267,34 +1019,41 @@
         }
         saveToStorage() {
             try { localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(this.calendario)); }
-            catch (error) { console.error('Error saving calendar:', error); }
+            catch (error) { console.error('Error saving:', error); }
         }
         generateWeek() {
-            const p1c = AdvancedSelector.selectDiverse(PRIMEROS_COMIDA, 7);
-            const p2cRaw = AdvancedSelector.selectDiverse(SEGUNDOS_COMIDA, 7);
-            const c1 = AdvancedSelector.selectDiverse(PRIMEROS_CENA, 7);
-            const c2Raw = AdvancedSelector.selectDiverse(SEGUNDOS_CENA, 7);
-            const p2c = AdvancedSelector.resolveMealPairing(p1c, p2cRaw, SEGUNDOS_COMIDA);
-            const c2 = AdvancedSelector.resolveMealPairing(c1, c2Raw, SEGUNDOS_CENA);
+            const lunches = AdvancedSelector.selectDiverse(LUNCH_DISHES, 7);
+            const dinnersRaw = AdvancedSelector.selectDiverse(DINNER_DISHES, 7);
+            const dinners = AdvancedSelector.resolveDayPairing(lunches, dinnersRaw, DINNER_DISHES);
+
             let semana = [];
             let totalK = 0, totalP = 0, totalC = 0, totalG = 0;
             let diversityScores = [];
-            let compatibleMeals = 0, totalMeals = 0;
+            let balancedDays = 0;
+
             for (let i = 0; i < 7; i++) {
-                const p1 = p1c[i], p2 = p2c[i], cena1 = c1[i], cena2 = c2[i];
-                const diaK = p1.kcal + p2.kcal + cena1.kcal + cena2.kcal;
-                const diaP = p1.p + p2.p + cena1.p + cena2.p;
-                const diaC = p1.c + p2.c + cena1.c + cena2.c;
-                const diaG = p1.g + p2.g + cena1.g + cena2.g;
+                const comida = lunches[i];
+                const cena = dinners[i];
+                const diaK = comida.kcal + cena.kcal;
+                const diaP = comida.p + cena.p;
+                const diaC = comida.c + cena.c;
+                const diaG = comida.g + cena.g;
                 totalK += diaK; totalP += diaP; totalC += diaC; totalG += diaG;
-                const dayMeals = [p1, p2, cena1, cena2];
-                const diversity = AdvancedSelector.analyzeDayDiversity(dayMeals);
+                const dayMeals = [comida, cena];
+                const diversity = AdvancedSelector.calculateDayScore(dayMeals);
                 diversityScores.push(diversity.score);
-                const dayObj = { dia: DIAS[i], p1c: p1, p2c: p2, c1: cena1, c2: cena2, total: { kcal: diaK, p: diaP, c: diaC, g: diaG }, diversity: diversity };
-                compatibleMeals += AdvancedSelector.countCompatibleMeals(dayObj);
-                totalMeals += 2;
-                semana.push(dayObj);
+                const balanced = AdvancedSelector.dayIsBalanced(comida, cena);
+                if (balanced) balancedDays++;
+                semana.push({
+                    dia: DIAS[i],
+                    comida: comida,
+                    cena: cena,
+                    total: { kcal: diaK, p: diaP, c: diaC, g: diaG },
+                    diversity: diversity,
+                    balanced: balanced
+                });
             }
+
             this.semanaActual = semana;
             const avgDiversity = Math.round(diversityScores.reduce((a, b) => a + b, 0) / diversityScores.length);
             const nextMonday = this._getNextMonday();
@@ -1308,8 +1067,8 @@
                     c: Math.round(totalC / 7),
                     g: Math.round(totalG / 7),
                     diversity: avgDiversity,
-                    compatibleMeals: compatibleMeals,
-                    totalMeals: totalMeals
+                    balancedDays: balancedDays,
+                    totalDays: 7
                 }
             };
             this.calendario.push(semanaCalendario);
@@ -1350,7 +1109,7 @@
         }
         analyzeWeek(semana) {
             if (!semana) return null;
-            const allMeals = semana.flatMap(d => [d.p1c, d.p2c, d.c1, d.c2]);
+            const allMeals = semana.flatMap(d => [d.comida, d.cena]);
             const totalK = allMeals.reduce((s, m) => s + m.kcal, 0);
             const totalP = allMeals.reduce((s, m) => s + m.p, 0);
             const totalC = allMeals.reduce((s, m) => s + m.c, 0);
@@ -1367,13 +1126,16 @@
                 const cats = AdvancedSelector.extractCategories(meal);
                 for (const cat of cats) allCategories.add(cat);
             }
-            let compatiblePairs = 0, totalPairs = 0;
+            let balancedDays = 0;
             for (const day of semana) {
-                if (AdvancedSelector.areCompatible(day.p1c, day.p2c)) compatiblePairs++;
-                if (AdvancedSelector.areCompatible(day.c1, day.c2)) compatiblePairs++;
-                totalPairs += 2;
+                if (day.balanced) balancedDays++;
             }
-            return { avgK, avgP, avgC, avgG, pctProtein, pctCarbs, pctFat, totalK, totalP, totalC, totalG, meals: allMeals, uniqueIngredients: allCategories.size, compatiblePairs, totalPairs };
+            return {
+                avgK, avgP, avgC, avgG, pctProtein, pctCarbs, pctFat,
+                totalK, totalP, totalC, totalG,
+                meals: allMeals, uniqueIngredients: allCategories.size,
+                balancedDays, totalDays: 7
+            };
         }
     }
 
@@ -1409,12 +1171,69 @@
     function mShort(p) { return `${p.kcal} · ${p.g}g · ${p.c}g · ${p.p}g`; }
     function proteinLabel(plato) {
         const t = AdvancedSelector.getProteinType(plato);
-        const labels = { carne: 'carne', pescado: 'pescado', vegetariano: 'veg', mixto: 'mixto' };
+        const labels = { carne: 'carne', pescado: 'pescado', vegetariano: 'veg' };
         return { type: t, label: labels[t] || '' };
     }
     function mealMacrosHtml(plato) {
         const { type, label } = proteinLabel(plato);
         return `${mShort(plato)} <span class="protein-tag ${type}">${label}</span>`;
+    }
+
+    // ============================================================
+    //  GENERACIÓN DEL BOTÓN "AÑADIR AL CALENDARIO"
+    // ============================================================
+    function escapeHtmlAttribute(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    function buildCalendarButton(dayInfo, dayIndex, startDate) {
+        // Calcular la fecha real del día
+        const dayDate = new Date(startDate);
+        dayDate.setDate(dayDate.getDate() + dayIndex);
+        const dateStr = dayDate.toISOString().split('T')[0];
+
+        // Construir nombre del evento y descripción (con \n literales para la librería)
+        const eventName = escapeHtmlAttribute(`Menú ${dayInfo.dia.nombre}: ${dayInfo.comida.nombre} / ${dayInfo.cena.nombre}`);
+
+        const descriptionParts = [
+            `🍽️ COMIDA: ${dayInfo.comida.nombre}`,
+            `${dayInfo.comida.kcal} kcal · ${dayInfo.comida.p}g P · ${dayInfo.comida.c}g C · ${dayInfo.comida.g}g G`,
+            `Proteína: ${dayInfo.comida.balanced.proteina} · Hidratos: ${dayInfo.comida.balanced.carbohidrato}`,
+            `Verdura: ${dayInfo.comida.balanced.verdura} · Grasa: ${dayInfo.comida.balanced.grasa}`,
+            ``,
+            `🌙 CENA: ${dayInfo.cena.nombre}`,
+            `${dayInfo.cena.kcal} kcal · ${dayInfo.cena.p}g P · ${dayInfo.cena.c}g C · ${dayInfo.cena.g}g G`,
+            `Proteína: ${dayInfo.cena.balanced.proteina} · Hidratos: ${dayInfo.cena.balanced.carbohidrato}`,
+            `Verdura: ${dayInfo.cena.balanced.verdura} · Grasa: ${dayInfo.cena.balanced.grasa}`,
+            ``,
+            `Total día: ${dayInfo.total.kcal} kcal · ${dayInfo.total.p}g P · ${dayInfo.total.c}g C · ${dayInfo.total.g}g G`
+        ];
+        const description = escapeHtmlAttribute(descriptionParts.join('\\n'));
+
+        return `
+            <div class="calendar-btn-wrapper">
+                <add-to-calendar-button
+                    name="${eventName}"
+                    description="${description}"
+                    startDate="${dateStr}"
+                    endDate="${dateStr}"
+                    allDayEvent="true"
+                    options="'Apple','Google','Outlook.com','iCal'"
+                    timeZone="Europe/Madrid"
+                    language="es"
+                    lightMode="dark"
+                    size="2"
+                    label="Añadir al calendario"
+                    buttonStyle="default"
+                    styleLight="--btn-background:rgba(255,138,122,0.16);--btn-text:#ff8a7a;--btn-border:rgba(255,138,122,0.3);"
+                    styleDark="--btn-background:rgba(255,138,122,0.16);--btn-text:#ff8a7a;--btn-border:rgba(255,138,122,0.3);"
+                ></add-to-calendar-button>
+            </div>
+        `;
     }
 
     function actualizarContador() {
@@ -1442,10 +1261,7 @@
             let totalDiv = 0;
             for (const day of semana) {
                 if (day.diversity) totalDiv += day.diversity.score;
-                else {
-                    const dayMeals = [day.p1c, day.p2c, day.c1, day.c2];
-                    totalDiv += AdvancedSelector.analyzeDayDiversity(dayMeals).score;
-                }
+                else totalDiv += AdvancedSelector.calculateDayScore([day.comida, day.cena]).score;
             }
             avgDiversity = Math.round(totalDiv / semana.length);
         }
@@ -1465,14 +1281,23 @@
 
     function renderMenu(semana) {
         const grid = document.getElementById('weekGrid');
+
+        // Obtener la fecha de inicio de la semana correspondiente
+        const entry = planner.calendario.find(e => e.semana === semana)
+            || planner.calendario[planner.calendario.length - 1];
+        const startDate = entry ? new Date(entry.fechaInicio) : null;
+
         let html = '';
-        for (const d of semana) {
+        for (let i = 0; i < semana.length; i++) {
+            const d = semana[i];
             const divScore = d.diversity ? d.diversity.score : 0;
             let badgeClass = 'bad', badgeText = `Repetido ${divScore}%`;
-            if (divScore > 70) { badgeClass = 'good'; badgeText = `Diverso ${divScore}%`; }
+            if (divScore > 85) { badgeClass = 'good'; badgeText = `Excelente ${divScore}%`; }
+            else if (divScore > 60) { badgeClass = 'good'; badgeText = `Buena ${divScore}%`; }
             else if (divScore > 40) { badgeClass = 'warning'; badgeText = `Mejorable ${divScore}%`; }
-            const comidaOk = AdvancedSelector.areCompatible(d.p1c, d.p2c);
-            const cenaOk = AdvancedSelector.areCompatible(d.c1, d.c2);
+
+            const calendarBtn = startDate ? buildCalendarButton(d, i, startDate) : '';
+
             html += `
                 <div class="day-card">
                     <div class="day-card-header">
@@ -1480,24 +1305,14 @@
                         <span class="diversity-badge ${badgeClass}">${badgeText}</span>
                     </div>
                     <div class="meal-group">
-                        <div class="meal-label"><span class="dot dot-lunch1"></span>1º Comida</div>
-                        <div class="meal-name">${d.p1c.nombre}</div>
-                        <div class="meal-macros">${mealMacrosHtml(d.p1c)}</div>
+                        <div class="meal-label"><span class="dot dot-comida"></span>Comida</div>
+                        <div class="meal-name">${d.comida.nombre}</div>
+                        <div class="meal-macros">${mealMacrosHtml(d.comida)}</div>
                     </div>
                     <div class="meal-group">
-                        <div class="meal-label"><span class="dot dot-lunch2"></span>2º Comida ${comidaOk ? '<span class="pair-ok">✓</span>' : '<span class="pair-bad">✗</span>'}</div>
-                        <div class="meal-name">${d.p2c.nombre}</div>
-                        <div class="meal-macros">${mealMacrosHtml(d.p2c)}</div>
-                    </div>
-                    <div class="meal-group">
-                        <div class="meal-label"><span class="dot dot-dinner1"></span>1º Cena</div>
-                        <div class="meal-name">${d.c1.nombre}</div>
-                        <div class="meal-macros">${mealMacrosHtml(d.c1)}</div>
-                    </div>
-                    <div class="meal-group">
-                        <div class="meal-label"><span class="dot dot-dinner2"></span>2º Cena ${cenaOk ? '<span class="pair-ok">✓</span>' : '<span class="pair-bad">✗</span>'}</div>
-                        <div class="meal-name">${d.c2.nombre}</div>
-                        <div class="meal-macros">${mealMacrosHtml(d.c2)}</div>
+                        <div class="meal-label"><span class="dot dot-cena"></span>Cena</div>
+                        <div class="meal-name">${d.cena.nombre}</div>
+                        <div class="meal-macros">${mealMacrosHtml(d.cena)}</div>
                     </div>
                     <div class="day-summary">
                         <span>Kcal <strong>${d.total.kcal}</strong></span>
@@ -1505,10 +1320,24 @@
                         <span>C <strong>${d.total.c}g</strong></span>
                         <span>P <strong>${d.total.p}g</strong></span>
                     </div>
+                    ${calendarBtn}
                 </div>
             `;
         }
         grid.innerHTML = html;
+    }
+
+    function renderBalancedInfo(plato) {
+        if (!plato.balanced) return '';
+        const b = plato.balanced;
+        return `
+            <div class="balanced-info">
+                <div class="item"><span class="item-label">Proteína</span><span class="item-value">${b.proteina}</span></div>
+                <div class="item"><span class="item-label">Hidratos</span><span class="item-value">${b.carbohidrato}</span></div>
+                <div class="item"><span class="item-label">Verdura</span><span class="item-value">${b.verdura}</span></div>
+                <div class="item"><span class="item-label">Grasa</span><span class="item-value">${b.grasa}</span></div>
+            </div>
+        `;
     }
 
     function renderRecetas(semana) {
@@ -1520,37 +1349,34 @@
         let html = '';
         for (const d of semana) {
             const recetas = [
-                { tipo: '1º Comida', plato: d.p1c },
-                { tipo: '2º Comida', plato: d.p2c },
-                { tipo: '1º Cena', plato: d.c1 },
-                { tipo: '2º Cena', plato: d.c2 }
+                { tipo: 'Comida', plato: d.comida },
+                { tipo: 'Cena', plato: d.cena }
             ];
             const divScore = d.diversity ? d.diversity.score : 0;
-            const diversityLabel = divScore > 70 ? 'Alta diversidad' : divScore > 40 ? 'Media diversidad' : 'Baja diversidad';
             html += `
                 <div class="recipes-day-section">
                     <div class="recipes-day-header">
                         <div>
                             <span class="day-name">${d.dia.nombre}</span>
-                            <span style="font-size:11px;color:var(--muted);margin-left:8px;">${diversityLabel} (${divScore}%)</span>
+                            <span style="font-size:11px;color:var(--muted);margin-left:8px;">Diversidad ${divScore}%</span>
                         </div>
-                        <span style="font-size:11px;color:var(--muted);">${d.total.kcal} kcal · ${d.total.g}g grasa</span>
+                        <span style="font-size:11px;color:var(--muted);">${d.total.kcal} kcal · ${d.total.p}g P · ${d.total.c}g C · ${d.total.g}g G</span>
                     </div>
                     <div class="recipes-day-grid">
             `;
             for (const r of recetas) {
-                if (!r.plato || !r.plato.ingredientes) continue;
                 const { type, label } = proteinLabel(r.plato);
                 html += `
                     <div class="recipe-mini">
                         <div class="recipe-mini-type">${r.tipo} <span class="protein-tag ${type}">${label}</span></div>
                         <div class="recipe-mini-title">${r.plato.nombre}</div>
-                        <div class="recipe-mini-macros">${r.plato.kcal}k · ${r.plato.g}g · ${r.plato.c}g · ${r.plato.p}g</div>
+                        <div class="recipe-mini-macros">${r.plato.kcal} kcal · ${r.plato.p}g P · ${r.plato.c}g C · ${r.plato.g}g G</div>
                         <button class="recipe-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">Ver receta</button>
                         <div class="recipe-mini-expand">
-                            <div><strong>Descripción:</strong> ${r.plato.descripcion}</div>
+                            ${renderBalancedInfo(r.plato)}
+                            <div style="margin-top:10px;"><strong>Preparación:</strong> ${r.plato.descripcion}</div>
                             <div class="ingredients"><strong>Ingredientes:</strong><br>${r.plato.ingredientes.map(i => `• ${i}`).join('<br>')}</div>
-                            <div style="margin-top:8px;color:var(--muted-dark);font-size:11px;">${r.plato.tiempo || 15} min · ${r.plato.dificultad || 'media'} · Tipo: ${label}</div>
+                            <div style="margin-top:8px;color:var(--muted-dark);font-size:11px;">${r.plato.tiempo || 15} min · ${r.plato.dificultad || 'media'}</div>
                         </div>
                     </div>
                 `;
@@ -1582,24 +1408,20 @@
                 const diaDate = new Date(fecha);
                 const dayIndex = DIAS.findIndex(dia => dia.nombre === d.dia.nombre);
                 diaDate.setDate(diaDate.getDate() + dayIndex);
-                const recetas = [
-                    { type: '1º Comida', plato: d.p1c },
-                    { type: '2º Comida', plato: d.p2c },
-                    { type: '1º Cena', plato: d.c1 },
-                    { type: '2º Cena', plato: d.c2 }
-                ];
                 html += `
                     <div class="calendar-day">
                         <div class="calendar-day-header">
                             <span class="calendar-day-number">${diaDate.getDate()}</span>
                             <span class="calendar-day-name">${d.dia.nombre}</span>
                         </div>
-                        ${recetas.map(r => `
-                            <div class="calendar-meal">
-                                <span class="type">${r.type}</span>
-                                <span class="name">${r.plato.nombre}</span>
-                            </div>
-                        `).join('')}
+                        <div class="calendar-meal">
+                            <span class="type">Comida</span>
+                            <span class="name">${d.comida.nombre}</span>
+                        </div>
+                        <div class="calendar-meal">
+                            <span class="type">Cena</span>
+                            <span class="name">${d.cena.nombre}</span>
+                        </div>
                     </div>
                 `;
             }
@@ -1619,9 +1441,7 @@
         if (semana && semana.length > 0) {
             let totalDiv = 0;
             for (const day of semana) {
-                let divScore;
-                if (day.diversity) divScore = day.diversity.score;
-                else divScore = AdvancedSelector.analyzeDayDiversity([day.p1c, day.p2c, day.c1, day.c2]).score;
+                let divScore = day.diversity ? day.diversity.score : AdvancedSelector.calculateDayScore([day.comida, day.cena]).score;
                 totalDiv += divScore;
                 diversityDetails.push({ dia: day.dia.nombre, score: divScore });
             }
@@ -1629,10 +1449,8 @@
         }
         const meals = stats.meals;
         const types = [
-            { name: '1º Comida', items: meals.filter((_, i) => i % 4 === 0) },
-            { name: '2º Comida', items: meals.filter((_, i) => i % 4 === 1) },
-            { name: '1º Cena', items: meals.filter((_, i) => i % 4 === 2) },
-            { name: '2º Cena', items: meals.filter((_, i) => i % 4 === 3) }
+            { name: 'Comidas', items: meals.filter((_, i) => i % 2 === 0) },
+            { name: 'Cenas', items: meals.filter((_, i) => i % 2 === 1) }
         ];
         const avgByType = types.map(t => {
             const avgK = Math.round(t.items.reduce((s, m) => s + m.kcal, 0) / t.items.length);
@@ -1641,7 +1459,7 @@
             const avgG = Math.round(t.items.reduce((s, m) => s + m.g, 0) / t.items.length);
             return { ...t, avgK, avgP, avgC, avgG };
         });
-        const compatPct = stats.totalPairs > 0 ? Math.round((stats.compatiblePairs / stats.totalPairs) * 100) : 100;
+        const balancedPct = Math.round((stats.balancedDays / stats.totalDays) * 100);
 
         container.innerHTML = `
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:16px;">
@@ -1663,17 +1481,17 @@
                     </div>
                 </div>
                 <div style="background:var(--surface);border-radius:var(--radius-lg);padding:18px;border:1px solid var(--line);">
-                    <h3 style="color:#fff;font-size:14px;font-weight:850;margin-bottom:12px;letter-spacing:-0.01em;">Diversidad</h3>
-                    <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Global</div>
-                    <strong style="font-size:26px;color:${avgDiversity > 70 ? 'var(--green)' : avgDiversity > 40 ? 'var(--orange)' : 'var(--red)'};letter-spacing:-0.04em;">${avgDiversity}%</strong>
+                    <h3 style="color:#fff;font-size:14px;font-weight:850;margin-bottom:12px;letter-spacing:-0.01em;">Equilibrio</h3>
+                    <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Diversidad global</div>
+                    <strong style="font-size:26px;color:${avgDiversity > 85 ? 'var(--green)' : avgDiversity > 60 ? 'var(--success)' : avgDiversity > 40 ? 'var(--orange)' : 'var(--red)'};letter-spacing:-0.04em;">${avgDiversity}%</strong>
                     <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line);">
-                        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Parejas compatibles</div>
-                        <strong style="font-size:16px;color:${compatPct === 100 ? 'var(--green)' : compatPct >= 80 ? 'var(--orange)' : 'var(--red)'};">${stats.compatiblePairs}/${stats.totalPairs} (${compatPct}%)</strong>
+                        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Días equilibrados (carne ≠ pescado)</div>
+                        <strong style="font-size:16px;color:${balancedPct === 100 ? 'var(--green)' : balancedPct >= 80 ? 'var(--orange)' : 'var(--red)'};">${stats.balancedDays}/${stats.totalDays} (${balancedPct}%)</strong>
                     </div>
                 </div>
             </div>
             <div style="background:var(--surface);border-radius:var(--radius-lg);padding:18px;border:1px solid var(--line);margin-bottom:16px;">
-                <h3 style="color:#fff;font-size:14px;font-weight:850;margin-bottom:12px;letter-spacing:-0.01em;">Media por tipo</h3>
+                <h3 style="color:#fff;font-size:14px;font-weight:850;margin-bottom:12px;letter-spacing:-0.01em;">Media por tipo de comida</h3>
                 <div style="overflow-x:auto;">
                     <table style="width:100%;border-collapse:collapse;font-size:12px;">
                         <thead>
@@ -1703,7 +1521,7 @@
                 <h3 style="color:#fff;font-size:14px;font-weight:850;margin-bottom:12px;letter-spacing:-0.01em;">Diversidad por día</h3>
                 <div style="display:flex;gap:6px;flex-wrap:wrap;">
                     ${diversityDetails.map(d => `
-                        <span style="background:${d.score > 70 ? 'var(--green-bg)' : d.score > 40 ? 'var(--orange-bg)' : 'var(--red-bg)'};padding:5px 10px;border-radius:99px;font-size:11px;font-weight:850;color:${d.score > 70 ? 'var(--green)' : d.score > 40 ? 'var(--orange)' : 'var(--red)'};border:1px solid ${d.score > 70 ? 'rgba(110,231,183,0.2)' : d.score > 40 ? 'rgba(251,191,36,0.2)' : 'rgba(251,113,133,0.2)'};">
+                        <span style="background:${d.score > 85 ? 'var(--green-bg)' : d.score > 60 ? 'var(--success-soft)' : d.score > 40 ? 'var(--orange-bg)' : 'var(--red-bg)'};padding:5px 10px;border-radius:99px;font-size:11px;font-weight:850;color:${d.score > 85 ? 'var(--green)' : d.score > 60 ? 'var(--success)' : d.score > 40 ? 'var(--orange)' : 'var(--red)'};border:1px solid ${d.score > 85 ? 'rgba(110,231,183,0.2)' : d.score > 60 ? 'rgba(110,231,183,0.15)' : d.score > 40 ? 'rgba(251,191,36,0.2)' : 'rgba(251,113,133,0.2)'};">
                             ${d.dia}: ${d.score}%
                         </span>
                     `).join('')}
@@ -1728,9 +1546,7 @@
             let totalDiv = 0;
             for (const day of result.semana) if (day.diversity) totalDiv += day.diversity.score;
             const avgDiv = Math.round(totalDiv / result.semana.length);
-            const compat = result.stats.compatibleMeals;
-            const total = result.stats.totalMeals;
-            showToast(`Menú generado · diversidad ${avgDiv}% · ${compat}/${total} parejas compatibles`, 'success', 3500);
+            showToast(`Menú generado · diversidad ${avgDiv}% · ${result.stats.balancedDays}/7 días equilibrados`, 'success', 3500);
         } catch (error) {
             console.error('Error:', error);
             showToast('Error al generar el menú', 'error');
@@ -1767,7 +1583,6 @@
         showToast('Todo limpiado', 'info');
     }
 
-    // Tabs
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
@@ -1790,8 +1605,8 @@
     window.eliminarSemana = eliminarSemana;
 
     actualizarContador();
-    console.log('Planificador Mediterráneo v3 cargado · UI coral');
-    console.log(`${PRIMEROS_COMIDA.length} primeros, ${SEGUNDOS_COMIDA.length} segundos, ${PRIMEROS_CENA.length} primeros cena, ${SEGUNDOS_CENA.length} segundos cena`);
+    console.log('Planificador Mediterráneo v4 · plato único + calendario');
+    console.log(`${LUNCH_DISHES.length} comidas, ${DINNER_DISHES.length} cenas`);
 })();
 </script>
 
