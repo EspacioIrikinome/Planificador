@@ -9,9 +9,6 @@
     <meta name="theme-color" content="#0a0707">
     <title>Planificador · Mediterráneo</title>
 
-    <!-- Librería de añadir a calendario (Apple, Google, Outlook, iCal) -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/add-to-calendar-button@2" async defer></script>
-
     <style>
     :root {
         --bg: #0a0707;
@@ -246,7 +243,7 @@
         width: auto;
         max-width: 540px;
         margin: 0 auto;
-        padding: 6px;
+        padding: 5px;
         border: 1px solid rgba(255, 200, 190, 0.22);
         border-radius: 25px;
         background: rgba(20, 12, 14, 0.92);
@@ -263,11 +260,12 @@
         border-radius: 19px;
         color: var(--muted);
         background: transparent;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 850;
-        padding: 0 8px;
+        padding: 0 4px;
         text-align: center;
         white-space: nowrap;
+        letter-spacing: -0.01em;
     }
     .tab-btn.active {
         color: #fff;
@@ -470,22 +468,6 @@
     .diversity-badge.warning { background: var(--warning-soft); color: var(--warning); border: 1px solid rgba(251, 191, 36, 0.2); }
     .diversity-badge.bad { background: var(--danger-soft); color: var(--danger); border: 1px solid rgba(251, 113, 133, 0.2); }
 
-    /* Contenedor del botón de calendario */
-    .calendar-btn-wrapper {
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px solid var(--line);
-        display: flex;
-        justify-content: flex-end;
-    }
-    /* Personalización del web component add-to-calendar-button */
-    add-to-calendar-button {
-        --btn-background: rgba(255, 138, 122, 0.16);
-        --btn-text: var(--primary);
-        --btn-border: rgba(255, 138, 122, 0.3);
-        --btn-hover: rgba(255, 138, 122, 0.28);
-    }
-
     /* RECETAS */
     .recipes-container { display: flex; flex-direction: column; gap: 14px; }
     .recipes-day-section {
@@ -626,6 +608,123 @@
         text-align: center;
     }
 
+    /* LISTA DE LA COMPRA */
+    .shopping-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: var(--primary-soft);
+        border: 1px solid rgba(255, 138, 122, 0.2);
+        border-radius: var(--radius-md);
+        margin-bottom: 16px;
+        font-size: 12px;
+        font-weight: 750;
+        color: var(--text-soft);
+        flex-wrap: wrap;
+    }
+    .shopping-summary .pending {
+        color: var(--primary);
+        font-weight: 850;
+    }
+
+    .shopping-category { margin-bottom: 18px; }
+
+    .shopping-category-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 4px 8px;
+        color: var(--primary);
+        font-size: 11px;
+        font-weight: 850;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+    .shopping-category-title .count {
+        padding: 2px 8px;
+        background: var(--surface-light);
+        color: var(--muted);
+        border-radius: 99px;
+        font-size: 10px;
+        font-weight: 850;
+        letter-spacing: 0.02em;
+    }
+
+    .shopping-items {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        background: rgba(30, 22, 24, 0.7);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+    }
+
+    .shopping-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        background: rgba(255, 255, 255, 0.025);
+        cursor: pointer;
+        border-bottom: 1px solid var(--line);
+        transition: background 0.15s ease;
+    }
+    .shopping-item:last-child { border-bottom: 0; }
+    .shopping-item:hover { background: rgba(255, 255, 255, 0.06); }
+
+    .shopping-item input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+        border: 1.5px solid var(--line-strong);
+        border-radius: 6px;
+        background: transparent;
+        cursor: pointer;
+        position: relative;
+        transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .shopping-item input[type="checkbox"]:checked {
+        background: var(--primary);
+        border-color: var(--primary);
+    }
+    .shopping-item input[type="checkbox"]:checked::after {
+        content: "";
+        position: absolute;
+        left: 5px;
+        top: 1px;
+        width: 5px;
+        height: 10px;
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+    .shopping-item input[type="checkbox"]:checked ~ .shopping-qty,
+    .shopping-item input[type="checkbox"]:checked ~ .shopping-name {
+        text-decoration: line-through;
+        opacity: 0.42;
+    }
+
+    .shopping-qty {
+        color: var(--primary);
+        font-size: 12px;
+        font-weight: 850;
+        min-width: 60px;
+        flex-shrink: 0;
+    }
+    .shopping-name {
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 600;
+        flex: 1;
+        word-break: break-word;
+        line-height: 1.35;
+    }
+
     /* TOASTS */
     .toast-container {
         position: fixed;
@@ -672,7 +771,7 @@
         .tab-content { padding: 16px 12px 0; }
         .list-header h2 { font-size: 17px; }
         .tabs { padding: 4px; border-radius: 20px; right: 10px; left: 10px; bottom: max(10px, var(--safe-bottom)); }
-        .tab-btn { min-height: 44px; font-size: 11px; border-radius: 16px; padding: 0 4px; }
+        .tab-btn { min-height: 44px; font-size: 10px; border-radius: 16px; padding: 0 2px; }
         .day-card { padding: 14px; }
         .meal-name { font-size: 13px; }
         #landing h1 { font-size: 36px; }
@@ -716,6 +815,7 @@
 
     <div class="tabs" role="tablist">
         <button class="tab-btn active" data-tab="menu" role="tab" aria-selected="true">Menú</button>
+        <button class="tab-btn" data-tab="compra" role="tab" aria-selected="false">Compra</button>
         <button class="tab-btn" data-tab="recetas" role="tab" aria-selected="false">Recetas</button>
         <button class="tab-btn" data-tab="calendario" role="tab" aria-selected="false">Calendario</button>
         <button class="tab-btn" data-tab="analisis" role="tab" aria-selected="false">Análisis</button>
@@ -777,6 +877,20 @@
         </div>
     </div>
 
+    <!-- COMPRA -->
+    <div id="tab-compra" class="tab-content" role="tabpanel">
+        <div class="list-header">
+            <h2>Lista de la compra</h2>
+            <div style="display:flex;gap:6px;">
+                <button class="btn-secondary" id="copyShoppingBtn">Copiar</button>
+                <button class="btn-secondary" id="resetShoppingBtn">Reiniciar</button>
+            </div>
+        </div>
+        <div id="shoppingListContainer">
+            <div class="empty-state">Genera un menú para ver la lista de la compra</div>
+        </div>
+    </div>
+
     <!-- RECETAS -->
     <div id="tab-recetas" class="tab-content" role="tabpanel">
         <div class="recipes-container" id="recipesContainer">
@@ -806,6 +920,7 @@
 
     const CONFIG = {
         STORAGE_KEY: 'planificador_mediterraneo_v4_single',
+        SHOPPING_KEY: 'planificador_shopping_v1',
         MAX_WEEKS: 52,
         TARGET_CALORIES: 2000,
         TARGET_PROTEIN: 100,
@@ -900,7 +1015,7 @@
         { nombre: "Revuelto de setas y gambas con patata panadera", kcal: 480, g: 22, c: 32, p: 32, ingredientes: ["200 g de setas", "200 g de gambas peladas", "4 huevos", "200 g de patatas", "2 dientes de ajo", "Perejil fresco", "2 cdas de aceite de oliva", "Sal", "Pimienta"], descripcion: "Asa las patatas en rodajas. Saltea ajo, setas y gambas. Añade los huevos batidos y cuaja. Sirve con las patatas panadera y perejil.", balanced: { proteina: "Gambas y huevos", carbohidrato: "Patata", verdura: "Setas", grasa: "Aceite de oliva" }, tiempo: 30, dificultad: 'fácil' },
         { nombre: "Ensalada de atún, patata y huevo", kcal: 480, g: 20, c: 32, p: 30, ingredientes: ["2 latas de atún", "250 g de patatas", "2 huevos", "Lechuga", "Tomate", "Cebolla morada", "Aceitunas", "2 cdas de aceite de oliva", "Vinagre", "Sal"], descripcion: "Cuece las patatas y los huevos. Mezcla con atún, lechuga, tomate, cebolla y aceitunas. Aliña con aceite y vinagre.", balanced: { proteina: "Atún y huevo", carbohidrato: "Patata", verdura: "Lechuga y tomate", grasa: "Aceite de oliva" }, tiempo: 25, dificultad: 'fácil' },
         { nombre: "Merluza al papillote con calabacín y patata", kcal: 460, g: 16, c: 28, p: 35, ingredientes: ["2 lomos de merluza", "1 calabacín", "150 g de patatas", "1 limón", "2 cdas de aceite de oliva", "Perejil fresco", "Sal", "Pimienta"], descripcion: "Horno a 200°C. Coloca la merluza con calabacín en rodajas y patata fina en papel de horno. Añade limón, aceite, sal y pimienta. Hornea 15 min.", balanced: { proteina: "Merluza", carbohidrato: "Patata", verdura: "Calabacín", grasa: "Aceite de oliva" }, tiempo: 30, dificultad: 'fácil' },
-        { nombre: "Pollo con verduras asadas y boniato", kcal: 540, g: 18, c: 38, p: 38, ingredientes: ["2 pechugas de pollo", "200 g de boniato", "1 pimiento rojo", "1 calabacín", "1 cebolla", "2 cdas de aceite de oliva", "Tomillo", "Romero", "Sal", "Pimienta"], descripcion: "Horno a 200°C. Coloca todo en una bandeja con aceite, sal, tomillo y romero. Hornea 25 min hasta que el pollo y las verduras estén tiernos.", balanced: { proteina: "Pollo", carbohidrato: "Boniato", verdura: "Pimiento, calabacín y cebolla", grasa: "Aceite de oliva" }, tiempo: 35, dificultad: 'fácil' },
+        { nombre: "Pollo con verduras asadas y boniato", kcal: 540, g: 18, c: 38, p: 38, ingredientes: ["2 pechugas de pollo", "200 g de boniato", "1 pimiento rojo", "1 calabacín", "1 cebolla", "2 cdas de aceite de oliva", "Tomillo", "Romero", "Sal", "Pimienta"], descripcion: "Horno a 200°C. Coloca todo en una bandeja con aceite, sal, tomillo y romero. Hornea 25 min hasta que el pollo y las verduras estén tiernas.", balanced: { proteina: "Pollo", carbohidrato: "Boniato", verdura: "Pimiento, calabacín y cebolla", grasa: "Aceite de oliva" }, tiempo: 35, dificultad: 'fácil' },
         { nombre: "Tortilla de espinacas y queso con patata al horno", kcal: 500, g: 24, c: 30, p: 28, ingredientes: ["200 g de espinacas frescas", "5 huevos", "100 g de queso rallado", "200 g de patatas", "1 diente de ajo", "2 cdas de aceite de oliva", "Sal", "Pimienta"], descripcion: "Asa las patatas en rodajas 20 min a 200°C. Saltea las espinacas con ajo. Bate los huevos con queso. Cuaja la tortilla. Sirve con las patatas asadas.", balanced: { proteina: "Huevos y queso", carbohidrato: "Patata", verdura: "Espinacas", grasa: "Aceite de oliva y queso" }, tiempo: 30, dificultad: 'fácil' },
         { nombre: "Garbanzos con espinacas y huevo", kcal: 500, g: 20, c: 42, p: 28, ingredientes: ["300 g de garbanzos cocidos", "200 g de espinacas", "2 huevos", "2 dientes de ajo", "1 cucharadita de pimentón", "1 cda de aceite de oliva", "Sal", "Pimienta"], descripcion: "Sofríe ajo con pimentón. Añade espinacas y garbanzos. Cocina 5 min. Sirve con un huevo poché o frito por encima.", balanced: { proteina: "Garbanzos y huevo", carbohidrato: "Garbanzos", verdura: "Espinacas", grasa: "Aceite de oliva" }, tiempo: 20, dificultad: 'fácil' },
         { nombre: "Sardinas asadas con pisto y pan integral", kcal: 480, g: 24, c: 28, p: 32, ingredientes: ["8 sardinas frescas", "2 calabacines", "1 berenjena", "1 pimiento", "1 cebolla", "2 tomates", "2 rebanadas de pan integral", "2 cdas de aceite de oliva", "Sal", "Pimienta"], descripcion: "Horno a 200°C. Asa las sardinas 8 min. Mientras, sofríe cebolla, pimiento, berenjena, calabacín y tomate 15 min. Sirve con el pan tostado.", balanced: { proteina: "Sardinas", carbohidrato: "Pan integral", verdura: "Pisto de verduras", grasa: "Aceite de oliva" }, tiempo: 30, dificultad: 'fácil' },
@@ -1078,11 +1193,21 @@
         deleteWeek(id) {
             this.calendario = this.calendario.filter(w => w.id !== id);
             this.saveToStorage();
+            try {
+                const data = JSON.parse(localStorage.getItem(CONFIG.SHOPPING_KEY) || '{}');
+                delete data[id];
+                localStorage.setItem(CONFIG.SHOPPING_KEY, JSON.stringify(data));
+            } catch (e) {}
             if (this.calendario.length > 0) this.semanaActual = this.calendario[this.calendario.length - 1].semana;
             else this.semanaActual = null;
             return this.calendario;
         }
-        clearAll() { this.calendario = []; this.semanaActual = null; this.saveToStorage(); }
+        clearAll() {
+            this.calendario = [];
+            this.semanaActual = null;
+            this.saveToStorage();
+            try { localStorage.removeItem(CONFIG.SHOPPING_KEY); } catch (e) {}
+        }
         getLastWeek() {
             if (this.calendario.length === 0) return null;
             return this.calendario[this.calendario.length - 1].semana;
@@ -1179,63 +1304,6 @@
         return `${mShort(plato)} <span class="protein-tag ${type}">${label}</span>`;
     }
 
-    // ============================================================
-    //  GENERACIÓN DEL BOTÓN "AÑADIR AL CALENDARIO"
-    // ============================================================
-    function escapeHtmlAttribute(str) {
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/"/g, '&quot;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
-    }
-
-    function buildCalendarButton(dayInfo, dayIndex, startDate) {
-        // Calcular la fecha real del día
-        const dayDate = new Date(startDate);
-        dayDate.setDate(dayDate.getDate() + dayIndex);
-        const dateStr = dayDate.toISOString().split('T')[0];
-
-        // Construir nombre del evento y descripción (con \n literales para la librería)
-        const eventName = escapeHtmlAttribute(`Menú ${dayInfo.dia.nombre}: ${dayInfo.comida.nombre} / ${dayInfo.cena.nombre}`);
-
-        const descriptionParts = [
-            `🍽️ COMIDA: ${dayInfo.comida.nombre}`,
-            `${dayInfo.comida.kcal} kcal · ${dayInfo.comida.p}g P · ${dayInfo.comida.c}g C · ${dayInfo.comida.g}g G`,
-            `Proteína: ${dayInfo.comida.balanced.proteina} · Hidratos: ${dayInfo.comida.balanced.carbohidrato}`,
-            `Verdura: ${dayInfo.comida.balanced.verdura} · Grasa: ${dayInfo.comida.balanced.grasa}`,
-            ``,
-            `🌙 CENA: ${dayInfo.cena.nombre}`,
-            `${dayInfo.cena.kcal} kcal · ${dayInfo.cena.p}g P · ${dayInfo.cena.c}g C · ${dayInfo.cena.g}g G`,
-            `Proteína: ${dayInfo.cena.balanced.proteina} · Hidratos: ${dayInfo.cena.balanced.carbohidrato}`,
-            `Verdura: ${dayInfo.cena.balanced.verdura} · Grasa: ${dayInfo.cena.balanced.grasa}`,
-            ``,
-            `Total día: ${dayInfo.total.kcal} kcal · ${dayInfo.total.p}g P · ${dayInfo.total.c}g C · ${dayInfo.total.g}g G`
-        ];
-        const description = escapeHtmlAttribute(descriptionParts.join('\\n'));
-
-        return `
-            <div class="calendar-btn-wrapper">
-                <add-to-calendar-button
-                    name="${eventName}"
-                    description="${description}"
-                    startDate="${dateStr}"
-                    endDate="${dateStr}"
-                    allDayEvent="true"
-                    options="'Apple','Google','Outlook.com','iCal'"
-                    timeZone="Europe/Madrid"
-                    language="es"
-                    lightMode="dark"
-                    size="2"
-                    label="Añadir al calendario"
-                    buttonStyle="default"
-                    styleLight="--btn-background:rgba(255,138,122,0.16);--btn-text:#ff8a7a;--btn-border:rgba(255,138,122,0.3);"
-                    styleDark="--btn-background:rgba(255,138,122,0.16);--btn-text:#ff8a7a;--btn-border:rgba(255,138,122,0.3);"
-                ></add-to-calendar-button>
-            </div>
-        `;
-    }
-
     function actualizarContador() {
         document.querySelector('#weekCounter').textContent = planner.calendario.length;
         document.querySelector('#semanasGuardadas').textContent = planner.calendario.length > 0
@@ -1250,6 +1318,7 @@
             renderRecetas(semana);
             renderAnalisis(semana);
             actualizarStats(semana);
+            renderShoppingList(semana);
         }
     }
 
@@ -1282,11 +1351,6 @@
     function renderMenu(semana) {
         const grid = document.getElementById('weekGrid');
 
-        // Obtener la fecha de inicio de la semana correspondiente
-        const entry = planner.calendario.find(e => e.semana === semana)
-            || planner.calendario[planner.calendario.length - 1];
-        const startDate = entry ? new Date(entry.fechaInicio) : null;
-
         let html = '';
         for (let i = 0; i < semana.length; i++) {
             const d = semana[i];
@@ -1295,8 +1359,6 @@
             if (divScore > 85) { badgeClass = 'good'; badgeText = `Excelente ${divScore}%`; }
             else if (divScore > 60) { badgeClass = 'good'; badgeText = `Buena ${divScore}%`; }
             else if (divScore > 40) { badgeClass = 'warning'; badgeText = `Mejorable ${divScore}%`; }
-
-            const calendarBtn = startDate ? buildCalendarButton(d, i, startDate) : '';
 
             html += `
                 <div class="day-card">
@@ -1320,7 +1382,6 @@
                         <span>C <strong>${d.total.c}g</strong></span>
                         <span>P <strong>${d.total.p}g</strong></span>
                     </div>
-                    ${calendarBtn}
                 </div>
             `;
         }
@@ -1530,6 +1591,341 @@
         `;
     }
 
+    // ============================================================
+    //  LISTA DE LA COMPRA
+    // ============================================================
+    const RECOGNIZED_UNITS = [
+        'g','kg','ml','l',
+        'cda','cdas','cucharada','cucharadas',
+        'cucharadita','cucharaditas',
+        'vaso','vasos','taza','tazas',
+        'diente','dientes','lata','latas',
+        'manojo','manojos','rebanada','rebanadas',
+        'hoja','hojas','rama','ramas'
+    ];
+
+    const UNIT_CANONICAL = {
+        'g':'g','kg':'g','ml':'ml','l':'ml',
+        'cda':'cda','cdas':'cda','cucharada':'cda','cucharadas':'cda',
+        'cucharadita':'cdta','cucharaditas':'cdta',
+        'vaso':'vaso','vasos':'vaso',
+        'taza':'taza','tazas':'taza',
+        'diente':'diente','dientes':'diente',
+        'lata':'lata','latas':'lata',
+        'manojo':'manojo','manojos':'manojo',
+        'rebanada':'rebanada','rebanadas':'rebanada',
+        'hoja':'hoja','hojas':'hoja',
+        'rama':'rama','ramas':'rama'
+    };
+
+    const UNIT_FACTOR = { 'kg': 1000, 'l': 1000 };
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function parseQty(q) {
+        if (!q) return null;
+        if (q.includes('/')) {
+            const parts = q.split('/');
+            if (parts.length !== 2) return null;
+            const num = parseFloat(parts[0]) / parseFloat(parts[1]);
+            return isNaN(num) ? null : num;
+        }
+        const num = parseFloat(q.replace(',', '.'));
+        return isNaN(num) ? null : num;
+    }
+
+    function parseIngredient(str) {
+        const s = String(str).trim();
+        const m = s.match(/^([\d]+(?:[.,\/]\d+)?)\s+(?:([a-zA-ZáéíóúñÁÉÍÓÚÑ]+)\s+(?:de\s+)?)?(.+)$/i);
+        if (!m) return { qty: null, unit: null, name: s };
+
+        const qty = parseQty(m[1]);
+        if (qty === null) return { qty: null, unit: null, name: s };
+
+        const word = m[2] ? m[2].toLowerCase() : null;
+        if (word && RECOGNIZED_UNITS.includes(word)) {
+            const canonicalUnit = UNIT_CANONICAL[word];
+            const factor = UNIT_FACTOR[word] || 1;
+            return { qty: qty * factor, unit: canonicalUnit, name: m[3].trim() };
+        }
+
+        const rest = s.slice(m[1].length).trim();
+        return { qty: qty, unit: null, name: rest };
+    }
+
+    function cleanDisplayName(name) {
+        let n = name;
+        let changed = true;
+        while (changed) {
+            const prev = n;
+            n = n.replace(/\s+en\s+(filetes?|rodajas?|juliana|tiras|cuartos?|trocead[oa]s?|láminas?)\s*$/i, '');
+            n = n.replace(/\s+(fresc[oa]s?|madur[oa]s?|limpi[oa]s?|enter[oa]s?|picad[oa]s?|rallad[oa]s?|cocid[oa]s?|congelad[oa]s?|median[oa]s?|pequeñ[oa]s?|grandes?|virgen\s+extra)\s*$/i, '');
+            changed = prev !== n;
+        }
+        n = n.trim();
+        if (!n) return name;
+        return n.charAt(0).toUpperCase() + n.slice(1);
+    }
+
+    function normalizeKey(name) {
+        return name
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    function categorizeIngredient(name) {
+        const n = name.toLowerCase();
+        const cats = {
+            'Proteínas': ['pollo','pavo','ternera','cerdo','carne','picada','chorizo','jamón','jamon','salmón','salmon','atún','atun','bacalao','merluza','dorada','lubina','gamba','langostino','mejillón','mejillon','calamar','sepia','sardina','huevo','queso','feta','parmesano','lenteja','garbanzo','alubia','tofu'],
+            'Verduras': ['tomate','cherry','pimiento','cebolla','ajo','calabacín','calabacin','berenjena','espinaca','lechuga','pepino','brócoli','brocoli','zanahoria','alcachofa','seta','champiñón','champinon','guisante','espárrago','esparrago','puerro','rúcula','rucula','pulpa'],
+            'Hidratos': ['arroz','pasta','patata','boniato','pan','quinoa','cuscús','cuscu','integral','harina'],
+            'Grasas y frutos secos': ['aceite','aceituna','nuez','nueces','almendra','piñón','pinon','aguacate'],
+            'Especias y básicos': ['sal','pimienta','orégano','oregano','tomillo','romero','perejil','albahaca','azafrán','azafran','curry','vino','vinagre','limón','limon','laurel','eneldo','cilantro','menta','pimentón','pimenton','jengibre','guindilla','leche de coco','caldo']
+        };
+        for (const [cat, kws] of Object.entries(cats)) {
+            if (kws.some(k => n.includes(k))) return cat;
+        }
+        return 'Otros';
+    }
+
+    function formatQtyValue(q) {
+        if (Number.isInteger(q)) return q.toString();
+        const s = q.toFixed(2).replace(/\.?0+$/, '');
+        return s.replace('.', ',');
+    }
+
+    function displayUnit(qty, unit) {
+        if (!unit) return '';
+        if (['g', 'ml'].includes(unit)) return unit;
+        if (qty === 1) return unit;
+        const plurals = {
+            'cda': 'cdas', 'cdta': 'cdtas',
+            'vaso': 'vasos', 'taza': 'tazas',
+            'diente': 'dientes', 'lata': 'latas',
+            'manojo': 'manojos', 'rebanada': 'rebanadas',
+            'hoja': 'hojas', 'rama': 'ramas'
+        };
+        return plurals[unit] || unit;
+    }
+
+    function formatQuantity(qty, unit) {
+        if (qty === null || qty === undefined) return 'c/n';
+        if (unit === 'g' && qty >= 1000) {
+            return `${formatQtyValue(qty / 1000)} kg`;
+        }
+        if (unit === 'ml' && qty >= 1000) {
+            return `${formatQtyValue(qty / 1000)} l`;
+        }
+        const val = formatQtyValue(qty);
+        const u = displayUnit(qty, unit);
+        return u ? `${val} ${u}` : val;
+    }
+
+    function aggregateIngredients(semana) {
+        const map = new Map();
+
+        for (const day of semana) {
+            for (const dish of [day.comida, day.cena]) {
+                if (!dish || !dish.ingredientes) continue;
+                for (const raw of dish.ingredientes) {
+                    const parsed = parseIngredient(raw);
+                    const cleanName = cleanDisplayName(parsed.name);
+                    const key = normalizeKey(cleanName);
+                    if (!map.has(key)) {
+                        map.set(key, {
+                            key,
+                            name: cleanName,
+                            category: categorizeIngredient(cleanName),
+                            sums: {}
+                        });
+                    }
+                    const item = map.get(key);
+                    if (parsed.qty !== null) {
+                        const unitKey = parsed.unit || '__count__';
+                        item.sums[unitKey] = (item.sums[unitKey] || 0) + parsed.qty;
+                    }
+                }
+            }
+        }
+
+        const items = [];
+        for (const item of map.values()) {
+            const parts = [];
+            for (const [unit, qty] of Object.entries(item.sums)) {
+                if (unit === '__count__') {
+                    parts.push(formatQuantity(qty, null));
+                } else {
+                    parts.push(formatQuantity(qty, unit));
+                }
+            }
+            items.push({
+                key: item.key,
+                displayName: item.name,
+                category: item.category,
+                displayQty: parts.length ? parts.join(' + ') : 'c/n'
+            });
+        }
+
+        return items;
+    }
+
+    function getShoppingData() {
+        try { return JSON.parse(localStorage.getItem(CONFIG.SHOPPING_KEY) || '{}'); }
+        catch (e) { return {}; }
+    }
+    function saveShoppingData(data) {
+        try { localStorage.setItem(CONFIG.SHOPPING_KEY, JSON.stringify(data)); }
+        catch (e) {}
+    }
+    function getShoppingChecks(weekId) {
+        return getShoppingData()[weekId] || {};
+    }
+    function saveShoppingChecks(weekId, checks) {
+        const data = getShoppingData();
+        data[weekId] = checks;
+        saveShoppingData(data);
+    }
+
+    function renderShoppingList(semana) {
+        const container = document.getElementById('shoppingListContainer');
+        if (!semana || semana.length === 0) {
+            container.innerHTML = '<div class="empty-state">Genera un menú para ver la lista de la compra</div>';
+            return;
+        }
+
+        const entry = planner.calendario.find(e => e.semana === semana)
+            || planner.calendario[planner.calendario.length - 1];
+        const weekId = entry ? entry.id : null;
+        const weekNum = entry ? planner.getWeekNumber(new Date(entry.fechaInicio)) : null;
+        const checks = weekId ? getShoppingChecks(weekId) : {};
+
+        const items = aggregateIngredients(semana);
+        const total = items.length;
+        const checkedCount = items.filter(it => checks[it.key]).length;
+        const pendingCount = total - checkedCount;
+
+        const grouped = {};
+        for (const item of items) {
+            if (!grouped[item.category]) grouped[item.category] = [];
+            grouped[item.category].push(item);
+        }
+
+        const orderedCats = ['Proteínas', 'Verduras', 'Hidratos', 'Grasas y frutos secos', 'Especias y básicos', 'Otros'];
+
+        let html = `
+            <div class="shopping-summary">
+                <span>${total} ingrediente${total !== 1 ? 's' : ''} · ${semana.length} días${weekNum ? ' · Semana ' + weekNum : ''}</span>
+                <span class="pending">${pendingCount} por comprar</span>
+            </div>
+        `;
+
+        let hasItems = false;
+        for (const cat of orderedCats) {
+            if (!grouped[cat] || grouped[cat].length === 0) continue;
+            hasItems = true;
+            const catItems = grouped[cat].sort((a, b) => a.displayName.localeCompare(b.displayName, 'es'));
+            html += `
+                <div class="shopping-category">
+                    <h3 class="shopping-category-title">${cat} <span class="count">${catItems.length}</span></h3>
+                    <div class="shopping-items">
+                        ${catItems.map(item => {
+                            const isChecked = !!checks[item.key];
+                            return `
+                                <label class="shopping-item${isChecked ? ' is-checked' : ''}">
+                                    <input type="checkbox" data-key="${escapeHtml(item.key)}" ${isChecked ? 'checked' : ''}>
+                                    <span class="shopping-qty">${escapeHtml(item.displayQty)}</span>
+                                    <span class="shopping-name">${escapeHtml(item.displayName)}</span>
+                                </label>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        if (!hasItems) {
+            html += '<div class="empty-state">No se encontraron ingredientes en esta semana</div>';
+        }
+
+        container.innerHTML = html;
+
+        container.querySelectorAll('.shopping-item input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', () => {
+                if (!weekId) return;
+                const key = cb.dataset.key;
+                const current = getShoppingChecks(weekId);
+                current[key] = cb.checked;
+                saveShoppingChecks(weekId, current);
+                cb.closest('.shopping-item').classList.toggle('is-checked', cb.checked);
+                const pending = total - items.filter(it => current[it.key]).length;
+                const pendingEl = container.querySelector('.shopping-summary .pending');
+                if (pendingEl) pendingEl.textContent = `${pending} por comprar`;
+            });
+        });
+    }
+
+    function copyShoppingList() {
+        const semana = planner.getLastWeek();
+        if (!semana) {
+            showToast('No hay menú generado', 'warning');
+            return;
+        }
+        const items = aggregateIngredients(semana);
+        if (items.length === 0) {
+            showToast('La lista está vacía', 'warning');
+            return;
+        }
+        const grouped = {};
+        for (const item of items) {
+            if (!grouped[item.category]) grouped[item.category] = [];
+            grouped[item.category].push(item);
+        }
+        const orderedCats = ['Proteínas', 'Verduras', 'Hidratos', 'Grasas y frutos secos', 'Especias y básicos', 'Otros'];
+        let text = 'LISTA DE LA COMPRA\n\n';
+        for (const cat of orderedCats) {
+            if (!grouped[cat]) continue;
+            text += `${cat.toUpperCase()}\n`;
+            for (const item of grouped[cat].sort((a, b) => a.displayName.localeCompare(b.displayName, 'es'))) {
+                text += `  • ${item.displayQty} ${item.displayName}\n`;
+            }
+            text += '\n';
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Lista copiada al portapapeles', 'success');
+            }).catch(() => {
+                showToast('No se pudo copiar', 'error');
+            });
+        } else {
+            showToast('No se pudo copiar', 'error');
+        }
+    }
+
+    function resetShoppingChecks() {
+        const semana = planner.getLastWeek();
+        if (!semana) {
+            showToast('No hay menú generado', 'warning');
+            return;
+        }
+        const entry = planner.calendario.find(e => e.semana === semana)
+            || planner.calendario[planner.calendario.length - 1];
+        if (!entry) return;
+        saveShoppingChecks(entry.id, {});
+        renderShoppingList(semana);
+        showToast('Lista reiniciada', 'info');
+    }
+
+    // ============================================================
+    //  GENERACIÓN Y RENDER GLOBAL
+    // ============================================================
     function generarMenu() {
         if (planner.calendario.length >= CONFIG.MAX_WEEKS) {
             showToast(`Límite de ${CONFIG.MAX_WEEKS} semanas alcanzado`, 'error');
@@ -1542,6 +1938,7 @@
             renderAnalisis(result.semana);
             renderCalendario();
             actualizarStats(result.semana);
+            renderShoppingList(result.semana);
             actualizarContador();
             let totalDiv = 0;
             for (const day of result.semana) if (day.diversity) totalDiv += day.diversity.score;
@@ -1570,6 +1967,7 @@
         document.getElementById('weekGrid').innerHTML = '<div class="empty-state">Genera tu menú para empezar</div>';
         document.getElementById('recipesContainer').innerHTML = '<div class="empty-state">Sin recetas. Genera un menú.</div>';
         document.getElementById('analisisContainer').innerHTML = '<div class="empty-state">Sin datos para analizar. Genera un menú.</div>';
+        document.getElementById('shoppingListContainer').innerHTML = '<div class="empty-state">Genera un menú para ver la lista de la compra</div>';
         document.getElementById('statKcal').textContent = '—';
         document.getElementById('statProtein').textContent = '—';
         document.getElementById('statCarbs').textContent = '—';
@@ -1595,6 +1993,10 @@
                 const semana = planner.getLastWeek();
                 if (semana) renderAnalisis(semana);
             }
+            if (this.dataset.tab === 'compra') {
+                const semana = planner.getLastWeek();
+                renderShoppingList(semana);
+            }
         });
     });
 
@@ -1602,10 +2004,12 @@
     document.getElementById('salirBtn').addEventListener('click', salirApp);
     document.getElementById('btnGenerar').addEventListener('click', generarMenu);
     document.getElementById('clearAllBtn').addEventListener('click', limpiarTodo);
+    document.getElementById('copyShoppingBtn').addEventListener('click', copyShoppingList);
+    document.getElementById('resetShoppingBtn').addEventListener('click', resetShoppingChecks);
     window.eliminarSemana = eliminarSemana;
 
     actualizarContador();
-    console.log('Planificador Mediterráneo v4 · plato único + calendario');
+    console.log('Planificador Mediterráneo v5 · plato único + calendario + lista de la compra');
     console.log(`${LUNCH_DISHES.length} comidas, ${DINNER_DISHES.length} cenas`);
 })();
 </script>
